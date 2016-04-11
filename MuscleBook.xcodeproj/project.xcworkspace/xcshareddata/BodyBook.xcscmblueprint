@@ -1,0 +1,92 @@
+{
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "A83D0FD82EF3E827626685F862E10E2115F347C6" : 0,
+    "E24247BEF32EEF08CD1DB7BF27E5CF2C1C8612A7" : 0,
+    "AD29063FCB68D7F5F96726FDF73102AFB71B47B4" : 0,
+    "67620B5EFA902936DF04070AF595B76AB0333747" : 0,
+    "83BADBC5501CE21C43EFAD0B4239602133296C18" : 0,
+    "3A999A0044F026F7ADF66A6D83E1CB8EDCDF46AF" : 0,
+    "72C031073F0E7401AEDA6D1B9D7F04ED931ECBFE" : 0,
+    "CA2BA3249902D4403F64BB65F77ADB2633962400" : 0,
+    "C3D8ED1CB28D809ADCE2C0DE74935E8A502ACD53" : 0,
+    "04101981B66E318109934C9516F88D824BB96459" : 0,
+    "9EDF01A7804EB52CCFC540C61D3368942DB9FDFD" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "812413F2-3F09-4FF2-B2F3-0042A3B83279",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "A83D0FD82EF3E827626685F862E10E2115F347C6" : "BodyBook\/Submodules\/JSQNotificationObserverKit\/",
+    "E24247BEF32EEF08CD1DB7BF27E5CF2C1C8612A7" : "BodyBook\/Submodules\/StringScore\/",
+    "AD29063FCB68D7F5F96726FDF73102AFB71B47B4" : "BodyBook\/Submodules\/SwiftyDropbox\/",
+    "67620B5EFA902936DF04070AF595B76AB0333747" : "BodyBook\/Submodules\/Alamofire\/",
+    "83BADBC5501CE21C43EFAD0B4239602133296C18" : "BodyBook\/Submodules\/Eureka\/",
+    "3A999A0044F026F7ADF66A6D83E1CB8EDCDF46AF" : "BodyBook\/Submodules\/Operations\/",
+    "72C031073F0E7401AEDA6D1B9D7F04ED931ECBFE" : "BodyBook\/Submodules\/Static\/",
+    "CA2BA3249902D4403F64BB65F77ADB2633962400" : "BodyBook\/Submodules\/SwiftDate\/",
+    "C3D8ED1CB28D809ADCE2C0DE74935E8A502ACD53" : "BodyBook\/Submodules\/CryptoSwift\/",
+    "04101981B66E318109934C9516F88D824BB96459" : "BodyBook\/Submodules\/fmdb\/",
+    "9EDF01A7804EB52CCFC540C61D3368942DB9FDFD" : "BodyBook\/Submodules\/UIColor-Hex-Swift\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "BodyBook",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "BodyBook.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/ccgus\/fmdb.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "04101981B66E318109934C9516F88D824BB96459"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/danthorpe\/Operations.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "3A999A0044F026F7ADF66A6D83E1CB8EDCDF46AF"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Alamofire\/Alamofire.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "67620B5EFA902936DF04070AF595B76AB0333747"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/venmo\/Static.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "72C031073F0E7401AEDA6D1B9D7F04ED931ECBFE"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/xmartlabs\/Eureka.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "83BADBC5501CE21C43EFAD0B4239602133296C18"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/yeahdongcn\/UIColor-Hex-Swift.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9EDF01A7804EB52CCFC540C61D3368942DB9FDFD"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/jessesquires\/JSQNotificationObserverKit.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "A83D0FD82EF3E827626685F862E10E2115F347C6"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/dropbox\/SwiftyDropbox.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "AD29063FCB68D7F5F96726FDF73102AFB71B47B4"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/krzyzanowskim\/CryptoSwift.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "C3D8ED1CB28D809ADCE2C0DE74935E8A502ACD53"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/malcommac\/SwiftDate.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "CA2BA3249902D4403F64BB65F77ADB2633962400"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/sebj\/StringScore.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E24247BEF32EEF08CD1DB7BF27E5CF2C1C8612A7"
+    }
+  ]
+}

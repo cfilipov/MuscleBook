@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="65" id="LQk-Ve-tkG" customClass="CalendarWeekCell" customModule="MuscleBook" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="382" height="65"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LQk-Ve-tkG" id="iKb-Xo-NQg">
+                <rect key="frame" x="0.0" y="0.0" width="382" height="64.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RO5-DO-FBN" customClass="CVCalendarMenuView" customModule="CVCalendar">
+                        <rect key="frame" x="8" y="8" width="366" height="15"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="15" id="m6H-1P-8YU"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5ek-Kt-bV2" customClass="CVCalendarView" customModule="CVCalendar">
+                        <rect key="frame" x="8" y="23" width="366" height="41.5"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="41.5" id="f4j-pm-DVV"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottomMargin" secondItem="5ek-Kt-bV2" secondAttribute="bottom" constant="-8" id="22W-6Q-6sG"/>
+                    <constraint firstItem="5ek-Kt-bV2" firstAttribute="leading" secondItem="iKb-Xo-NQg" secondAttribute="leadingMargin" id="2Hw-Ii-Utg"/>
+                    <constraint firstItem="5ek-Kt-bV2" firstAttribute="top" secondItem="RO5-DO-FBN" secondAttribute="bottom" id="7fK-Eu-IZZ"/>
+                    <constraint firstItem="RO5-DO-FBN" firstAttribute="trailing" secondItem="iKb-Xo-NQg" secondAttribute="trailingMargin" id="Hic-tG-kHl"/>
+                    <constraint firstItem="5ek-Kt-bV2" firstAttribute="trailing" secondItem="iKb-Xo-NQg" secondAttribute="trailingMargin" id="KhH-YA-apx"/>
+                    <constraint firstItem="RO5-DO-FBN" firstAttribute="leading" secondItem="iKb-Xo-NQg" secondAttribute="leadingMargin" id="QL0-yr-4AO"/>
+                    <constraint firstItem="RO5-DO-FBN" firstAttribute="top" secondItem="iKb-Xo-NQg" secondAttribute="topMargin" id="ouH-6s-sAt"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="calendarView" destination="5ek-Kt-bV2" id="mQO-f5-GXT"/>
+                <outlet property="menuView" destination="RO5-DO-FBN" id="LOk-09-uM1"/>
+            </connections>
+            <point key="canvasLocation" x="296" y="224.5"/>
+        </tableViewCell>
+    </objects>
+</document>
