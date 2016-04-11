@@ -4,7 +4,7 @@ By contributing to the Muscle Book, you agree to [assign copyright of any contri
 
 # How to contribute
 
-Contributions to Muscle Book are very welcome. Please read the [Non-Goals section of the README](README.md#Non-Goals) making a pull request.
+Contributions to Muscle Book are very welcome. Please read the [Non-Goals section of the README](README.md#non-goals) making a pull request.
 
 ## Technical Overview
 

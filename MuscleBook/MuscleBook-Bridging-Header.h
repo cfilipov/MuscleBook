@@ -17,7 +17,6 @@
  */
 
 #import <YACYAML/YACYAML.h>
-#import "NSString+Score.h"
 #import "JAMSVGImage.h"
 #import "JAMSVGImageView.h"
 #import "JAMSVGImage+Extensions.h"

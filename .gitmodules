@@ -1,0 +1,21 @@
+[submodule "Submodules/Alamofire"]
+	path = Submodules/Alamofire
+	url = https://github.com/Alamofire/Alamofire.git
+[submodule "Submodules/UIColor-Hex-Swift"]
+	path = Submodules/UIColor-Hex-Swift
+	url = https://github.com/yeahdongcn/UIColor-Hex-Swift.git
+[submodule "Submodules/Eureka"]
+	path = Submodules/Eureka
+	url = https://github.com/xmartlabs/Eureka.git
+[submodule "Submodules/JSQNotificationObserverKit"]
+	path = Submodules/JSQNotificationObserverKit
+	url = https://github.com/jessesquires/JSQNotificationObserverKit.git
+[submodule "Submodules/SQLite.swift"]
+	path = Submodules/SQLite.swift
+	url = https://github.com/stephencelis/SQLite.swift.git
+[submodule "Submodules/CHCSVParser"]
+	path = Submodules/CHCSVParser
+	url = https://github.com/davedelong/CHCSVParser.git
+[submodule "Submodules/SQLiteMigrationManager.swift"]
+	path = Submodules/SQLiteMigrationManager.swift
+	url = https://github.com/garriguv/SQLiteMigrationManager.swift.git

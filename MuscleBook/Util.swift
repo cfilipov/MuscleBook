@@ -17,7 +17,6 @@
  */
 
 import Foundation
-import SwiftDate
 
 enum SuccessOrFail {
     case Fail
@@ -222,25 +221,6 @@ func WarnAlert(title: String? = nil, message: String, style: UIAlertControllerSt
     alert.addAction(UIAlertAction(title: actionButtonTitle, style: .Destructive, handler: completion))
     alert.addAction(UIAlertAction(title: cancelButtonTitle, style: .Default, handler: nil))
     UIViewController.topVC!.presentViewController(alert, animated: true, completion: nil)
-}
-
-struct DateSequence: SequenceType {
-
-    let start: NSDate
-
-    init(start: NSDate? = nil) {
-        let cal = NSCalendar.currentCalendar()
-        self.start = start ?? cal.startOfDayForDate(NSDate())
-    }
-
-    func generate() -> AnyGenerator<NSDate> {
-        var date: NSDate? = start
-        return AnyGenerator {
-            defer { date = (-1).days.fromDate(date) }
-            return date
-        }
-    }
-    
 }
 
 struct ConditionalPrefixSequence<S: SequenceType>: SequenceType {
