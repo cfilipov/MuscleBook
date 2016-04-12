@@ -172,6 +172,7 @@ extension Muscle {
         case .Hamstrings: return [.BicepsFemoris,.Semitendinosus,.IliotibialBand]
         case .Thigh: return [.Quadriceps,.Hamstrings]
         case .Calves: return [.Peroneus,.Soleus,.GastrocnemiusMedialHead,.GastrocnemiusLateralHead]
+        case .Gastrocnemius: return [.GastrocnemiusMedialHead, .GastrocnemiusLateralHead]
         case .Legs: return [.Thigh,.Calves]
         case .Abdominals: return [.RectusAbdominis,.ExternalOblique,.SerratusAnterior]
         case .PectoralisMajor: return [.PectoralisMajorSternal,.PectoralisMajorClavicular]

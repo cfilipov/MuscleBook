@@ -95,11 +95,7 @@ final class WorkoutViewController: FormViewController {
                 }
             }
 
-            <<< SideBySideAnatomyViewRow("anatomy") {
-                if let workoutID = self.workout.workoutID {
-                    $0.value = try! AnatomyViewConfig(MuscleWorkSummary.Adapter.forWorkout(workoutID))
-                }
-            }
+            <<< SideBySideAnatomyViewRow("anatomy")
 
             <<< LabelRow() {
                 $0.title = "Add Data Point"
@@ -112,12 +108,21 @@ final class WorkoutViewController: FormViewController {
                         record.worksetID = try! Workset.Adapter.save(record)
                         self.worksetsSection <<< self.workoutRecordToRow(record)
                     }
+                    self.updateAnatomyRow()
                 }
                 self.presentModalViewController(vc)
             }
 
-
         form +++ worksetsSection
+        updateAnatomyRow()
+    }
+
+    private func updateAnatomyRow() {
+        let row = form.rowByTag("anatomy")
+        if let workoutID = self.workout.workoutID {
+            row?.baseValue = try! AnatomyViewConfig(MuscleWorkSummary.Adapter.forWorkout(workoutID))
+            row?.updateCell()
+        }
     }
 
     private func workoutRecordToRow(record: Workset) -> BaseRow {

@@ -72,11 +72,11 @@ struct MuscleMovement {
 extension MuscleMovement.Classification {
     var color: UIColor {
         switch self {
-        case .DynamicStabilizer, .Stabilizer, .AntagonistStabilizer, .Other: return UIColor(rgba: "#ffffb2")
-        case .Agonist: return UIColor(rgba: "#ffffb2")
-        case .Antagonist: return UIColor(rgba: "#fecc5c")
-        case .Synergist: return UIColor(rgba: "#fd8d3c")
-        case .Target: return UIColor(rgba: "#e31a1c")
+        case .DynamicStabilizer, .Stabilizer, .AntagonistStabilizer, .Other: return UIColor(rgba: "#fcbba1")
+        case .Agonist: return UIColor(rgba: "#fcbba1")
+        case .Antagonist: return UIColor(rgba: "#fb6a4a")
+        case .Synergist: return UIColor(rgba: "#fb6a4a")
+        case .Target: return UIColor(rgba: "#ef3b2c")
         }
     }
 }

@@ -8,13 +8,14 @@ This app is not targeted at beginner lifters, but there is no reason a beginner 
 
 **This software is a work in progress, expect bugs.**
 
-<img src="Screenshots/Screenshot-20160410T23.36.49.png" style="width: 200px;" />
-<img src="Screenshots/Screenshot-20160410T23.40.43.png" style="width: 200px;" />
+<img src="Screenshots/ScreenShotApr1120168.25.22PM.png" style="width: 200px;" />
+<img src="Screenshots/ScreenShotApr1120168.25.56PM.png" style="width: 200px;" />
 
 ## Features
 
-- Workout data entry
+- Workout data entry displays e1RM and PR
 - Musculature visualizations
+- Intensity and volume calculations (used in viz)
 - Export to CSV
 - Track personal records (PRs)
 - [Estimated one-rep max](http://www.exrx.net/Calculators/OneRepMax.html) (e1RM)
@@ -27,6 +28,16 @@ This app is not targeted at beginner lifters, but there is no reason a beginner 
 - Works offline, no network connection required
 - Simple YAML format for custom exercises
 
+## Installation
+
+Right now this app is not available on the App Store so it can only be installed by manually sideloading it with Xcode. You will need al least some basic familiarity with Xcode and the provisioning process.
+
+After you clone the project, make sure you also init the submodules.
+
+	$ git clone https://github.com/cfilipov/MuscleBook.git
+	$ cd MuscleBook
+	$ git submodule update --init --recursive
+
 ## Non-Goals
 
 Muscle Book aims to be a useful tool for all lifters regardless of routine, lifting style or goal. To that end, here is a list of functionality that is intentionally excluded from the scope of the project:
@@ -37,10 +48,6 @@ Muscle Book aims to be a useful tool for all lifters regardless of routine, lift
 4. Anything that requires a centralized server
 5. Non-strength or muscle related features (running, etc...)
 6. Weight/exercise Goals
-
-### Note About Artwork
-
-I got the artwork for the anatomy visualization from [an old DeviantArt post](http://predator5791.deviantart.com/art/Interactive-Muscular-Anatomy-145463634). The terms of use are not clear and I have not had any success contacting the artist. If you are an artist and want to help contribute, please consider providing similar artwork under a compatible free license.
 
 ## License
 

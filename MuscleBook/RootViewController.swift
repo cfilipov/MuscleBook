@@ -55,7 +55,9 @@ class RootViewController: FormViewController {
                 $0.onChange { row in
                     let anatomyRow = self.form.rowByTag("anatomy") as? SideBySideAnatomyViewRow
                     let date = self.form.rowByTag("workout_week")?.baseValue as! NSDate
-                    anatomyRow?.value = try! AnatomyViewConfig(MuscleWorkSummary.Adapter.forDay(date))
+                    anatomyRow?.value = try! AnatomyViewConfig(
+                        MuscleWorkSummary.Adapter.forDay(date)
+                    )
                     anatomyRow?.updateCell()
                 }
                 $0.value = date
@@ -88,6 +90,7 @@ class RootViewController: FormViewController {
                 $0.controller = { SettingsViewController() }
             }
 
+        form.rowByTag("workout_week")?.baseValue = NSDate()
     }
 
     private func refresh() {

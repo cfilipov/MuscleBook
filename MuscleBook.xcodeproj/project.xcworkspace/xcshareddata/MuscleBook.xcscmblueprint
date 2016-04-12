@@ -1,8 +1,10 @@
 {
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "6151C1D79A4F3164326AD51EE5686506FC5383F5",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "6151C1D79A4F3164326AD51EE5686506FC5383F5" : 0,
     "A83D0FD82EF3E827626685F862E10E2115F347C6" : 0,
     "764A665CB468E6180AEE920F9857B6119987B39E" : 0,
     "9EDF01A7804EB52CCFC540C61D3368942DB9FDFD" : 0,
@@ -13,6 +15,7 @@
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "CC65DDB4-E30F-4DEA-91AB-81E50733DF5F",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "6151C1D79A4F3164326AD51EE5686506FC5383F5" : "MuscleBook\/",
     "A83D0FD82EF3E827626685F862E10E2115F347C6" : "MuscleBook\/Submodules\/JSQNotificationObserverKit\/",
     "764A665CB468E6180AEE920F9857B6119987B39E" : "MuscleBook\/Submodules\/SQLiteMigrationManager.swift\/",
     "9EDF01A7804EB52CCFC540C61D3368942DB9FDFD" : "MuscleBook\/Submodules\/UIColor-Hex-Swift\/",
@@ -29,6 +32,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/stephencelis\/SQLite.swift.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "3AE8ED2E684071AF4FB151FA51BF266B82FF45BD"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/cfilipov\/MuscleBook.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6151C1D79A4F3164326AD51EE5686506FC5383F5"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Alamofire\/Alamofire.git",

@@ -35,13 +35,15 @@ struct Workset {
 extension Workset: Equatable { }
 
 func == (lhs: Workset, rhs: Workset) -> Bool {
-    return lhs.worksetID == rhs.worksetID &&
-        lhs.workoutID == rhs.workoutID &&
-        lhs.exerciseName == rhs.exerciseName &&
-        lhs.date == rhs.date &&
-        lhs.reps == rhs.reps &&
-        lhs.weight == rhs.weight &&
-        lhs.duration == rhs.duration
+    // http://stackoverflow.com/questions/26550775
+    if lhs.worksetID != rhs.worksetID { return false }
+    if lhs.workoutID != rhs.workoutID { return false }
+    if lhs.exerciseName != rhs.exerciseName { return false }
+    if lhs.date != rhs.date { return false }
+    if lhs.reps != rhs.reps { return false }
+    if lhs.weight != rhs.weight { return false }
+    if lhs.duration != rhs.duration { return false }
+    return true
 }
 
 extension Workset {

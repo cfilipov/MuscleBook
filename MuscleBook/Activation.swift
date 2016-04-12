@@ -46,12 +46,17 @@ extension Activation {
         case .None: return 0
         case .Light: return 0.15
         case .Normal: return 0.5
-        case .High: return 0.8
+        case .High: return 0.7
         case .Max: return 1
         }
     }
 
     init(value: Double?, max: Double?, avg: Double?, window: Double = 0.25) {
+        if let _  = value where max == nil {
+            self = .Max
+            return
+        }
+
         guard let
             value = value,
             max = max,

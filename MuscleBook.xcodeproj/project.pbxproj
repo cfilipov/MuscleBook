@@ -59,7 +59,6 @@
 		B2843FF11CBB3412008D0953 /* AnatomyViewConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2843FF01CBB3412008D0953 /* AnatomyViewConfig.swift */; };
 		B2843FF31CBB3461008D0953 /* MuscleActivation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2843FF21CBB3461008D0953 /* MuscleActivation.swift */; };
 		B2843FF51CBB3480008D0953 /* Activation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2843FF41CBB3480008D0953 /* Activation.swift */; };
-		B2843FF71CBB3811008D0953 /* CVCalendar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2843FF61CBB3811008D0953 /* CVCalendar+Extensions.swift */; };
 		B2843FF91CBB41F1008D0953 /* SQLite+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2843FF81CBB41F1008D0953 /* SQLite+Extensions.swift */; };
 		B2843FFB1CBB4D8D008D0953 /* DateValueCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2843FFA1CBB4D8D008D0953 /* DateValueCell.xib */; };
 		B284400A1CBB80A8008D0953 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28440091CBB80A8008D0953 /* AboutViewController.swift */; };
@@ -474,7 +473,6 @@
 		B2843FF01CBB3412008D0953 /* AnatomyViewConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnatomyViewConfig.swift; sourceTree = "<group>"; };
 		B2843FF21CBB3461008D0953 /* MuscleActivation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MuscleActivation.swift; sourceTree = "<group>"; };
 		B2843FF41CBB3480008D0953 /* Activation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activation.swift; sourceTree = "<group>"; };
-		B2843FF61CBB3811008D0953 /* CVCalendar+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CVCalendar+Extensions.swift"; sourceTree = "<group>"; };
 		B2843FF81CBB41F1008D0953 /* SQLite+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SQLite+Extensions.swift"; sourceTree = "<group>"; };
 		B2843FFA1CBB4D8D008D0953 /* DateValueCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DateValueCell.xib; sourceTree = "<group>"; };
 		B28440091CBB80A8008D0953 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
@@ -1008,7 +1006,6 @@
 				B25E86681C7FD48200253A62 /* NSDate+YACYAMLPrivate.h */,
 				B25E86471C7F874500253A62 /* JAMSVGImage+Extensions.m */,
 				B2F8CF251C9723DC003A6796 /* Eureka+Extensions.swift */,
-				B2843FF61CBB3811008D0953 /* CVCalendar+Extensions.swift */,
 				B2843FF81CBB41F1008D0953 /* SQLite+Extensions.swift */,
 			);
 			name = "Lib Extensions";
@@ -1414,7 +1411,6 @@
 				B25E86481C7F874500253A62 /* JAMSVGImage+Extensions.m in Sources */,
 				B2E293D81CA9F166009BC21A /* WorksetCoder.swift in Sources */,
 				B2E2944E1CAB2D74009BC21A /* MuscleAdapter.swift in Sources */,
-				B2843FF71CBB3811008D0953 /* CVCalendar+Extensions.swift in Sources */,
 				B25E86911C800BA300253A62 /* OAuth.swift in Sources */,
 				B2A52BBB1CA0D1B100268B6C /* WorkoutsByDayViewController.swift in Sources */,
 				B2A52BBD1CA0E03F00268B6C /* WorkoutViewController.swift in Sources */,
@@ -1640,7 +1636,7 @@
 					"-ObjC",
 				);
 				OTHER_SWIFT_FLAGS = "-DDEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = me.cf.mb;
+				PRODUCT_BUNDLE_IDENTIFIER = me.cf.musclebook;
 				PRODUCT_NAME = MuscleBook;
 				PROVISIONING_PROFILE = "";
 				SWIFT_INCLUDE_PATHS = "";
@@ -1670,7 +1666,7 @@
 					"-ObjC",
 				);
 				OTHER_SWIFT_FLAGS = "-DDEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = me.cf.mb;
+				PRODUCT_BUNDLE_IDENTIFIER = me.cf.musclebook;
 				PRODUCT_NAME = MuscleBook;
 				PROVISIONING_PROFILE = "";
 				SWIFT_INCLUDE_PATHS = "";
