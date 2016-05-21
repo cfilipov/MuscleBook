@@ -47,6 +47,10 @@ class RootViewController: FormViewController {
         let date = NSDate()
 
         form +++ mainMenuSection
+            
+            <<< PunchcardRow("punchcard") {
+                $0.value = EFCalendarGraphAdapterDelegate()
+            }
 
             <<< CalendarWeekRow("workout_week") {
                 $0.numberOfDotsForDate = { date -> Int in

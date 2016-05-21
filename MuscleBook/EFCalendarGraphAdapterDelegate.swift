@@ -1,28 +1,33 @@
 /*
  Muscle Book
  Copyright (C) 2016  Cristian Filipov
-
+ 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
-
+ 
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
-
+ 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#import <YACYAML/YACYAML.h>
-#import "JAMSVGImage.h"
-#import "JAMSVGImageView.h"
-#import "JAMSVGImage+Extensions.h"
-#import "NSDate+YACYAMLPrivate.h"
-#import "SecurityUtil.h"
-#import <CommonCrypto/CommonCrypto.h>
-#import <YACYAML/CBLParseDate.h>
-#import "CHCSVParser.h"
-#import "EFCalendarGraph.h"
+import Foundation
+
+class EFCalendarGraphAdapterDelegate: NSObject, EFCalendarGraphDataSource {
+    
+    private let cal = NSCalendar.currentCalendar()
+    private let workoutCounts: [NSDate: Int] = Dictionary(try! Workout.countByDay())
+    
+    func numberOfDataPointsInCalendarGraph(calendarGraph: EFCalendarGraph!) -> UInt {
+        return 360
+    }
+    
+    func calendarGraph(calendarGraph: EFCalendarGraph!, valueForDate date: NSDate!, daysAfterStartDate: UInt, daysBeforeEndDate: UInt) -> AnyObject! {
+        return workoutCounts[cal.startOfDayForDate(date)] ?? 0
+    }
+}

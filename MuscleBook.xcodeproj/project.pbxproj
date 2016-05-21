@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		A22DE6781CA64B91001759CF /* CreateWorkoutRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22DE6771CA64B91001759CF /* CreateWorkoutRecordViewController.swift */; };
+		A23B0A2D1CF0D1B100AD924F /* PunchcardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23B0A2C1CF0D1B100AD924F /* PunchcardCell.swift */; };
+		A23B0A2F1CF0D67B00AD924F /* EFCalendarGraphAdapterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23B0A2E1CF0D67B00AD924F /* EFCalendarGraphAdapterDelegate.swift */; };
+		A23B0A371CF0E62F00AD924F /* EFCalendarGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = A23B0A341CF0E62F00AD924F /* EFCalendarGraph.m */; };
+		A23B0A381CF0E62F00AD924F /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A23B0A361CF0E62F00AD924F /* NSDate+Utilities.m */; };
 		A255E2551CBBA3A0009742BB /* SQLiteMigrationManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E795011CBBA26C004FF320 /* SQLiteMigrationManager.framework */; };
 		A255E2561CBBA3A0009742BB /* SQLiteMigrationManager.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2E795011CBBA26C004FF320 /* SQLiteMigrationManager.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A255E2711CBBA3BD009742BB /* CVCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E795091CBBA281004FF320 /* CVCalendar.framework */; };
@@ -421,6 +425,12 @@
 
 /* Begin PBXFileReference section */
 		A22DE6771CA64B91001759CF /* CreateWorkoutRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CreateWorkoutRecordViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		A23B0A2C1CF0D1B100AD924F /* PunchcardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PunchcardCell.swift; sourceTree = "<group>"; };
+		A23B0A2E1CF0D67B00AD924F /* EFCalendarGraphAdapterDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EFCalendarGraphAdapterDelegate.swift; sourceTree = "<group>"; };
+		A23B0A331CF0E62F00AD924F /* EFCalendarGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFCalendarGraph.h; sourceTree = "<group>"; };
+		A23B0A341CF0E62F00AD924F /* EFCalendarGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFCalendarGraph.m; sourceTree = "<group>"; };
+		A23B0A351CF0E62F00AD924F /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
+		A23B0A361CF0E62F00AD924F /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utilities.m"; sourceTree = "<group>"; };
 		A2E7948E1CA85197004FF320 /* noun_179916_cc.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = noun_179916_cc.svg; sourceTree = "<group>"; };
 		B205857C1C7C1F5500491328 /* StatisticsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = StatisticsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B207A7A41C63072300BD4DC9 /* MuscleBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MuscleBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -576,6 +586,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A23B0A321CF0E62F00AD924F /* EFCalendarGraph */ = {
+			isa = PBXGroup;
+			children = (
+				A23B0A331CF0E62F00AD924F /* EFCalendarGraph.h */,
+				A23B0A341CF0E62F00AD924F /* EFCalendarGraph.m */,
+				A23B0A351CF0E62F00AD924F /* NSDate+Utilities.h */,
+				A23B0A361CF0E62F00AD924F /* NSDate+Utilities.m */,
+			);
+			name = EFCalendarGraph;
+			path = Extern/EFCalendarGraph;
+			sourceTree = "<group>";
+		};
 		A2E794FC1CBBA26C004FF320 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -619,6 +641,7 @@
 				B23668E81CB341EF00C0CEFB /* FormItems.swift */,
 				B29485E11C8122730032DF0A /* Profiler.swift */,
 				B2DD36B91C6C50A2002F8576 /* Util.swift */,
+				A23B0A2E1CF0D67B00AD924F /* EFCalendarGraphAdapterDelegate.swift */,
 				B23387181CB4F8640027981A /* Database */,
 				B2F8CF241C97238D003A6796 /* Extern */,
 				B2A80D1B1C72EDC00072928B /* Form Cells */,
@@ -817,6 +840,7 @@
 			isa = PBXGroup;
 			children = (
 				B2E2945E1CAC781A009BC21A /* AnatomyViewCell.swift */,
+				A23B0A2C1CF0D1B100AD924F /* PunchcardCell.swift */,
 				B2843FE61CB8A33B008D0953 /* SideBySideAnatomyViewCell.swift */,
 				B2E2946D1CACA1D2009BC21A /* CalendarWeekCell.swift */,
 				B2A52BC31CA1185100268B6C /* ImageCheckCell.swift */,
@@ -870,6 +894,7 @@
 		B2BD94831C67258100653556 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				A23B0A321CF0E62F00AD924F /* EFCalendarGraph */,
 				B27D2F951CB480CF00C219E8 /* SQLiteMigrationManager.xcodeproj */,
 				B2C367A11CB188080045824F /* CHCSVParser */,
 				B2E294601CACA199009BC21A /* CVCalendar.xcodeproj */,
@@ -1399,6 +1424,7 @@
 				B2843FF11CBB3412008D0953 /* AnatomyViewConfig.swift in Sources */,
 				B27D2FA51CB4845800C219E8 /* MigrationInit.swift in Sources */,
 				B25E86861C800BA300253A62 /* README.md in Sources */,
+				A23B0A371CF0E62F00AD924F /* EFCalendarGraph.m in Sources */,
 				B29EA5261C866F4200F2E261 /* ValueCoding.swift in Sources */,
 				B23386E61CB48C710027981A /* MuscleWorkoutAdapter.swift in Sources */,
 				B2E294571CAC649E009BC21A /* ExerciseReference.swift in Sources */,
@@ -1436,6 +1462,7 @@
 				B2E2945F1CAC781A009BC21A /* AnatomyViewCell.swift in Sources */,
 				B2A52BA41CA0A74500268B6C /* JAMStyledBezierPathFactory.m in Sources */,
 				B2A52BAF1CA0AC5800268B6C /* AnatomyDiagramViewController.swift in Sources */,
+				A23B0A381CF0E62F00AD924F /* NSDate+Utilities.m in Sources */,
 				B25E868A1C800BA300253A62 /* BabelValidators.swift in Sources */,
 				B2A52BA71CA0A74500268B6C /* JAMSVGImage.m in Sources */,
 				B2BCB5361C76F2970046F5A1 /* ExerciseDetailViewController.swift in Sources */,
@@ -1451,7 +1478,9 @@
 				B207A7A81C63072300BD4DC9 /* AppDelegate.swift in Sources */,
 				B2A52BA91CA0A74500268B6C /* JAMSVGButton.m in Sources */,
 				B2A52BAA1CA0A74500268B6C /* JAMSVGImageView.m in Sources */,
+				A23B0A2F1CF0D67B00AD924F /* EFCalendarGraphAdapterDelegate.swift in Sources */,
 				B284400A1CBB80A8008D0953 /* AboutViewController.swift in Sources */,
+				A23B0A2D1CF0D1B100AD924F /* PunchcardCell.swift in Sources */,
 				B2A52BC41CA1185100268B6C /* ImageCheckCell.swift in Sources */,
 				B25E86951C800BA300253A62 /* Team.swift in Sources */,
 				B2843FF31CBB3461008D0953 /* MuscleActivation.swift in Sources */,
