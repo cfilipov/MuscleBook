@@ -37,12 +37,12 @@ extension WorksetAdapter {
         writer.finishLine()
         try all().forEach { workset in
             writer.writeField(workset.date.datatypeValue)
-            writer.writeField(String(workset.workoutID))
-            writer.writeField(String(workset.exerciseID))
+            writer.writeField(workset.workoutID?.description ?? "")
+            writer.writeField(workset.exerciseID?.description ?? "")
             writer.writeField(workset.exerciseName)
-            writer.writeField(String(workset.reps))
-            writer.writeField(String(workset.weight))
-            writer.writeField(String(workset.duration))
+            writer.writeField(workset.reps.description)
+            writer.writeField(workset.weight?.description ?? "")
+            writer.writeField(workset.duration?.description ?? "")
             writer.finishLine()
         }
     }
