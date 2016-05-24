@@ -23,10 +23,27 @@ import JSQNotificationObserverKit
 
 class RootViewController: FormViewController {
 
-    private let mainMenuSection = Section()
     private let mainQueue = NSOperationQueue.mainQueue()
     private var workoutCounts: [NSDate: Int] = [:]
     private var observer: CocoaObserver? = nil
+
+    let weightFormatter: NSNumberFormatter = {
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = .DecimalStyle
+        return formatter
+    }()
+
+    private var selectedDate: NSDate = NSDate() {
+        didSet {
+            let anatomyRow = self.form.rowByTag("anatomy") as? SideBySideAnatomyViewRow
+            anatomyRow?.value = try! AnatomyViewConfig(
+                MuscleWorkSummary.Adapter
+                    .forDay(selectedDate)
+                    .filter { $0.movementClass == .Target }
+            )
+            anatomyRow?.updateCell()
+        }
+    }
 
     deinit {
         observer = nil
@@ -34,6 +51,8 @@ class RootViewController: FormViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "✻", style: .Plain, target: self, action: #selector(onMenuButtonPresed))
 
         let notification = CocoaNotification(name: UIApplicationDidReceiveMemoryWarningNotification)
         observer = CocoaObserver(notification, queue: self.mainQueue, handler: { (notification: NSNotification) in
@@ -46,59 +65,51 @@ class RootViewController: FormViewController {
 
         let date = NSDate()
 
-        form +++ mainMenuSection
-            
-            <<< PunchcardRow("punchcard") {
-                $0.value = EFCalendarGraphAdapterDelegate()
-            }
+        form
 
-            <<< CalendarWeekRow("workout_week") {
-                $0.numberOfDotsForDate = { date -> Int in
-                    self.workoutCounts[date] ?? 0
-                }
-                $0.onChange { row in
-                    let anatomyRow = self.form.rowByTag("anatomy") as? SideBySideAnatomyViewRow
-                    let date = self.form.rowByTag("workout_week")?.baseValue as! NSDate
-                    anatomyRow?.value = try! AnatomyViewConfig(
-                        MuscleWorkSummary.Adapter.forDay(date)
-                    )
-                    anatomyRow?.updateCell()
-                }
-                $0.value = date
-            }
+        +++ Section()
 
-            <<< SideBySideAnatomyViewRow("anatomy")
-
-            <<< PushViewControllerRow() {
-                $0.title = "Workouts"
-                $0.controller = { WorkoutsByDayViewController() }
+        <<< SegmentedRow<String>() {
+            $0.options = ["Volume", "Intensity", "Duration"]
+            $0.value = "Volume"
+        }
+        
+        <<< PunchcardRow("punchcard") {
+            $0.value = EFCalendarGraphAdapterDelegate()
+            $0.onCellSelection { _, _ in
+                let vc = WorkoutsByDayViewController()
+                self.showViewController(vc, sender: nil)
             }
+        }
 
-            <<< PushViewControllerRow() {
-                $0.title = "Exercises"
-                $0.controller = { ExercisesListViewController() }
+        <<< CalendarWeekRow("workout_week") {
+            $0.numberOfDotsForDate = { date -> Int in
+                self.workoutCounts[date] ?? 0
             }
+            $0.onChange { row in
+                self.selectedDate = row.value!
+            }
+            $0.value = date
+        }
 
-            <<< PushViewControllerRow() {
-                $0.title = "Muscles"
-                $0.controller = { MuscleListViewController() }
-            }
+//        <<< LabelRow() {
+//            $0.title = "Total Weight Moved"
+//
+//            if let totalWeight = workout.totalWeight {
+//                $0.value = weightFormatter.stringFromNumber(totalWeight)
+//                $0.hidden = false
+//            } else {
+//                $0.hidden = true
+//            }
+//        }
 
-            <<< PushViewControllerRow() {
-                $0.title = "Statistics"
-                $0.controller = { StatisticsViewController() }
-            }
-
-            <<< PushViewControllerRow() {
-                $0.title = "Settings"
-                $0.controller = { SettingsViewController() }
-            }
+        <<< SideBySideAnatomyViewRow("anatomy")
 
         form.rowByTag("workout_week")?.baseValue = NSDate()
     }
 
     private func refresh() {
-        workoutCounts = Dictionary(try! Workout.countByDay())
+        workoutCounts = Dictionary(try! Workout.Adapter.countByDay())
         self.form.rowByTag("anatomy")?.updateCell()
         self.form.rowByTag("workout_week")?.updateCell()
     }
@@ -106,6 +117,11 @@ class RootViewController: FormViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         refresh()
+    }
+
+    func onMenuButtonPresed() {
+        let vc = MenuViewController()
+        self.showViewController(vc, sender: nil)
     }
 
 }

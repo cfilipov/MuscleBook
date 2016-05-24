@@ -56,10 +56,6 @@ enum WorkoutAdapter: TableAdapterType, DateAdapterType, KeyedAdapterType {
             count: row[sets]
         )
     }
-    
-}
-
-extension Workout {
 
     static func nextWorkoutID() -> Int64 {
         let db = DB.sharedInstance.connection
@@ -71,25 +67,31 @@ extension Workout {
 
     static func countByDay() throws -> [(NSDate, Int)] {
         let db = DB.sharedInstance.connection
-        let tbWorkout = Adapter.table
-        let cWorkoutID = Adapter.workoutID
-        let cDate = Adapter.date
         let rows = try db.prepare(
-            tbWorkout.select(cDate, cWorkoutID.count).group(cDate.localDay)
+            table.select(date, workoutID.count).group(date.localDay)
         )
         let cal = NSCalendar.currentCalendar()
         return rows.map { row in
-            let date = cal.startOfDayForDate(row[cDate])
-            return (date, row[cWorkoutID.count])
+            return (cal.startOfDayForDate(row[date]), row[workoutID.count])
         }
     }
 
     static func all() throws -> AnySequence<Workout> {
         let db = DB.sharedInstance.connection
-        let table = Adapter.table
-        let cDate = Adapter.date
-        return try db.prepare(table.order(cDate.desc)).adapterOf(Workout)
+        return try db.prepare(table.order(date.desc)).adapterOf(Workout)
     }
+
+    static func volumeByDay() throws -> [(NSDate, Double)] {
+        let cal = NSCalendar.currentCalendar()
+        return try all().map { workout in
+            let date = cal.startOfDayForDate(workout.date)
+            return (date, workout.totalWeight ?? 0)
+        }
+    }
+    
+}
+
+extension Workout {
 
     func startDate() -> NSDate? {
         let db = DB.sharedInstance.connection

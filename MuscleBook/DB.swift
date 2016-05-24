@@ -163,6 +163,13 @@ extension DateAdapterType where Model: DateModelType, Model.Adapter == Self, Sel
         return db.pluck(table.select(date.min))?.get(date.min)
     }
 
+    static func find(date: NSDate) -> Model? {
+        let cal = NSCalendar.currentCalendar()
+        let query = table.filter(self.date == cal.startOfDayForDate(date))
+        guard let row = db.pluck(query) else { return nil }
+        return mapRow(row)
+    }
+
 }
 
 

@@ -31,6 +31,7 @@
 		B23386F41CB4ED690027981A /* ExerciseReferenceAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23386F31CB4ED690027981A /* ExerciseReferenceAdapter.swift */; };
 		B23387591CB74F0C0027981A /* VerifyWorksetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23387581CB74F0C0027981A /* VerifyWorksetsViewController.swift */; };
 		B23668E91CB341EF00C0CEFB /* FormItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23668E81CB341EF00C0CEFB /* FormItems.swift */; };
+		B23F0C751CF18775006BF745 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23F0C741CF18775006BF745 /* MenuViewController.swift */; };
 		B247AEEA1C9CD74C00A501B0 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = B247AEE91C9CD74C00A501B0 /* Model.swift */; };
 		B25E85831C7D6C3700253A62 /* Workset.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E85821C7D6C3700253A62 /* Workset.swift */; };
 		B25E861E1C7EBD8700253A62 /* AnatomySplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E861D1C7EBD8700253A62 /* AnatomySplitView.swift */; };
@@ -446,6 +447,7 @@
 		B23386F31CB4ED690027981A /* ExerciseReferenceAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseReferenceAdapter.swift; sourceTree = "<group>"; };
 		B23387581CB74F0C0027981A /* VerifyWorksetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyWorksetsViewController.swift; sourceTree = "<group>"; };
 		B23668E81CB341EF00C0CEFB /* FormItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormItems.swift; sourceTree = "<group>"; };
+		B23F0C741CF18775006BF745 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		B247AEE91C9CD74C00A501B0 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Model.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B25E85821C7D6C3700253A62 /* Workset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Workset.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B25E861D1C7EBD8700253A62 /* AnatomySplitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AnatomySplitView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1006,6 +1008,7 @@
 				B2A52BAE1CA0AC5800268B6C /* AnatomyDiagramViewController.swift */,
 				B2A52BAC1CA0AAB700268B6C /* MuscleListViewController.swift */,
 				B2A80D201C73B8AC0072928B /* RootViewController.swift */,
+				B23F0C741CF18775006BF745 /* MenuViewController.swift */,
 				B2C367B31CB1D30A0045824F /* Exercise */,
 				B2C367B21CB1D2E40045824F /* Settings */,
 				B2C367B11CB1D2C30045824F /* Workout */,
@@ -1410,6 +1413,7 @@
 				B23387591CB74F0C0027981A /* VerifyWorksetsViewController.swift in Sources */,
 				B2A52BA31CA0A74500268B6C /* JAMStyledBezierPath.m in Sources */,
 				B23668E91CB341EF00C0CEFB /* FormItems.swift in Sources */,
+				B23F0C751CF18775006BF745 /* MenuViewController.swift in Sources */,
 				B25E86961C800BA300253A62 /* Users.swift in Sources */,
 				B2A52BA81CA0A74500268B6C /* UIImage+SVG.m in Sources */,
 				B2BE3BC81C8021FC009198EA /* SettingsViewController.swift in Sources */,

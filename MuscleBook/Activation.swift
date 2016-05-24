@@ -20,10 +20,10 @@ import Foundation
 
 public enum Activation: Int, Comparable {
     case None = 0
-    case Light
-    case Normal
-    case High
-    case Max
+    case Light // Below average intensity and volume
+    case Normal // Above average intensity or volume
+    case High // High intensity or volume (> 80% best) or failure set
+    case Max // New PR
 }
 
 public func <(lhs: Activation, rhs: Activation) -> Bool {

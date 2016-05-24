@@ -73,7 +73,7 @@ class WorkoutsByDayViewController: FormViewController {
         }.cellSetup { cell, row in
             cell.accessoryType = .DisclosureIndicator
         }.onCellSelection { cell, row in
-            let workoutID = Workout.nextWorkoutID()
+            let workoutID = Workout.Adapter.nextWorkoutID()
             let vc = CreateWorkoutRecordViewController(workoutID: workoutID) { record in
                 if let record = record {
                     try! Workset.Adapter.save(record)
@@ -84,7 +84,7 @@ class WorkoutsByDayViewController: FormViewController {
             self.presentModalViewController(vc)
         }
 
-        let allWorkouts = try! Workout.all()
+        let allWorkouts = try! Workout.Adapter.all()
         var curMonth: String? = nil
         var curSection: Section? = nil
         for w in allWorkouts {

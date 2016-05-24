@@ -21,13 +21,28 @@ import Foundation
 class EFCalendarGraphAdapterDelegate: NSObject, EFCalendarGraphDataSource {
     
     private let cal = NSCalendar.currentCalendar()
-    private let workoutCounts: [NSDate: Int] = Dictionary(try! Workout.countByDay())
-    
+    private let workouts: [NSDate: Double]
+    private let maxVolume: Double
+    private let aveVolume: Double
+
+    override init() {
+        workouts = Dictionary(try! Workout.Adapter.volumeByDay())
+        maxVolume = workouts.values.maxElement() ?? 0
+        aveVolume = workouts.values.reduce(0, combine: +) / Double(workouts.count)
+    }
+
     func numberOfDataPointsInCalendarGraph(calendarGraph: EFCalendarGraph!) -> UInt {
         return 360
     }
     
     func calendarGraph(calendarGraph: EFCalendarGraph!, valueForDate date: NSDate!, daysAfterStartDate: UInt, daysBeforeEndDate: UInt) -> AnyObject! {
-        return workoutCounts[cal.startOfDayForDate(date)] ?? 0
+        let volume = workouts[cal.startOfDayForDate(date)] ?? 0
+        if volume > aveVolume {
+            return 5
+        }
+        if volume <= aveVolume && volume > 0 {
+            return 1
+        }
+        return 0
     }
 }
