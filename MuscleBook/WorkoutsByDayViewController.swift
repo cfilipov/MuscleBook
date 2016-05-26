@@ -21,6 +21,8 @@ import Eureka
 
 class WorkoutsByDayViewController: FormViewController {
 
+    private let db = DB.sharedInstance
+
     let weightFormatter: NSNumberFormatter = {
         let formatter = NSNumberFormatter()
         formatter.numberStyle = .DecimalStyle
@@ -73,10 +75,10 @@ class WorkoutsByDayViewController: FormViewController {
         }.cellSetup { cell, row in
             cell.accessoryType = .DisclosureIndicator
         }.onCellSelection { cell, row in
-            let workoutID = Workout.Adapter.nextWorkoutID()
+            let workoutID = self.db.nextAvailableRowID(Workout)
             let vc = CreateWorkoutRecordViewController(workoutID: workoutID) { record in
                 if let record = record {
-                    try! Workset.Adapter.save(record)
+                    try! self.db.save(record)
                 }
                 self.rebuildForm()
                 self.dismissViewControllerAnimated(true, completion: nil)
@@ -84,7 +86,7 @@ class WorkoutsByDayViewController: FormViewController {
             self.presentModalViewController(vc)
         }
 
-        let allWorkouts = try! Workout.Adapter.all()
+        let allWorkouts = try! db.all(Workout)
         var curMonth: String? = nil
         var curSection: Section? = nil
         for w in allWorkouts {

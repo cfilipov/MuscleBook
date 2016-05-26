@@ -19,14 +19,15 @@
 import Foundation
 
 class EFCalendarGraphAdapterDelegate: NSObject, EFCalendarGraphDataSource {
-    
+
+    private let db = DB.sharedInstance
     private let cal = NSCalendar.currentCalendar()
     private let workouts: [NSDate: Double]
     private let maxVolume: Double
     private let aveVolume: Double
 
     override init() {
-        workouts = Dictionary(try! Workout.Adapter.volumeByDay())
+        workouts = Dictionary(try! db.volumeByDay())
         maxVolume = workouts.values.maxElement() ?? 0
         aveVolume = workouts.values.reduce(0, combine: +) / Double(workouts.count)
     }

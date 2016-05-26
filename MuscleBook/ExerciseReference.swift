@@ -17,16 +17,10 @@
  */
 
 import Foundation
-import SQLite
 
 struct ExerciseReference {
     let exerciseID: Int64?
     let name: String
-
-    var details: Exercise? {
-        guard let exerciseID = exerciseID else { return nil }
-        return Exercise.Adapter.find(exerciseID)
-    }
 }
 
 extension ExerciseReference: Equatable {}
@@ -46,4 +40,3 @@ extension Workset {
         return ExerciseReference(exerciseID: exerciseID, name: exerciseName)
     }
 }
-

@@ -20,13 +20,18 @@ import UIKit
 import Eureka
 
 class VerifyWorksetsViewController: FormViewController {
-    private lazy var exercises: AnySequence<ExerciseReference> = try! Workset.Adapter.unknownExercises()
+
+    private let db = DB.sharedInstance
+
+    private lazy var exercises: AnySequence<ExerciseReference> = {
+        try! self.db.findUnknownExercises()
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = "Unknwon Exercises"
-
+        
 //        form += exercises.map { Section($0) }
     }
 }

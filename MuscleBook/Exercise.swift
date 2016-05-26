@@ -32,3 +32,5 @@ struct Exercise {
     let link: String
     let source: String?
 }
+
+

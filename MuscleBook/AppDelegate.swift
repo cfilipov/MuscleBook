@@ -34,11 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Dropbox.setupWithAppKey("apsa8g46ubfs32k")
         Fabric.with([Crashlytics.self])
         UIView.appearance().tintColor = UIColor(rgba: "#ff0000")
-        do {
-            try DB.sharedInstance.migrateIfNeeded()
-        } catch {
-            fatalError("failed to migrate database: \(error)")
-        }
+        DB.sharedInstance
         Profiler.trace("App Launch").end()
         return true
     }
@@ -63,4 +59,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
-

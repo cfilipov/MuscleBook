@@ -21,6 +21,8 @@ import Eureka
 
 final class WorkoutViewController: FormViewController {
 
+    private let db = DB.sharedInstance
+
     private let workout: Workout
 
     lazy var titleLabel: UILabel = {
@@ -44,7 +46,7 @@ final class WorkoutViewController: FormViewController {
     }()
 
     lazy var worksetsSection: Section = {
-        let worksets = try! Workset.Adapter.all(workoutID: self.workout.workoutID!)
+        let worksets = try! self.db.worksets(workoutID: self.workout.workoutID!)
         var section = Section("Workout Sets")
         section += worksets.map(self.workoutRecordToRow)
         return section
@@ -105,7 +107,7 @@ final class WorkoutViewController: FormViewController {
                 let vc = CreateWorkoutRecordViewController(workoutID: self.workout.workoutID!) { record in
                     self.dismissViewControllerAnimated(true, completion: nil)
                     if var record = record {
-                        record.worksetID = try! Workset.Adapter.save(record)
+                        record.worksetID = try! self.db.save(record)
                         self.worksetsSection <<< self.workoutRecordToRow(record)
                     }
                     self.updateAnatomyRow()
@@ -120,7 +122,9 @@ final class WorkoutViewController: FormViewController {
     private func updateAnatomyRow() {
         let row = form.rowByTag("anatomy")
         if let workoutID = self.workout.workoutID {
-            row?.baseValue = try! AnatomyViewConfig(MuscleWorkSummary.Adapter.forWorkout(workoutID))
+            row?.baseValue = try! AnatomyViewConfig(
+                db.get(MuscleWorkSummary.self, workoutID: workoutID)
+            )
             row?.updateCell()
         }
     }

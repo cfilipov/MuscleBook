@@ -21,6 +21,8 @@ import Eureka
 
 class ExerciseDetailViewController : FormViewController {
 
+    private let db = DB.sharedInstance
+
     lazy var colorGenerator: AnyGenerator<UIColor> = {
         let palette = [
             // http://www.graphviz.org/doc/info/colors.html
@@ -39,6 +41,7 @@ class ExerciseDetailViewController : FormViewController {
             ]
         return palette.repeatGenerator
     }()
+
     let formatter = NSDateFormatter()
     var muscleColorImages: [Muscle: UIImage] = [:]
     var musclesDictionary: [MuscleMovement.Classification: [Muscle]] = [:]
@@ -49,9 +52,11 @@ class ExerciseDetailViewController : FormViewController {
     init(exercise: Exercise) {
 
         self.exercise = exercise
-        let muscles = exercise.exerciseID.flatMap { try! MuscleMovement.Adapter.find(exerciseID: $0) }
-        musclesDictionary = muscles?.dictionary() ?? [:]
         super.init(style: .Grouped)
+        let muscles = exercise.exerciseID.flatMap {
+            try! db.find(exerciseID: $0)
+        }
+        musclesDictionary ?= muscles?.dictionary()
         let muscleColorCoding = Dictionary(
             Set<Muscle>(musclesDictionary.values.flatMap{$0})
                 .map{($0,self.colorGenerator.next()!)}
@@ -141,4 +146,3 @@ class ExerciseDetailViewController : FormViewController {
     }
 
 }
-

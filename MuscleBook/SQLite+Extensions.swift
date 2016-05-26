@@ -19,6 +19,34 @@
 import Foundation
 import SQLite
 
+extension SQLite.Connection {
+    func prepare<T: SQLAdaptable>(query: QueryType) throws -> AnySequence<T> {
+        let rows = try prepare(query)
+        return AnySequence { Void -> AnyGenerator<T> in
+            let generator = rows.generate()
+            return AnyGenerator {
+                guard let row = generator.next() else { return nil }
+                return T(row: row)
+            }
+        }
+    }
+
+    func pluck<T: SQLAdaptable>(query: QueryType) -> T? {
+        guard let row = pluck(query) else { return nil }
+        return T(row: row)
+    }
+}
+
+extension SQLite.QueryType {
+    func insert<T: SQLAdaptable>(model: T) -> SQLite.Insert {
+        return insert(model.setters)
+    }
+
+    func insert<T: SQLAdaptable>(or onConflict: SQLite.OnConflict, _ model: T) -> SQLite.Insert {
+        return insert(or: .Replace, model.setters)
+    }
+}
+
 extension ExpressionType where UnderlyingType : Value {
     func asName(name: String) -> Expression<UnderlyingType> {
         return Expression("\(template) AS \(name)", bindings)

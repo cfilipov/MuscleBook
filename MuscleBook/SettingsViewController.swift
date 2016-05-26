@@ -20,7 +20,9 @@ import UIKit
 import Eureka
 
 class SettingsViewController : FormViewController {
-    
+
+    private let db = DB.sharedInstance
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -34,7 +36,7 @@ class SettingsViewController : FormViewController {
             $0.title = "Export to CSV"
         }.onCellSelection { _, _ in
             let url = NSURL.cacheUUID()
-            try! Workset.Adapter.exportCSV(url)
+            try! self.db.exportCSV(Workset.self, toURL: url)
             let vc = UIActivityViewController(
                 activityItems: [url],
                 applicationActivities: nil

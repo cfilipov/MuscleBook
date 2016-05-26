@@ -20,7 +20,6 @@ import Foundation
 
 extension Workset {
     static func importFromDropbox(file: String, completion: (SuccessOrFail -> Void)?) {
-        let db = DB.sharedInstance.connection
         let t = Profiler.trace(String(Workset), #function).start()
         Dropbox.authorizedClient!
             .files
@@ -34,7 +33,7 @@ extension Workset {
                 }
                 guard let (_, url) = response else { return }
                 let sets = Workset.fromYAML(url.path!)
-                try! db.transaction{sets.forEach{try! Workset.Adapter.save($0)}}
+                try! DB.sharedInstance.save(sets)
         }
     }
 

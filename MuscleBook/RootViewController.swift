@@ -23,6 +23,7 @@ import JSQNotificationObserverKit
 
 class RootViewController: FormViewController {
 
+    private let db = DB.sharedInstance
     private let mainQueue = NSOperationQueue.mainQueue()
     private var workoutCounts: [NSDate: Int] = [:]
     private var observer: CocoaObserver? = nil
@@ -37,8 +38,7 @@ class RootViewController: FormViewController {
         didSet {
             let anatomyRow = self.form.rowByTag("anatomy") as? SideBySideAnatomyViewRow
             anatomyRow?.value = try! AnatomyViewConfig(
-                MuscleWorkSummary.Adapter
-                    .forDay(selectedDate)
+                db.get(MuscleWorkSummary.self, date: selectedDate)
                     .filter { $0.movementClass == .Target }
             )
             anatomyRow?.updateCell()
@@ -69,11 +69,11 @@ class RootViewController: FormViewController {
 
         +++ Section()
 
-        <<< SegmentedRow<String>() {
-            $0.options = ["Volume", "Intensity", "Duration"]
-            $0.value = "Volume"
-        }
-        
+//        <<< SegmentedRow<String>() {
+//            $0.options = ["Volume", "Intensity", "Duration"]
+//            $0.value = "Volume"
+//        }
+
         <<< PunchcardRow("punchcard") {
             $0.value = EFCalendarGraphAdapterDelegate()
             $0.onCellSelection { _, _ in
@@ -92,24 +92,13 @@ class RootViewController: FormViewController {
             $0.value = date
         }
 
-//        <<< LabelRow() {
-//            $0.title = "Total Weight Moved"
-//
-//            if let totalWeight = workout.totalWeight {
-//                $0.value = weightFormatter.stringFromNumber(totalWeight)
-//                $0.hidden = false
-//            } else {
-//                $0.hidden = true
-//            }
-//        }
-
         <<< SideBySideAnatomyViewRow("anatomy")
 
         form.rowByTag("workout_week")?.baseValue = NSDate()
     }
 
     private func refresh() {
-        workoutCounts = Dictionary(try! Workout.Adapter.countByDay())
+        workoutCounts = Dictionary(try! db.countByDay(Workout))
         self.form.rowByTag("anatomy")?.updateCell()
         self.form.rowByTag("workout_week")?.updateCell()
     }

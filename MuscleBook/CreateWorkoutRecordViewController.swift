@@ -21,6 +21,7 @@ import Eureka
 
 class CreateWorkoutRecordViewController: FormViewController {
 
+    private let db = DB.sharedInstance
     private let workoutID: Int64
     private let callback: Workset? -> Void
     private let formatter = NSDateFormatter()
@@ -30,21 +31,21 @@ class CreateWorkoutRecordViewController: FormViewController {
     private let exerciseSpecified: Bool
 
     private lazy var workout: Workout? = {
-        return Workout.Adapter.find(self.workoutID)
+        self.db.get(Workout.self, workoutID: self.workoutID)
     }()
 
     lazy var minDate: NSDate? = {
-        if let workout = self.workout?.prev() {
-            return self.cal.startOfDayForDate(workout.date)
-        }
-        return nil
+        guard let workout = self.workout else { return nil }
+        guard let prev = self.db.prev(workout) else { return nil }
+        return self.cal.startOfDayForDate(prev.date)
     }()
 
     lazy var maxDate: NSDate? = {
-        if let nextWorkout = self.workout?.next() {
-            return nextWorkout.date
-        }
-        return NSDate()
+        guard let
+            workout = self.workout,
+            next = self.db.next(workout)
+            else { return NSDate() }
+        return next.date
     }()
     
     init(workoutID: Int64, exercise: ExerciseReference? = nil, defaultDate: NSDate = NSDate(), callback: Workset? -> Void) {
@@ -55,7 +56,7 @@ class CreateWorkoutRecordViewController: FormViewController {
             self.exercise = exercise
         } else {
             exerciseSpecified = false
-            let last = try! Workset.Adapter.newest()
+            let last = db.newest(Workset)
             self.exercise = last?.exerciseReference
         }
         self.callback = callback
@@ -136,7 +137,7 @@ class CreateWorkoutRecordViewController: FormViewController {
                             row.value = nil
                             return
                     }
-                    row.value = Workset.Adapter.findMax1RM(exerciseID: exerciseID, todate: date).flatMap {
+                    row.value = self.db.maxE1RM(exerciseID: exerciseID, todate: date).flatMap {
                         guard let weight = $0.weight else { return nil }
                         self.formatter.dateStyle = .ShortStyle
                         self.formatter.timeStyle = .NoStyle

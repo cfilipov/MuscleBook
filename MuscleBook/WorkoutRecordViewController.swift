@@ -23,6 +23,8 @@ class WorkoutRecordViewController : FormViewController {
 
     private let record: Workset
 
+    private let db = DB.sharedInstance
+
     private let dateFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
         formatter.dateStyle = .FullStyle
@@ -57,7 +59,7 @@ class WorkoutRecordViewController : FormViewController {
 
         let section = Section()
 
-        if let exercise = record.exerciseReference.details {
+        if let exercise = db.dereference(record.exerciseReference) {
             section <<< LabelRow("exercise") {
                 $0.title = "Exercise"
                 $0.value = record.exerciseName

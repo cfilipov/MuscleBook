@@ -18,20 +18,26 @@
 
 import UIKit
 import Eureka
+import SQLite
 
 final class SelectExerciseViewController: UITableViewController, TypedRowControllerType {
+
+    private let db = DB.sharedInstance
 
     var row: RowOf<ExerciseReference>!
     var completionCallback : ((UIViewController) -> ())?
 
     private let formatter = NSDateFormatter()
     private let searchController = UISearchController(searchResultsController: nil)
-    private let allExercises = Array(try! ExerciseReference.Adapter.all())
     private var filteredExercises: [ExerciseReference] = []
-    
+
     var exercises: [ExerciseReference] {
         return searchController.active ? filteredExercises : allExercises
     }
+
+    private lazy var allExercises: [ExerciseReference] = {
+        return (try? self.db.all(Exercise)) ?? []
+    }()
     
     init() {
         super.init(style: .Plain)
@@ -73,8 +79,9 @@ final class SelectExerciseViewController: UITableViewController, TypedRowControl
     }
     
     override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
-        let ex = exercises[indexPath.row]
-        let vc = ExerciseDetailViewController(exercise: ex.details!)
+        let ref = exercises[indexPath.row]
+        guard let exercise = db.dereference(ref) else { return }
+        let vc = ExerciseDetailViewController(exercise: exercise)
         showViewController(vc, sender: nil)
         searchController.active = false
     }
@@ -85,7 +92,7 @@ final class SelectExerciseViewController: UITableViewController, TypedRowControl
             tableView!.reloadData()
             return
         }
-        filteredExercises = Array(try! Exercise.Adapter.find(name: searchText))
+        filteredExercises = Array(try! db.match(name: searchText))
         tableView!.reloadData()
     }
 
@@ -96,4 +103,3 @@ extension SelectExerciseViewController: UISearchResultsUpdating {
         filterContentForSearchText(searchController.searchBar.text!)
     }
 }
-

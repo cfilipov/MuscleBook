@@ -22,6 +22,7 @@ import JSQNotificationObserverKit
 
 class DebugMenuViewController : FormViewController {
 
+    private let db = DB.sharedInstance
     private let mainQueue = NSOperationQueue.mainQueue()
     private var observer: CocoaObserver? = nil
     
@@ -89,7 +90,7 @@ class DebugMenuViewController : FormViewController {
             $0.title = "Export Database"
         }.onCellSelection { _, _ in
             let vc = UIActivityViewController(
-                activityItems: [NSURL(fileURLWithPath: DB.sharedInstance.path)],
+                activityItems: [NSURL(fileURLWithPath: DB.path)],
                 applicationActivities: nil
             )
             self.presentViewController(vc, animated: true, completion: nil)
@@ -114,7 +115,7 @@ class DebugMenuViewController : FormViewController {
     }
 
     private func onImportCSV(cell: LabelCell, row: LabelRow) {
-        guard Workset.Adapter.count() == 0 else {
+        guard db.count(Workset) == 0 else {
             Alert(message: "Cannot import data, you already have data.")
             return
         }
@@ -131,7 +132,7 @@ class DebugMenuViewController : FormViewController {
                 row.value = "Importing..."
                 row.reload()
                 do {
-                    let importCount = try WorksetAdapter.importCSV(url: url)
+                    let importCount = try self.db.importCSV(Workset.self, fromURL: url)
                     row.value = nil
                     row.disabled = false
                     row.reload()
@@ -150,5 +151,3 @@ class DebugMenuViewController : FormViewController {
     }
 
 }
-
-

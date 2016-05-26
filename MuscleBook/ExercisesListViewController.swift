@@ -21,13 +21,18 @@ import Eureka
 
 class ExercisesListViewController: UITableViewController, TypedRowControllerType {
 
+    private let db = DB.sharedInstance
+
     var row: RowOf<ExerciseReference>!
     var completionCallback : ((UIViewController) -> ())?
 
     private let formatter = NSDateFormatter()
     private let searchController = UISearchController(searchResultsController: nil)
-    private let allExercises = Array(try! ExerciseReference.Adapter.all())
     private var filteredExercises: [ExerciseReference] = []
+
+    private lazy var allExercises: [ExerciseReference] = {
+        return (try? self.db.all(Exercise)) ?? []
+    }()
 
     var exercises: [ExerciseReference] {
         return searchController.active ? filteredExercises : allExercises
@@ -66,8 +71,9 @@ class ExercisesListViewController: UITableViewController, TypedRowControllerType
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let ex = exercises[indexPath.row]
-        let vc = ExerciseDetailViewController(exercise: ex.details!)
+        let ref = exercises[indexPath.row]
+        let ex = db.dereference(ref)
+        let vc = ExerciseDetailViewController(exercise: ex!)
         showViewController(vc, sender: nil)
         searchController.active = false
     }
@@ -78,10 +84,9 @@ class ExercisesListViewController: UITableViewController, TypedRowControllerType
             tableView!.reloadData()
             return
         }
-        filteredExercises = Array(try! Exercise.Adapter.find(name: searchText))
+        filteredExercises = Array(try! db.match(name: searchText))
         tableView!.reloadData()
     }
-
 }
 
 extension ExercisesListViewController: UISearchResultsUpdating {

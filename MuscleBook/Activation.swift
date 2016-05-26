@@ -18,15 +18,15 @@
 
 import Foundation
 
-public enum Activation: Int, Comparable {
-    case None = 0
+enum Activation: Int64, Comparable {
+    case None
     case Light // Below average intensity and volume
     case Normal // Above average intensity or volume
     case High // High intensity or volume (> 80% best) or failure set
     case Max // New PR
 }
 
-public func <(lhs: Activation, rhs: Activation) -> Bool {
+func <(lhs: Activation, rhs: Activation) -> Bool {
     return lhs.rawValue < rhs.rawValue
 }
 
@@ -86,6 +86,20 @@ extension Activation {
         else {
             self = .None
             return
+        }
+    }
+
+    static var all: [Activation] {
+        return [.None, .Light, .Normal, .High, .Max]
+    }
+
+    var name: String {
+        switch self {
+        case .None: return "None"
+        case .Light: return "Light"
+        case .Normal: return "Normal"
+        case .High: return "High"
+        case .Max: return "Max"
         }
     }
 }

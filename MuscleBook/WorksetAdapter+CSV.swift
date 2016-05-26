@@ -18,37 +18,6 @@
 
 import Foundation
 
-extension WorksetAdapter {
-    
-    static func importCSV(url url: NSURL) throws -> Int {
-        let importer = WorksetCSVImporter(url: url)
-        return try importer.importCSV()
-    }
-
-    static func exportCSV(url: NSURL) throws {
-        let writer = CHCSVWriter(forWritingToCSVFile: url.path)
-        writer.writeField("Date")
-        writer.writeField("WorkoutID")
-        writer.writeField("ExerciseID")
-        writer.writeField("Exercise")
-        writer.writeField("Reps")
-        writer.writeField("Weight")
-        writer.writeField("Duration")
-        writer.finishLine()
-        try all().forEach { workset in
-            writer.writeField(workset.date.datatypeValue)
-            writer.writeField(workset.workoutID?.description ?? "")
-            writer.writeField(workset.exerciseID?.description ?? "")
-            writer.writeField(workset.exerciseName)
-            writer.writeField(workset.reps.description)
-            writer.writeField(workset.weight?.description ?? "")
-            writer.writeField(workset.duration?.description ?? "")
-            writer.finishLine()
-        }
-    }
-
-}
-
 final class WorksetCSVImporter {
 
     private let url: NSURL
@@ -72,13 +41,9 @@ final class WorksetCSVImporter {
         precondition(workoutIDs.isEmpty)
         precondition(curWorkoutID == 0)
         records = NSArray(contentsOfCSVURL: url, options: [.SanitizesFields, .TrimsWhitespace, .UsesFirstLineAsKeys]) as! [CHCSVOrderedDictionary]
-        try DB.sharedInstance.connection.transaction {
-            for record in self.records {
-                if let w = try self.workset(CSVRecord: record) {
-                    try Workset.Adapter.save(w)
-                }
-            }
-        }
+        try DB.sharedInstance.save(
+            records.flatMap { try workset(CSVRecord: $0) }
+        )
         return records.count
     }
 
@@ -108,9 +73,10 @@ final class WorksetCSVImporter {
         let wID = (record["WorkoutID"] as? String).flatMap { Int64($0) } ?? nextWorkoutID(dateStr: dateStr)
         let date = NSDate.parseISO8601Date(dateStr)
         if weight == nil && duration == nil { return nil }
+        let db = DB.sharedInstance
         var workset = try Workset(
             worksetID: nil,
-            exerciseID: exerciseID ?? Exercise.Adapter.find(name: exerciseName).generate().next()?.exerciseID,
+            exerciseID: exerciseID ?? db.match(name: exerciseName).generate().next()?.exerciseID,
             workoutID: wID,
             exerciseName: exerciseName,
             date: date,
@@ -121,9 +87,10 @@ final class WorksetCSVImporter {
             maxE1RM: nil,
             maxDuration: nil
         )
-        workset.maxE1RM = workset.exerciseID.flatMap { Workset.Adapter.findMax1RM(exerciseID: $0, todate: date)?.e1RM }
+        workset.maxE1RM = workset.exerciseID.flatMap {
+            db.maxE1RM(exerciseID: $0, todate: date)?.e1RM
+        }
         return workset
     }
 
 }
-

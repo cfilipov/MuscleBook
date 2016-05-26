@@ -18,7 +18,30 @@
 
 import Foundation
 import SQLite
+import SQLiteMigrationManager
 
-extension MuscleWorkout: ModelType {
-    typealias Adapter = WorkoutAdapter
+protocol Schema {
+    static var migration: Migration { get }
+    static var version: Int64 { get }
+    static func migrateDatabase(db: Connection) throws
+}
+
+struct AnyMigration<S: Schema>: Migration {
+    let version: Int64
+    let schema: S.Type
+
+    init(schema: S.Type) {
+        self.schema = schema
+        self.version = schema.version
+    }
+
+    func migrateDatabase(db: Connection) throws {
+        try S.migrateDatabase(db)
+    }
+}
+
+extension Schema {
+    static var migration: Migration {
+        return AnyMigration(schema: self)
+    }
 }

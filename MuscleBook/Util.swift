@@ -404,3 +404,9 @@ extension NSDateFormatter {
     }
 }
 
+infix operator ?= { associativity right }
+func ?=<T>(inout left: T, right: T?) {
+    if let right = right {
+        left = right
+    }
+}

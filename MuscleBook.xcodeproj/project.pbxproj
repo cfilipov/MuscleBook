@@ -27,11 +27,11 @@
 		B232F8041C633EB20072FEEC /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2B3E1181C6309CD00C9C9A0 /* Alamofire.framework */; };
 		B232F8051C633EB20072FEEC /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B2B3E1181C6309CD00C9C9A0 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B23386C11CB48C680027981A /* MuscleWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23386C01CB48C680027981A /* MuscleWorkout.swift */; };
-		B23386E61CB48C710027981A /* MuscleWorkoutAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23386E51CB48C710027981A /* MuscleWorkoutAdapter.swift */; };
-		B23386F41CB4ED690027981A /* ExerciseReferenceAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23386F31CB4ED690027981A /* ExerciseReferenceAdapter.swift */; };
 		B23387591CB74F0C0027981A /* VerifyWorksetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23387581CB74F0C0027981A /* VerifyWorksetsViewController.swift */; };
 		B23668E91CB341EF00C0CEFB /* FormItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23668E81CB341EF00C0CEFB /* FormItems.swift */; };
 		B23F0C751CF18775006BF745 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23F0C741CF18775006BF745 /* MenuViewController.swift */; };
+		B23F0CD81CF4BFDB006BF745 /* Schema20160524095754146.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23F0CD71CF4BFDB006BF745 /* Schema20160524095754146.swift */; };
+		B23F0CDC1CF693A2006BF745 /* Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23F0CDB1CF693A2006BF745 /* Schema.swift */; };
 		B247AEEA1C9CD74C00A501B0 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = B247AEE91C9CD74C00A501B0 /* Model.swift */; };
 		B25E85831C7D6C3700253A62 /* Workset.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E85821C7D6C3700253A62 /* Workset.swift */; };
 		B25E861E1C7EBD8700253A62 /* AnatomySplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E861D1C7EBD8700253A62 /* AnatomySplitView.swift */; };
@@ -56,11 +56,10 @@
 		B25E86951C800BA300253A62 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E86801C800BA300253A62 /* Team.swift */; };
 		B25E86961C800BA300253A62 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E86811C800BA300253A62 /* Users.swift */; };
 		B25E86971C800BA300253A62 /* UsersRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E86821C800BA300253A62 /* UsersRoutes.swift */; };
-		B27D2FA51CB4845800C219E8 /* MigrationInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27D2FA41CB4845800C219E8 /* MigrationInit.swift */; };
+		B27D2FA51CB4845800C219E8 /* Schema20160410215418161.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27D2FA41CB4845800C219E8 /* Schema20160410215418161.swift */; };
 		B2843FC21CB8A1E2008D0953 /* SideBySideAnatomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2843FC11CB8A1E2008D0953 /* SideBySideAnatomyView.swift */; };
 		B2843FE71CB8A33B008D0953 /* SideBySideAnatomyViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2843FE61CB8A33B008D0953 /* SideBySideAnatomyViewCell.swift */; };
 		B2843FE91CB8C42F008D0953 /* MuscleWorkSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2843FE81CB8C42F008D0953 /* MuscleWorkSummary.swift */; };
-		B2843FEB1CB8C462008D0953 /* MuscleWorkSummaryAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2843FEA1CB8C462008D0953 /* MuscleWorkSummaryAdapter.swift */; };
 		B2843FF11CBB3412008D0953 /* AnatomyViewConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2843FF01CBB3412008D0953 /* AnatomyViewConfig.swift */; };
 		B2843FF31CBB3461008D0953 /* MuscleActivation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2843FF21CBB3461008D0953 /* MuscleActivation.swift */; };
 		B2843FF51CBB3480008D0953 /* Activation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2843FF41CBB3480008D0953 /* Activation.swift */; };
@@ -100,7 +99,6 @@
 		B2C367A51CB188080045824F /* CHCSVParser.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C367A31CB188080045824F /* CHCSVParser.m */; };
 		B2C367A81CB188470045824F /* WorksetAdapter+CSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C367A71CB188470045824F /* WorksetAdapter+CSV.swift */; };
 		B2C367AA1CB1B12F0045824F /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C367A91CB1B12F0045824F /* Workout.swift */; };
-		B2C367AC1CB1B1400045824F /* WorkoutAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C367AB1CB1B1400045824F /* WorkoutAdapter.swift */; };
 		B2C367AF1CB1C8640045824F /* DebugTimersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C367AE1CB1C8640045824F /* DebugTimersViewController.swift */; };
 		B2C367C31CB235000045824F /* AnatomyDebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C367C21CB235000045824F /* AnatomyDebugViewController.swift */; };
 		B2D61BC11C657DCB00D30F79 /* HEXColor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2D61BB31C657D3800D30F79 /* HEXColor.framework */; };
@@ -113,18 +111,13 @@
 		B2E1A38B1C72B1DD00B0B653 /* Eureka.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B2E1A3871C72B1CF00B0B653 /* Eureka.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B2E1A38F1C72B21100B0B653 /* WorkoutRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E1A38E1C72B21100B0B653 /* WorkoutRecordViewController.swift */; };
 		B2E293D31CA9E08E009BC21A /* DB.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E293D21CA9E08E009BC21A /* DB.swift */; };
-		B2E293D51CA9F053009BC21A /* WorksetAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E293D41CA9F053009BC21A /* WorksetAdapter.swift */; };
 		B2E293D81CA9F166009BC21A /* WorksetCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E293D71CA9F166009BC21A /* WorksetCoder.swift */; };
 		B2E293DA1CA9FB50009BC21A /* WorksetAdapter+Dropbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E293D91CA9FB50009BC21A /* WorksetAdapter+Dropbox.swift */; };
 		B2E293DC1CA9FBD4009BC21A /* Workset+YAML.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E293DB1CA9FBD4009BC21A /* Workset+YAML.swift */; };
 		B2E294101CAA51F7009BC21A /* MuscleMovement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E2940F1CAA51F7009BC21A /* MuscleMovement.swift */; };
 		B2E294141CAA5630009BC21A /* ExerciseCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E294131CAA5630009BC21A /* ExerciseCoder.swift */; };
-		B2E294161CAA579A009BC21A /* ExerciseAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E294151CAA579A009BC21A /* ExerciseAdapter.swift */; };
 		B2E294181CAA6680009BC21A /* MuscleMovementCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E294171CAA6680009BC21A /* MuscleMovementCoder.swift */; };
-		B2E2941A1CAAE9A1009BC21A /* MuscleMovementAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E294191CAAE9A1009BC21A /* MuscleMovementAdapter.swift */; };
-		B2E2944E1CAB2D74009BC21A /* MuscleAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E2944D1CAB2D74009BC21A /* MuscleAdapter.swift */; };
 		B2E294511CAB40F2009BC21A /* Exercise+YAML.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E294501CAB40F2009BC21A /* Exercise+YAML.swift */; };
-		B2E294531CAB4B7A009BC21A /* MuscleMovementClassificationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E294521CAB4B7A009BC21A /* MuscleMovementClassificationAdapter.swift */; };
 		B2E294571CAC649E009BC21A /* ExerciseReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E294561CAC649E009BC21A /* ExerciseReference.swift */; };
 		B2E2945F1CAC781A009BC21A /* AnatomyViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E2945E1CAC781A009BC21A /* AnatomyViewCell.swift */; };
 		B2E2946E1CACA1D2009BC21A /* CalendarWeekCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E2946D1CACA1D2009BC21A /* CalendarWeekCell.swift */; };
@@ -443,11 +436,11 @@
 		B23180D31C76D6730043BFE4 /* Muscle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Muscle.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B23180D91C76DDCF0043BFE4 /* Exercise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Exercise.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B23386C01CB48C680027981A /* MuscleWorkout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MuscleWorkout.swift; sourceTree = "<group>"; };
-		B23386E51CB48C710027981A /* MuscleWorkoutAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MuscleWorkoutAdapter.swift; sourceTree = "<group>"; };
-		B23386F31CB4ED690027981A /* ExerciseReferenceAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseReferenceAdapter.swift; sourceTree = "<group>"; };
 		B23387581CB74F0C0027981A /* VerifyWorksetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyWorksetsViewController.swift; sourceTree = "<group>"; };
 		B23668E81CB341EF00C0CEFB /* FormItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormItems.swift; sourceTree = "<group>"; };
 		B23F0C741CF18775006BF745 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		B23F0CD71CF4BFDB006BF745 /* Schema20160524095754146.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schema20160524095754146.swift; sourceTree = "<group>"; };
+		B23F0CDB1CF693A2006BF745 /* Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schema.swift; sourceTree = "<group>"; };
 		B247AEE91C9CD74C00A501B0 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Model.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B25E85821C7D6C3700253A62 /* Workset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Workset.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B25E861D1C7EBD8700253A62 /* AnatomySplitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AnatomySplitView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -477,11 +470,10 @@
 		B25E86811C800BA300253A62 /* Users.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		B25E86821C800BA300253A62 /* UsersRoutes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersRoutes.swift; sourceTree = "<group>"; };
 		B27D2F951CB480CF00C219E8 /* SQLiteMigrationManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SQLiteMigrationManager.xcodeproj; path = Submodules/SQLiteMigrationManager.swift/SQLiteMigrationManager.xcodeproj; sourceTree = "<group>"; };
-		B27D2FA41CB4845800C219E8 /* MigrationInit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MigrationInit.swift; sourceTree = "<group>"; };
+		B27D2FA41CB4845800C219E8 /* Schema20160410215418161.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schema20160410215418161.swift; sourceTree = "<group>"; };
 		B2843FC11CB8A1E2008D0953 /* SideBySideAnatomyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBySideAnatomyView.swift; sourceTree = "<group>"; };
 		B2843FE61CB8A33B008D0953 /* SideBySideAnatomyViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBySideAnatomyViewCell.swift; sourceTree = "<group>"; };
 		B2843FE81CB8C42F008D0953 /* MuscleWorkSummary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MuscleWorkSummary.swift; sourceTree = "<group>"; };
-		B2843FEA1CB8C462008D0953 /* MuscleWorkSummaryAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MuscleWorkSummaryAdapter.swift; sourceTree = "<group>"; };
 		B2843FF01CBB3412008D0953 /* AnatomyViewConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnatomyViewConfig.swift; sourceTree = "<group>"; };
 		B2843FF21CBB3461008D0953 /* MuscleActivation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MuscleActivation.swift; sourceTree = "<group>"; };
 		B2843FF41CBB3480008D0953 /* Activation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activation.swift; sourceTree = "<group>"; };
@@ -530,7 +522,6 @@
 		B2C367A31CB188080045824F /* CHCSVParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHCSVParser.m; sourceTree = "<group>"; };
 		B2C367A71CB188470045824F /* WorksetAdapter+CSV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "WorksetAdapter+CSV.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2C367A91CB1B12F0045824F /* Workout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Workout.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		B2C367AB1CB1B1400045824F /* WorkoutAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = WorkoutAdapter.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2C367AE1CB1C8640045824F /* DebugTimersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DebugTimersViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2C367C21CB235000045824F /* AnatomyDebugViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnatomyDebugViewController.swift; sourceTree = "<group>"; };
 		B2D61BA61C657D3800D30F79 /* HEXColor.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HEXColor.xcodeproj; path = "Submodules/UIColor-Hex-Swift/HEXColor.xcodeproj"; sourceTree = "<group>"; };
@@ -542,18 +533,13 @@
 		B2E1A38E1C72B21100B0B653 /* WorkoutRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = WorkoutRecordViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2E293B91CA9E03A009BC21A /* SQLite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SQLite.xcodeproj; path = Submodules/SQLite.swift/SQLite.xcodeproj; sourceTree = "<group>"; };
 		B2E293D21CA9E08E009BC21A /* DB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DB.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		B2E293D41CA9F053009BC21A /* WorksetAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = WorksetAdapter.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2E293D71CA9F166009BC21A /* WorksetCoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = WorksetCoder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2E293D91CA9FB50009BC21A /* WorksetAdapter+Dropbox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "WorksetAdapter+Dropbox.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2E293DB1CA9FBD4009BC21A /* Workset+YAML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "Workset+YAML.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2E2940F1CAA51F7009BC21A /* MuscleMovement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MuscleMovement.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2E294131CAA5630009BC21A /* ExerciseCoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ExerciseCoder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		B2E294151CAA579A009BC21A /* ExerciseAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ExerciseAdapter.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2E294171CAA6680009BC21A /* MuscleMovementCoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MuscleMovementCoder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		B2E294191CAAE9A1009BC21A /* MuscleMovementAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MuscleMovementAdapter.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		B2E2944D1CAB2D74009BC21A /* MuscleAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MuscleAdapter.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2E294501CAB40F2009BC21A /* Exercise+YAML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "Exercise+YAML.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		B2E294521CAB4B7A009BC21A /* MuscleMovementClassificationAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MuscleMovementClassificationAdapter.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2E294561CAC649E009BC21A /* ExerciseReference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ExerciseReference.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2E2945E1CAC781A009BC21A /* AnatomyViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AnatomyViewCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2E294601CACA199009BC21A /* CVCalendar.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CVCalendar.xcodeproj; path = Extern/CVCalendar/CVCalendar.xcodeproj; sourceTree = "<group>"; };
@@ -681,18 +667,19 @@
 			isa = PBXGroup;
 			children = (
 				B2E293D21CA9E08E009BC21A /* DB.swift */,
-				B2843FEC1CB8C46B008D0953 /* Model */,
-				B23387191CB4F8710027981A /* Migration */,
+				B23F0CDB1CF693A2006BF745 /* Schema.swift */,
+				B23387191CB4F8710027981A /* Schemas */,
 			);
 			name = Database;
 			sourceTree = "<group>";
 		};
-		B23387191CB4F8710027981A /* Migration */ = {
+		B23387191CB4F8710027981A /* Schemas */ = {
 			isa = PBXGroup;
 			children = (
-				B27D2FA41CB4845800C219E8 /* MigrationInit.swift */,
+				B27D2FA41CB4845800C219E8 /* Schema20160410215418161.swift */,
+				B23F0CD71CF4BFDB006BF745 /* Schema20160524095754146.swift */,
 			);
-			name = Migration;
+			name = Schemas;
 			sourceTree = "<group>";
 		};
 		B25E866B1C800BA300253A62 /* SwiftyDropbox */ = {
@@ -730,22 +717,6 @@
 				B25E86821C800BA300253A62 /* UsersRoutes.swift */,
 			);
 			path = Source;
-			sourceTree = "<group>";
-		};
-		B2843FEC1CB8C46B008D0953 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				B2E294151CAA579A009BC21A /* ExerciseAdapter.swift */,
-				B23386F31CB4ED690027981A /* ExerciseReferenceAdapter.swift */,
-				B2E2944D1CAB2D74009BC21A /* MuscleAdapter.swift */,
-				B2E294191CAAE9A1009BC21A /* MuscleMovementAdapter.swift */,
-				B2E294521CAB4B7A009BC21A /* MuscleMovementClassificationAdapter.swift */,
-				B23386E51CB48C710027981A /* MuscleWorkoutAdapter.swift */,
-				B2843FEA1CB8C462008D0953 /* MuscleWorkSummaryAdapter.swift */,
-				B2C367AB1CB1B1400045824F /* WorkoutAdapter.swift */,
-				B2E293D41CA9F053009BC21A /* WorksetAdapter.swift */,
-			);
-			name = Model;
 			sourceTree = "<group>";
 		};
 		B2843FED1CB8C4E1008D0953 /* Coder */ = {
@@ -1407,7 +1378,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2C367AF1CB1C8640045824F /* DebugTimersViewController.swift in Sources */,
-				B2E293D51CA9F053009BC21A /* WorksetAdapter.swift in Sources */,
 				B2E1A38F1C72B21100B0B653 /* WorkoutRecordViewController.swift in Sources */,
 				B25E86871C800BA300253A62 /* Async.swift in Sources */,
 				B23387591CB74F0C0027981A /* VerifyWorksetsViewController.swift in Sources */,
@@ -1418,7 +1388,6 @@
 				B2A52BA81CA0A74500268B6C /* UIImage+SVG.m in Sources */,
 				B2BE3BC81C8021FC009198EA /* SettingsViewController.swift in Sources */,
 				B2E7C58A1C69043300E60C07 /* SplitSwipeView.swift in Sources */,
-				B2E294531CAB4B7A009BC21A /* MuscleMovementClassificationAdapter.swift in Sources */,
 				B29485E21C8122730032DF0A /* Profiler.swift in Sources */,
 				B2E293D31CA9E08E009BC21A /* DB.swift in Sources */,
 				B25E861E1C7EBD8700253A62 /* AnatomySplitView.swift in Sources */,
@@ -1426,34 +1395,28 @@
 				B2E293DA1CA9FB50009BC21A /* WorksetAdapter+Dropbox.swift in Sources */,
 				B25E86891C800BA300253A62 /* BabelSerializers.swift in Sources */,
 				B2843FF11CBB3412008D0953 /* AnatomyViewConfig.swift in Sources */,
-				B27D2FA51CB4845800C219E8 /* MigrationInit.swift in Sources */,
+				B27D2FA51CB4845800C219E8 /* Schema20160410215418161.swift in Sources */,
 				B25E86861C800BA300253A62 /* README.md in Sources */,
 				A23B0A371CF0E62F00AD924F /* EFCalendarGraph.m in Sources */,
 				B29EA5261C866F4200F2E261 /* ValueCoding.swift in Sources */,
-				B23386E61CB48C710027981A /* MuscleWorkoutAdapter.swift in Sources */,
 				B2E294571CAC649E009BC21A /* ExerciseReference.swift in Sources */,
 				B25E868B1C800BA300253A62 /* Client.swift in Sources */,
 				B2DD36BA1C6C50A2002F8576 /* Util.swift in Sources */,
 				B2A52BAD1CA0AAB700268B6C /* MuscleListViewController.swift in Sources */,
 				B2C367AA1CB1B12F0045824F /* Workout.swift in Sources */,
-				B2C367AC1CB1B1400045824F /* WorkoutAdapter.swift in Sources */,
 				B2A52BA51CA0A74500268B6C /* JAMSVGGradientParts.m in Sources */,
 				B25E86481C7F874500253A62 /* JAMSVGImage+Extensions.m in Sources */,
 				B2E293D81CA9F166009BC21A /* WorksetCoder.swift in Sources */,
-				B2E2944E1CAB2D74009BC21A /* MuscleAdapter.swift in Sources */,
 				B25E86911C800BA300253A62 /* OAuth.swift in Sources */,
 				B2A52BBB1CA0D1B100268B6C /* WorkoutsByDayViewController.swift in Sources */,
 				B2A52BBD1CA0E03F00268B6C /* WorkoutViewController.swift in Sources */,
 				B2BCB5341C76EFCF0046F5A1 /* ExercisesListViewController.swift in Sources */,
 				B2843FC21CB8A1E2008D0953 /* SideBySideAnatomyView.swift in Sources */,
 				B2C367A51CB188080045824F /* CHCSVParser.m in Sources */,
-				B2E2941A1CAAE9A1009BC21A /* MuscleMovementAdapter.swift in Sources */,
 				B2A52BA61CA0A74500268B6C /* JAMSVGParser.m in Sources */,
 				B2C367C31CB235000045824F /* AnatomyDebugViewController.swift in Sources */,
-				B23386F41CB4ED690027981A /* ExerciseReferenceAdapter.swift in Sources */,
 				B25E86931C800BA300253A62 /* Sharing.swift in Sources */,
 				B25E86921C800BA300253A62 /* SecurityUtil.m in Sources */,
-				B2E294161CAA579A009BC21A /* ExerciseAdapter.swift in Sources */,
 				B205857D1C7C1F5500491328 /* StatisticsViewController.swift in Sources */,
 				B2843FE91CB8C42F008D0953 /* MuscleWorkSummary.swift in Sources */,
 				B23386C11CB48C680027981A /* MuscleWorkout.swift in Sources */,
@@ -1465,13 +1428,13 @@
 				B2B326891C852162005F88E4 /* DebugMenuViewController.swift in Sources */,
 				B2E2945F1CAC781A009BC21A /* AnatomyViewCell.swift in Sources */,
 				B2A52BA41CA0A74500268B6C /* JAMStyledBezierPathFactory.m in Sources */,
+				B23F0CD81CF4BFDB006BF745 /* Schema20160524095754146.swift in Sources */,
 				B2A52BAF1CA0AC5800268B6C /* AnatomyDiagramViewController.swift in Sources */,
 				A23B0A381CF0E62F00AD924F /* NSDate+Utilities.m in Sources */,
 				B25E868A1C800BA300253A62 /* BabelValidators.swift in Sources */,
 				B2A52BA71CA0A74500268B6C /* JAMSVGImage.m in Sources */,
 				B2BCB5361C76F2970046F5A1 /* ExerciseDetailViewController.swift in Sources */,
 				B2843FF51CBB3480008D0953 /* Activation.swift in Sources */,
-				B2843FEB1CB8C462008D0953 /* MuscleWorkSummaryAdapter.swift in Sources */,
 				B2E294141CAA5630009BC21A /* ExerciseCoder.swift in Sources */,
 				B25E864B1C7FA7BE00253A62 /* SelectExerciseViewController.swift in Sources */,
 				B247AEEA1C9CD74C00A501B0 /* Model.swift in Sources */,
@@ -1485,6 +1448,7 @@
 				A23B0A2F1CF0D67B00AD924F /* EFCalendarGraphAdapterDelegate.swift in Sources */,
 				B284400A1CBB80A8008D0953 /* AboutViewController.swift in Sources */,
 				A23B0A2D1CF0D1B100AD924F /* PunchcardCell.swift in Sources */,
+				B23F0CDC1CF693A2006BF745 /* Schema.swift in Sources */,
 				B2A52BC41CA1185100268B6C /* ImageCheckCell.swift in Sources */,
 				B25E86951C800BA300253A62 /* Team.swift in Sources */,
 				B2843FF31CBB3461008D0953 /* MuscleActivation.swift in Sources */,

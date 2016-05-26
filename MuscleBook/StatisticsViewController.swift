@@ -20,6 +20,8 @@ import UIKit
 import Eureka
 
 class StatisticsViewController : FormViewController {
+    
+    let db = DB.sharedInstance
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,22 +32,22 @@ class StatisticsViewController : FormViewController {
 
             <<< LabelRow() {
                 $0.title = "Total Exercises"
-                $0.value = String(Exercise.Adapter.count())
+                $0.value = String(db.count(Exercise))
             }
 
             <<< LabelRow() {
                 $0.title = "Total Muscles"
-                $0.value = String(Muscle.Adapter.count())
+                $0.value = String(db.count(Muscle))
             }
 
             <<< LabelRow() {
-                $0.title = "Total Workout Records"
-                $0.value = String(Workset.Adapter.count())
+                $0.title = "Total Workout Sets"
+                $0.value = String(db.count(Workset))
             }
 
             <<< LabelRow() {
                 $0.title = "Total Workouts"
-                $0.value = String(Workout.Adapter.count())
+                $0.value = String(db.count(Workout))
             }
 
     }
