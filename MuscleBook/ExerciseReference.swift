@@ -37,6 +37,6 @@ extension Exercise {
 
 extension Workset {
     var exerciseReference: ExerciseReference {
-        return ExerciseReference(exerciseID: exerciseID, name: exerciseName)
+        return ExerciseReference(exerciseID: input.exerciseID, name: input.exerciseName)
     }
 }

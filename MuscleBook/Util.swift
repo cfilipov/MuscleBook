@@ -301,6 +301,10 @@ extension NSCalendar {
         guard let d2 = d2 else { return false }
         return isDate(d1, inSameDayAsDate: d2)
     }
+
+    public func addDays(days: Int, toDate date: NSDate) -> NSDate? {
+        return dateByAddingUnit(.Day, value: days, toDate: date, options: NSCalendarOptions(rawValue: 0))
+    }
 }
 
 // http://stackoverflow.com/a/28102175

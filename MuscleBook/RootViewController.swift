@@ -38,8 +38,7 @@ class RootViewController: FormViewController {
         didSet {
             let anatomyRow = self.form.rowByTag("anatomy") as? SideBySideAnatomyViewRow
             anatomyRow?.value = try! AnatomyViewConfig(
-                db.get(MuscleWorkSummary.self, date: selectedDate)
-                    .filter { $0.movementClass == .Target }
+                db.get(MuscleWorkSummary.self, date: selectedDate, movementClass: .Target)
             )
             anatomyRow?.updateCell()
         }

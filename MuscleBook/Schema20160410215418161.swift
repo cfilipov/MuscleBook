@@ -47,7 +47,7 @@ extension This {
         static let synonyms = Expression<ArrayBox<String>>("synonyms")
         static let isMuscleGroup = Expression<Bool>("is_muscle_group")
     }
-
+    
     enum MuscleMovementClassification {
         static let table = Table("muscle_movement_classification")
         static let muscleMovementClassID = Expression<Int64>("muscle_movement_class_id")
@@ -110,7 +110,6 @@ extension This {
 // MARK:
 
 extension This.Exercise {
-
     static func find(exactName name: String) -> QueryType {
         return search
             .select(exerciseID, self.name)
@@ -138,7 +137,7 @@ extension This.MuscleMovement {
 
 // MARK:
 
-private extension This.Workset {
+extension This.Workset {
     static func create(db: Connection) throws {
         try db.run(
             table.create(ifNotExists: true) { t in
@@ -167,7 +166,7 @@ private extension This.Workset {
     }
 }
 
-private extension This.Workout {
+extension This.Workout {
     static func create(db: Connection) throws {
         try db.run(
             table.create(This.Workout.table
@@ -186,7 +185,7 @@ private extension This.Workout {
     }
 }
 
-private extension This.Muscle {
+extension This.Muscle {
     static func create(db: Connection) throws {
         try db.run(table.create(ifNotExists: true) { t in
             t.column(muscleID, primaryKey: true)
@@ -235,7 +234,7 @@ private extension This.Muscle {
     }
 }
 
-private extension This.MuscleMovementClassification {
+extension This.MuscleMovementClassification {
     static func create(db: Connection) throws {
         try db.run(
             table.create(ifNotExists: true) { t in
@@ -258,7 +257,7 @@ private extension This.MuscleMovementClassification {
     }
 }
 
-private extension This.MuscleMovement {
+extension This.MuscleMovement {
     static func create(db: Connection) throws {
         try db.run(
             table.create(ifNotExists: true) { t in
@@ -278,7 +277,7 @@ private extension This.MuscleMovement {
     }
 }
 
-private extension This.Exercise {
+extension This.Exercise {
     static func create(db: Connection) throws {
         try db.run(
             table.create(ifNotExists: true) { t in

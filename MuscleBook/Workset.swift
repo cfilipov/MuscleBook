@@ -19,49 +19,46 @@
 import Foundation
 
 struct Workset {
+    struct Input {
+        var exerciseID: Int64?
+        var exerciseName: String
+        var startTime: NSDate
+        var duration: Double
+        var failure: Bool
+        var warmup: Bool
+        var reps: Int?
+        var weight: Double?
+    }
+    struct Calculations {
+        var volume: Double?
+        var e1RM: Double?
+        var percentMaxVolume: Double?
+        var intensity: Double?
+        var activation: Activation
+    }
     var worksetID: Int64?
-    let exerciseID: Int64?
-    let workoutID: Int64?
-    let exerciseName: String
-    let date: NSDate
-    let reps: Int
-    let weight: Double?
-    let duration: Double?
-    var e1RM: Double?
-    var maxE1RM: Double?
-    var maxDuration: Double?
+    var workoutID: Int64?
+    var input: Input
+    var calculations: Calculations?
 }
 
-extension Workset: Equatable { }
-
-func == (lhs: Workset, rhs: Workset) -> Bool {
-    // http://stackoverflow.com/questions/26550775
-    if lhs.worksetID != rhs.worksetID { return false }
-    if lhs.workoutID != rhs.workoutID { return false }
-    if lhs.exerciseName != rhs.exerciseName { return false }
-    if lhs.date != rhs.date { return false }
-    if lhs.reps != rhs.reps { return false }
-    if lhs.weight != rhs.weight { return false }
-    if lhs.duration != rhs.duration { return false }
-    return true
+// http://www.exrx.net/Calculators/OneRepMax.html
+// http://www.exrx.net/Calculators/onerepmax.js
+func estimate1RM(reps reps: Int, weight: Double) -> Double? {
+    precondition(reps >= 0)
+    if reps == 0 { return nil }
+    if reps == 1 { return weight }
+    if reps < 10 { return round(weight / (1.0278 - 0.0278 * Double(reps))) }
+    else { return round(weight / 0.75) }
 }
 
 extension Workset {
-    var valueString: String {
-        if let weight = weight {
-            return "\(reps)@\(weight)"
-        }
-        return "\(reps) reps"
-    }
-
-    // http://www.exrx.net/Calculators/OneRepMax.html
-    // http://www.exrx.net/Calculators/onerepmax.js
-    static func estimate1RM(reps reps: Int, weight: Double) -> Double? {
-        precondition(reps >= 0)
-        if reps == 0 { return nil }
-        if reps == 1 { return weight }
-        if reps < 10 { return round(weight / (1.0278 - 0.0278 * Double(reps))) }
-        if reps == 10 { return round(weight / 0.75) }
-        return nil // This calculation only works for reps < 10
+    init(input: Input) {
+        self = Workset(
+            worksetID: nil,
+            workoutID: nil,
+            input: input,
+            calculations: nil
+        )
     }
 }

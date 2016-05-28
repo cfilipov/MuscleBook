@@ -20,7 +20,6 @@ import UIKit
 import Eureka
 
 class WorkoutsByDayViewController: FormViewController {
-
     private let db = DB.sharedInstance
 
     let weightFormatter: NSNumberFormatter = {
@@ -75,11 +74,7 @@ class WorkoutsByDayViewController: FormViewController {
         }.cellSetup { cell, row in
             cell.accessoryType = .DisclosureIndicator
         }.onCellSelection { cell, row in
-            let workoutID = self.db.nextAvailableRowID(Workout)
-            let vc = CreateWorkoutRecordViewController(workoutID: workoutID) { record in
-                if let record = record {
-                    try! self.db.save(record)
-                }
+            let vc = CreateWorkoutRecordViewController { record in
                 self.rebuildForm()
                 self.dismissViewControllerAnimated(true, completion: nil)
             }
@@ -90,7 +85,7 @@ class WorkoutsByDayViewController: FormViewController {
         var curMonth: String? = nil
         var curSection: Section? = nil
         for w in allWorkouts {
-            let month = monthFormatter.stringFromDate(w.date)
+            let month = monthFormatter.stringFromDate(w.startTime)
             if month != curMonth {
                 curMonth = month
                 let section = Section(month)
@@ -104,8 +99,9 @@ class WorkoutsByDayViewController: FormViewController {
     }
 
     private func workoutToRow(workout: Workout) -> BaseRow {
-        let row = workout.count > 0 ? activeDayRow(workout) : restDayRow(workout)
-        row.title = dateFormatter.stringFromDate(workout.date)
+        let row = activeDayRow(workout)
+        //let row = workout.reps > 0 ? activeDayRow(workout) : restDayRow(workout)
+        row.title = dateFormatter.stringFromDate(workout.startTime)
         return row
     }
 
@@ -118,8 +114,8 @@ class WorkoutsByDayViewController: FormViewController {
 
     private func activeDayRow(workout: Workout) -> BaseRow {
         let row = LabelRow()
-        if let totalWeight = workout.totalWeight {
-            row.value = weightFormatter.stringFromNumber(totalWeight)
+        if let volume = workout.volume {
+            row.value = weightFormatter.stringFromNumber(volume)
         }
         row.onCellSelection { cell, row in
             let vc = WorkoutViewController(workout: workout)

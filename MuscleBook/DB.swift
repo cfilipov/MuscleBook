@@ -20,14 +20,9 @@ import Foundation
 import SQLite
 import SQLiteMigrationManager
 
-protocol SQLAdaptable {
-    init(row: Row)
-    var setters: [Setter] { get }
-}
-
 // MARK:
 
-private typealias CurrentSchema = Schema20160410215418161
+typealias CurrentSchema = Schema20160524095754146
 
 class DB {
 
@@ -41,50 +36,47 @@ class DB {
     private let db: Connection
 
     private init() {
-        do {
+        let fileManager = NSFileManager.defaultManager()
 
-            let fileManager = NSFileManager.defaultManager()
+        if !fileManager.fileExistsAtPath(DB.path) {
+            let bundlePath = BundlePath(name: "musclebook", type: "db")
+            try! fileManager.copyItemAtPath(bundlePath, toPath: DB.path)
+        }
 
-            if !fileManager.fileExistsAtPath(DB.path) {
-                let bundlePath = BundlePath(name: "musclebook", type: "db")
-                try! fileManager.copyItemAtPath(bundlePath, toPath: DB.path)
-            }
+        db = try! Connection(DB.path)
 
-            db = try Connection(DB.path)
+        #if DEBUG
+            print("Database: " + DB.path)
+            db.trace{print($0)}
+        #endif
 
-            #if DEBUG
-                print("Database: " + DB.path)
-                db.trace{print($0)}
-            #endif
+        let migrationManager = SQLiteMigrationManager(
+            db: db,
+            migrations: [
+                Schema20160410215418161.migration,
+                Schema20160524095754146.migration
+            ]
+        )
 
-            let migrationManager = SQLiteMigrationManager(
-                db: db,
-                migrations: [
-                    Schema20160410215418161.migration,
-                    // Schema20160524095754146.migration
-                ]
-            )
+        if !migrationManager.hasMigrationsTable() {
+            try! migrationManager.createMigrationsTable()
+        }
 
-            if !migrationManager.hasMigrationsTable() {
-                try migrationManager.createMigrationsTable()
-            }
-
-            if migrationManager.needsMigration() {
-                try migrationManager.migrateDatabase()
-            }
-            
-        } catch {
-            fatalError()
+        if migrationManager.needsMigration() {
+            try! migrationManager.migrateDatabase()
+            try! recalculateAllWorksets()
         }
     }
 
 }
 
+// MARK:
+
 extension DB {
 
     func all(type: Workset.Type) throws -> AnySequence<Workset> {
         return try db.prepare(
-            Workset.Schema.table.order(Workset.Schema.date.desc)
+            Workset.Schema.table.order(Workset.Schema.startTime.desc)
         )
     }
 
@@ -97,7 +89,7 @@ extension DB {
     }
 
     func all(type: Workout.Type) throws -> AnySequence<Workout> {
-        return try db.prepare(Workout.Schema.table.order(Workout.Schema.date.desc))
+        return try db.prepare(Workout.Schema.table.order(Workout.Schema.startTime.desc))
     }
 
     func save(exercise: Exercise) throws -> Int64 {
@@ -114,16 +106,31 @@ extension DB {
         return try db.run(MuscleMovement.Schema.table.insert(movement))
     }
 
-    func save(workset: Workset) throws -> Int64 {
-        return try db.run(Workset.Schema.table.insert(workset))
+    func save(workset: Workset) throws {
+        try db.transaction {
+            var w = workset
+            let wID = self.workoutID(forStartTime: workset.input.startTime, duration: workset.input.duration)
+            w.workoutID = wID
+            try self.db.run(Workset.Schema.table.insert(w))
+            try self.recalculate(workoutID: wID)
+        }
     }
 
-    func save(records: [Workset]) throws {
+    func save(worksets: [Workset]) throws {
         try db.transaction {
-            for w in records {
+            for w in worksets {
                 try self.save(w)
             }
         }
+    }
+
+    func update(workset: Workset) throws {
+        typealias W = Workset.Schema
+        try db.run(
+            W.table
+                .filter(W.worksetID == workset.worksetID!)
+                .update(workset.setters)
+        )
     }
 
     func count(type: Exercise.Type) -> Int {
@@ -145,14 +152,14 @@ extension DB {
     func count(type: Workout.Type, date: NSDate) -> Int {
         return db.scalar(
             Workout.Schema.table.filter(
-                Workout.Schema.date.localDay == date.localDay
+                Workout.Schema.startTime.localDay == date.localDay
             ).count
         )
     }
 
     func countByDay(type: Workout.Type) throws -> [(NSDate, Int)] {
         let cal = NSCalendar.currentCalendar()
-        let date = Workout.Schema.date
+        let date = Workout.Schema.startTime
         let count = Workout.Schema.workoutID.count
         let rows = try db.prepare(
             Workout.Schema.table.select(date, count).group(date.localDay)
@@ -206,15 +213,69 @@ extension DB {
         return (max ?? 0) + 1
     }
 
-    func maxE1RM(exerciseID exerciseID: Int64, todate date: NSDate = NSDate()) -> Workset? {
+    func maxRM(exerciseID exerciseID: Int64, todate date: NSDate = NSDate()) -> Workset? {
         return db.pluck(
             Workset.Schema.table
                 .filter(
-                    Workset.Schema.date.localDay < date.localDay &&
+                    Workset.Schema.startTime.localDay < date.localDay &&
                         Workset.Schema.exerciseID == exerciseID &&
                         Workset.Schema.exerciseID != nil
                 )
-                .order(Workset.Schema.e1RM.desc)
+                .order(Workset.Schema.weight.desc)
+                .limit(1)
+        )
+    }
+
+    func max1RM(exerciseID exerciseID: Int64, todate date: NSDate = NSDate()) -> Workset? {
+        typealias W = Workset.Schema
+        return db.pluck(W.table
+            .filter(
+                W.startTime.localDay < date.localDay &&
+                    W.exerciseID == exerciseID &&
+                    W.exerciseID != nil &&
+                    W.reps == 1
+            )
+            .order(Workset.Schema.weight.desc)
+            .limit(1)
+        )
+    }
+
+    func maxE1RM(exerciseID exerciseID: Int64, todate date: NSDate = NSDate()) -> Workset? {
+        typealias W = Workset.Schema
+        return db.pluck(W.table
+            .filter(
+                W.startTime.localDay < date.localDay &&
+                    W.exerciseID == exerciseID &&
+                    W.exerciseID != nil
+            )
+            .order(W.e1RM.desc)
+            .limit(1)
+        )
+    }
+
+    func maxXRM(exerciseID exerciseID: Int64, reps: Int, todate date: NSDate = NSDate()) -> Workset? {
+        typealias W = Workset.Schema
+        return db.pluck(W.table
+            .filter(
+                W.startTime.localDay < date.localDay &&
+                    W.exerciseID == exerciseID &&
+                    W.exerciseID != nil &&
+                    W.reps == reps
+            )
+            .order(Workset.Schema.weight.desc)
+            .limit(1)
+        )
+    }
+
+    func maxVolume(exerciseID exerciseID: Int64, todate date: NSDate = NSDate()) -> Workset? {
+        return db.pluck(
+            Workset.Schema.table
+                .filter(
+                    Workset.Schema.startTime.localDay < date.localDay &&
+                        Workset.Schema.exerciseID == exerciseID &&
+                        Workset.Schema.exerciseID != nil
+                )
+                .order(Workset.Schema.volume.desc)
                 .limit(1)
         )
     }
@@ -222,135 +283,157 @@ extension DB {
     func volumeByDay() throws -> [(NSDate, Double)] {
         let cal = NSCalendar.currentCalendar()
         return try all(Workout).map { workout in
-            let date = cal.startOfDayForDate(workout.date)
-            return (date, workout.totalWeight ?? 0)
+            let date = cal.startOfDayForDate(workout.startTime)
+            return (date, workout.volume ?? 0)
         }
     }
 
-    func get(type: MuscleWorkSummary.Type, date: NSDate) throws -> [MuscleWorkSummary] {
-        let query = " SELECT " +
-            "\n     m.muscle_id, " +
-            "\n     w.exercise_id, " +
-            "\n     w.exercise_name, " +
-            "\n     m.muscle_movement_class_id, " +
-            "\n     avg(e1rm) as 'e1rm', " +
-            "\n     max_e1rm, " +
-            "\n     " +
-            "\n     ( -- 'avg_e1rm' " +
-            "\n         SELECT avg(e1rm) " +
-            "\n         FROM workset as ws " +
-            "\n         WHERE date(date, 'localtime') < date(?, 'localtime') " +
-            "\n             AND ws.exercise_id = m.exercise_id " +
-            "\n     ) as 'avg_e1rm', " +
-            "\n     " +
-            "\n     ( -- 'volume' " +
-            "\n         SELECT sum(reps * weight) " +
-            "\n         FROM workset as ws " +
-            "\n         WHERE date(date, 'localtime') = date(?, 'localtime') " +
-            "\n             AND ws.exercise_id = m.exercise_id " +
-            "\n     ) as 'volume', " +
-            "\n     " +
-            "\n     ( -- 'max_volume' " +
-            "\n         SELECT max(reps * weight) " +
-            "\n         FROM workset as ws " +
-            "\n         WHERE date(date, 'localtime') < date(?, 'localtime') " +
-            "\n             AND ws.exercise_id = m.exercise_id " +
-            "\n         GROUP BY ws.workout_id " +
-            "\n         ORDER BY max(reps * weight) DESC " +
-            "\n         LIMIT 1 " +
-            "\n     ) as 'max_volume', " +
-            "\n     " +
-            "\n     ( -- 'avg_volume' " +
-            "\n         SELECT avg(reps * weight) " +
-            "\n         FROM workset as ws " +
-            "\n         WHERE date(date, 'localtime') < date(?, 'localtime') " +
-            "\n             AND ws.exercise_id = m.exercise_id " +
-            "\n     ) as 'avg_volume' " +
-            "\n     " +
-            "\n FROM workset as w " +
-            "\n JOIN muscle_movement as m " +
-            "\n     ON w.exercise_id = m.exercise_id " +
-            "\n WHERE date(date, 'localtime') == date(?, 'localtime') " +
-            "\n     AND w.exercise_id NOT NULL AND m.muscle_id NOT NULL " +
-        "\n GROUP BY muscle_movement_class_id, m.muscle_id "
-        let stmt = try db.prepare(query).generate()
-        stmt.bind(date.datatypeValue, date.datatypeValue, date.datatypeValue, date.datatypeValue, date.datatypeValue)
-        return stmt.map { row in
-            return MuscleWorkSummary(
-                muscle: Muscle(rawValue: row[0] as! Int64)!,
-                exercise: ExerciseReference(exerciseID: (row[1] as! Int64), name: (row[2] as! String)),
-                movementClass: MuscleMovement.Classification(rawValue: row[3] as! Int64)!,
-                e1RM: row[4] as? Double,
-                maxE1RM: row[5] as? Double,
-                avgE1RM: row[6] as? Double,
-                volume: row[7] as! Double,
-                maxVolume: row[8] as? Double,
-                avgVolume: row[9] as? Double
-            )
-        }
+    func activationByDay() throws -> [NSDate: Activation] {
+        let cal = NSCalendar.currentCalendar()
+        typealias W = Workset.Schema
+        let res = try db.prepare(W.table
+            .select(W.startTime, W.activation)
+            .group(W.startTime.localDay)
+            .order(W.startTime.localDay)
+        )
+        return Dictionary(
+            res.lazy.map {
+                (
+                    cal.startOfDayForDate($0[W.startTime]),
+                    $0.get(W.activation)
+                )
+            }
+        )
     }
 
-    func get(type: MuscleWorkSummary.Type, workoutID: Int64) throws -> [MuscleWorkSummary] {
-        let query = " SELECT " +
-            "\n     m.muscle_id, " +
-            "\n     w.exercise_id, " +
-            "\n     w.exercise_name, " +
-            "\n     m.muscle_movement_class_id, " +
-            "\n     avg(e1rm) as 'e1rm', " +
-            "\n     max_e1rm, " +
-            "\n     " +
-            "\n     ( -- 'avg_e1rm' " +
-            "\n         SELECT avg(e1rm) " +
-            "\n         FROM workset as ws " +
-            "\n         WHERE date(date, 'localtime') < date(w.date, 'localtime') " +
-            "\n             AND ws.exercise_id = m.exercise_id " +
-            "\n     ) as 'avg_e1rm', " +
-            "\n     " +
-            "\n     ( -- 'volume' " +
-            "\n         SELECT sum(reps * weight) " +
-            "\n         FROM workset as ws " +
-            "\n         WHERE w.workout_id == ? " +
-            "\n             AND ws.exercise_id = m.exercise_id " +
-            "\n     ) as 'volume', " +
-            "\n     " +
-            "\n     ( -- 'max_volume' " +
-            "\n         SELECT max(reps * weight) " +
-            "\n         FROM workset as ws " +
-            "\n         WHERE date(date, 'localtime') < date(w.date, 'localtime') " +
-            "\n             AND ws.exercise_id = m.exercise_id " +
-            "\n         GROUP BY ws.workout_id " +
-            "\n         ORDER BY max(reps * weight) DESC " +
-            "\n         LIMIT 1 " +
-            "\n     ) as 'max_volume', " +
-            "\n     " +
-            "\n     ( -- 'avg_volume' " +
-            "\n         SELECT avg(reps * weight) " +
-            "\n         FROM workset as ws " +
-            "\n         WHERE date(date, 'localtime') < date(w.date, 'localtime') " +
-            "\n             AND ws.exercise_id = m.exercise_id " +
-            "\n     ) as 'avg_volume' " +
-            "\n     " +
-            "\n FROM workset as w " +
-            "\n JOIN muscle_movement as m " +
-            "\n     ON w.exercise_id = m.exercise_id " +
-            "\n WHERE w.workout_id == ? " +
-            "\n     AND w.exercise_id NOT NULL AND m.muscle_id NOT NULL " +
-        "\n GROUP BY muscle_movement_class_id, m.muscle_id "
-        let stmt = try db.prepare(query).generate()
-        stmt.bind(workoutID, workoutID)
-        return stmt.map { row in
-            return MuscleWorkSummary(
-                muscle: Muscle(rawValue: row[0] as! Int64)!,
-                exercise: ExerciseReference(exerciseID: (row[1] as! Int64), name: (row[2] as! String)),
-                movementClass: MuscleMovement.Classification(rawValue: row[3] as! Int64)!,
-                e1RM: row[4] as? Double,
-                maxE1RM: row[5] as? Double,
-                avgE1RM: row[6] as? Double,
-                volume: row[7] as! Double,
-                maxVolume: row[8] as? Double,
-                avgVolume: row[9] as? Double
-            )
+    func firstWorkoutDay() -> NSDate? {
+        typealias W = Workout.Schema
+        return db.scalar(W.table.select(W.startTime.min))
+    }
+
+    func lastWorkoutDay() -> NSDate? {
+        typealias W = Workout.Schema
+        return db.scalar(W.table.select(W.startTime.max))
+    }
+
+    func isRestDay(date: NSDate) -> Bool {
+        typealias W = Workout.Schema
+        let count = db.scalar(
+            W.table
+                .select(W.workoutID.count)
+                .filter(W.startTime.localDay == date.localDay)
+        )
+        return count > 0 ? true : false
+    }
+
+    func lastRestDay() -> NSDate? {
+        let cal = NSCalendar.currentCalendar()
+        let minDate = firstWorkoutDay()
+        var date = NSDate()
+        while !cal.isSameDay(date, minDate) {
+            if isRestDay(date) {
+                break
+            } else {
+                date = cal.addDays(-1, toDate: date)!
+            }
         }
+        return date
+    }
+
+    func totalExercises(sinceDate date: NSDate) -> Int {
+        typealias W = Workset.Schema
+        return db.scalar(W.table
+            .select(W.exerciseID.distinct.count)
+            .filter(W.startTime.localDay >= date)
+        )
+    }
+
+    func totalSets(sinceDate date: NSDate) -> Int {
+        typealias W = Workset.Schema
+        return db.scalar(W.table
+            .select(W.worksetID.count)
+            .filter(W.startTime.localDay >= date)
+        )
+    }
+
+    func totalWorkouts(sinceDate date: NSDate) -> Int {
+        typealias W = Workset.Schema
+        return db.scalar(W.table
+            .select(W.workoutID.distinct.count)
+            .filter(W.startTime.localDay >= date)
+        )
+    }
+
+    func totalVolume(sinceDate date: NSDate) -> Double? {
+        typealias W = Workset.Schema
+        let query: ScalarQuery = W.table.select(W.volume.sum)
+        return db.scalar(query.filter(W.startTime.localDay >= date))
+    }
+
+    func totalPRs(sinceDate date: NSDate) -> Int {
+        typealias W = Workset.Schema
+        return db.scalar(W.table
+            .select(W.worksetID.count)
+            .filter(W.startTime.localDay >= date &&
+                (W.intensity > 1.0 || W.intensity > 1.0)
+            )
+        )
+    }
+
+    func totalActiveDuration(sinceDate date: NSDate) -> Double? {
+        typealias W = Workset.Schema
+        return db.scalar(W.table
+            .select(W.duration.sum)
+            .filter(W.startTime.localDay >= date)
+        )
+    }
+
+    func get(type: MuscleWorkSummary.Type, date: NSDate, movementClass: MuscleMovement.Classification) throws -> AnySequence<MuscleWorkSummary> {
+        typealias W = Workset.Schema
+        typealias M = MuscleMovement.Schema
+        return try db.prepare(W.table
+            .select(
+                M.muscleID,
+                M.muscleMovementClassID,
+                W.table[W.exerciseID],
+                W.table[W.exerciseName],
+                W.activation.max,
+                W.volume.sum,
+                W.weight.max
+            )
+            .join(M.table, on: W.table[W.exerciseID] == M.table[M.exerciseID])
+            .filter(
+                W.startTime.localDay == date.localDay &&
+                W.table[W.exerciseID] != nil &&
+                M.muscleMovementClassID == movementClass &&
+                M.muscleID != nil
+            )
+            .group(M.muscleID)
+        )
+    }
+
+    func get(type: MuscleWorkSummary.Type, workoutID: Int64, movementClass: MuscleMovement.Classification) throws -> AnySequence<MuscleWorkSummary> {
+        typealias W = Workset.Schema
+        typealias M = MuscleMovement.Schema
+        return try db.prepare(W.table
+            .select(
+                M.muscleID,
+                M.muscleMovementClassID,
+                W.table[W.exerciseID],
+                W.table[W.exerciseName],
+                W.activation.max,
+                W.volume.sum,
+                W.weight.max
+            )
+            .join(M.table, on: W.table[W.exerciseID] == M.table[M.exerciseID])
+            .filter(
+                W.workoutID == workoutID &&
+                W.table[W.exerciseID] != nil &&
+                M.muscleMovementClassID == movementClass &&
+                M.muscleID != nil
+            )
+            .group(M.muscleID)
+        )
     }
 
     func importCSV(type: Workset.Type, fromURL url: NSURL) throws -> Int {
@@ -369,25 +452,26 @@ extension DB {
         writer.writeField("Duration")
         writer.finishLine()
         try all(Workset).forEach { workset in
-            writer.writeField(workset.date.datatypeValue)
+            writer.writeField(workset.input.startTime.datatypeValue)
             writer.writeField(workset.workoutID?.description ?? "")
-            writer.writeField(workset.exerciseID?.description ?? "")
-            writer.writeField(workset.exerciseName)
-            writer.writeField(workset.reps.description)
-            writer.writeField(workset.weight?.description ?? "")
-            writer.writeField(workset.duration?.description ?? "")
+            writer.writeField(workset.input.exerciseID?.description ?? "")
+            writer.writeField(workset.input.exerciseName)
+            writer.writeField(workset.input.reps?.description ?? "")
+            writer.writeField(workset.input.weight?.description ?? "")
+            writer.writeField(workset.input.duration.description)
             writer.finishLine()
         }
     }
 
     func dateRange(workoutID workoutID: Int64) -> (NSDate, NSDate)? {
+        let date = Workset.Schema.startTime
         let row = db.pluck(Workset.Schema.table
-            .select(Workset.Schema.date.min, Workset.Schema.date.max)
+            .select(date.min, date.max)
             .filter(Workset.Schema.workoutID == workoutID)
             .limit(1)
         )
-        guard let min = row?[Workset.Schema.date.min] else { return nil }
-        guard let max = row?[Workset.Schema.date.max] else { return nil }
+        guard let min = row?[date.min] else { return nil }
+        guard let max = row?[date.max] else { return nil }
         return (min, max)
     }
 
@@ -401,246 +485,146 @@ extension DB {
 
     func startDate(workout: Workout) -> NSDate? {
         let row = db.pluck(Workset.Schema.table
-            .select(Workset.Schema.date.min)
+            .select(Workset.Schema.startTime.min)
             .filter(Workset.Schema.workoutID == workout.workoutID!)
             .limit(1)
         )
-        return row?[Workset.Schema.date.min]
+        return row?[Workset.Schema.startTime.min]
     }
 
     func endDate(workout: Workout) -> NSDate? {
         let row = db.pluck(Workset.Schema.table
-            .select(Workset.Schema.date.max)
+            .select(Workset.Schema.startTime.max)
             .filter(Workset.Schema.workoutID == workout.workoutID!)
             .limit(1)
         )
-        return row?[Workset.Schema.date.max]
+        return row?[Workset.Schema.startTime.max]
     }
 
     func prev(workout: Workout) -> Workout? {
-        let date = Workset.Schema.date
-        return db.pluck(Workset.Schema.table
+        typealias W = Workset.Schema
+        let date = W.startTime
+        return db.pluck(W.table
             .order(date.desc)
-            .filter(date < workout.date)
+            .filter(date < workout.startTime)
             .limit(1)
         )
     }
 
     func next(workout: Workout) -> Workout? {
-        let date = Workset.Schema.date
+        let date = Workset.Schema.startTime
         return db.pluck(Workset.Schema.table
             .order(date.asc)
-            .filter(date > workout.date)
+            .filter(date > workout.startTime)
             .limit(1)
         )
     }
 
     func newest(type: Workset.Type) -> Workset? {
-        return db.pluck(Workset.Schema.table.order(Workset.Schema.date.desc))
+        typealias W = Workset.Schema
+        return db.pluck(W.table.order(W.startTime.desc))
     }
 
     func delete(workset: Workset) throws -> Int {
+        typealias W = Workset.Schema
         guard let worksetID = workset.worksetID else {
             fatalError("Identifier required to delete workset \(workset)")
         }
-        let query = Workset.Schema.table.filter(Workset.Schema.worksetID == worksetID)
+        let query = W.table.filter(W.worksetID == worksetID)
         return try db.run(query.delete())
     }
 
-}
-
-// MARK:
-
-extension Exercise: SQLAdaptable {
-    typealias Schema = CurrentSchema.Exercise
-
-    init(row: Row) {
-        exerciseID = row[Schema.exerciseID]
-        name = row[Schema.name]
-        equipment = row.get(Schema.equipment).array
-        gif = row[Schema.gif]
-        force = row[Schema.force]
-        level = row[Schema.level]
-        muscles = nil
-        mechanics = row[Schema.mechanics]
-        type = row[Schema.type]
-        instructions = row.get(Schema.instructions)?.array
-        link = row[Schema.link]
-        source = row[Schema.source]
+    func workoutID(forStartTime date: NSDate, duration: Double) -> Int64 {
+//        nextAvailableRowID(Workout)
+        fatalError()
     }
 
-    var setters: [Setter] {
-        return [
-            Schema.name <- self.name,
-            Schema.equipment <- ArrayBox(array: self.equipment),
-            Schema.gif <- self.gif,
-            Schema.force <- self.force,
-            Schema.level <- self.level,
-            Schema.mechanics <- self.mechanics,
-            Schema.type <- self.type,
-            Schema.instructions <- ArrayBox(array: self.instructions ?? []),
-            Schema.link <- self.link,
-            Schema.source <- self.source
-        ]
-    }
-}
-
-// MARK:
-
-extension ExerciseReference: SQLAdaptable {
-    typealias Schema = CurrentSchema.Exercise
-
-    init(row: Row) {
-        exerciseID = row[Schema.exerciseID]
-        name = row[Schema.name]
+    func recalculateAllWorksets() throws {
+        typealias W = Workset.Schema
+        for workset: Workset in try db.prepare(W.table) {
+            guard let records = get(Records.self, input: workset.input) else { continue }
+            let relRecords = RelativeRecords(input: workset.input, records: records)
+            var newWorkset = Workset(relativeRecords: relRecords)
+            newWorkset.worksetID = workset.worksetID
+            newWorkset.workoutID = workset.workoutID
+            try update(newWorkset)
+            if let workoutID = workset.workoutID {
+                try recalculate(workoutID: workoutID)
+            }
+        }
     }
 
-    var setters: [Setter] {
-        return [
-            Schema.exerciseID <- rowid,
-            Schema.name <- self.name
-        ]
-    }
-}
-
-extension Muscle: SQLite.Value {
-    static var declaredDatatype: String {
-        return Int64.declaredDatatype
-    }
-    static func fromDatatypeValue(intValue: Int64) -> Muscle {
-        return Muscle(rawValue: intValue)!
-    }
-    var datatypeValue: Int64 {
-        return self.rawValue
-    }
-}
-
-extension Muscle: SQLAdaptable {
-    typealias Schema = CurrentSchema.Muscle
-
-    init(row: Row) {
-        self = Muscle(rawValue: row[Schema.muscleID])!
-    }
-
-    var setters: [Setter] {
-        fatalError("This table cannot be modified")
-    }
-}
-
-extension Activation: SQLite.Value {
-    static var declaredDatatype: String {
-        return Int64.declaredDatatype
-    }
-    static func fromDatatypeValue(intValue: Int64) -> Activation {
-        return Activation(rawValue: intValue)!
-    }
-    var datatypeValue: Int64 {
-        return self.rawValue
-    }
-}
-
-//extension Activation: SQLAdaptable {
-//    typealias Schema = CurrentSchema.Activation
-//
-//    init(row: Row) {
-//        self = Activation(rawValue: row[Schema.activationID])!
-//    }
-//
-//    var setters: [Setter] {
-//        fatalError("This table cannot be modified")
-//    }
-//}
-
-extension MuscleMovement: SQLAdaptable {
-    typealias Schema = CurrentSchema.MuscleMovement
-
-    init(row: Row) {
-        muscleMovementID = row[Schema.muscleMovementID]
-        exerciseID = row[Schema.exerciseID]
-        classification = row.get(Schema.muscleMovementClassID)
-        muscleName = row[Schema.muscleName]
-        muscle = row.get(Schema.muscleID)
+    func recalculate(workoutID workoutID: Int64) throws -> SuccessOrFail {
+        typealias WS = Workset.Schema
+        typealias WO = Workout.Schema
+        guard let row = db.pluck(WS.table
+            .select(
+                WS.startTime.min,
+                WS.startTime.max,
+                WS.worksetID.count,
+                WS.reps.sum,
+                WS.volume.sum,
+                WS.duration.sum,
+                WS.percentMaxVolume.average,
+                WS.percentMaxDuration.average,
+                WS.intensity.average,
+                WS.duration.max,
+                WS.activation.max
+            )
+            .filter(WS.workoutID == workoutID)
+        ) else { return .Fail }
+        let sets = row[WS.worksetID.count]
+        guard let
+            startTime = row[WS.startTime.min],
+            endTime = row[WS.startTime.max],
+            reps = row[WS.reps.sum],
+            activeDuration = row[WS.duration.sum],
+            volume = row[WS.volume.sum],
+            avePcVolume = row[WS.percentMaxVolume.average],
+            avePercentMaxDuration = row[WS.percentMaxDuration.average],
+            aveIntensity = row[WS.intensity.average],
+            maxDuration = row[WS.duration.max],
+            maxActivation = row.get(WS.activation.max)
+            else { return .Fail }
+        let lastDuration = db.scalar(WS.table
+            .select(WS.duration)
+            .filter(WS.workoutID == workoutID)
+            .order(WS.startTime.desc)
+            .limit(1)
+        )
+        let duration = endTime.timeIntervalSinceDate(startTime) + lastDuration
+        let restDuration = duration - activeDuration
+        try db.run(WO.table
+            .filter(WS.workoutID == workoutID)
+            .update(
+                WO.startTime <- startTime,
+                WO.sets <- sets,
+                WO.reps <- reps,
+                WO.duration <- duration,
+                WO.restDuration <- restDuration,
+                WO.activeDuration <- activeDuration,
+                WO.volume <- volume,
+                WO.avePercentMaxVolume <- avePcVolume,
+                WO.avePercentMaxDuration <- avePercentMaxDuration,
+                WO.aveIntensity <- aveIntensity,
+                WO.maxDuration <- maxDuration,
+                WO.maxActivation <- maxActivation
+            )
+        )
+        return .Success
     }
 
-    var setters: [Setter] {
-        return [
-            Schema.exerciseID <- self.exerciseID!,
-            Schema.muscleMovementClassID <- self.classification,
-            Schema.muscleName <- self.muscleName,
-            Schema.muscleID <- self.muscle
-        ]
-    }
-}
-
-extension MuscleMovement.Classification: SQLite.Value {
-    static var declaredDatatype: String {
-        return Int64.declaredDatatype
-    }
-    static func fromDatatypeValue(intValue: Int64) -> MuscleMovement.Classification {
-        return MuscleMovement.Classification(rawValue: intValue)!
-    }
-    var datatypeValue: Int64 {
-        return self.rawValue
-    }
-}
-
-extension MuscleMovement.Classification: SQLAdaptable {
-    typealias Schema = CurrentSchema.MuscleMovementClassification
-
-    init(row: Row) {
-        self = MuscleMovement.Classification(rawValue: row[Schema.muscleMovementClassID])!
+    func get(type: Records.Type, input: Workset.Input) -> Records? {
+        guard let exerciseID = input.exerciseID else { return nil }
+        var perf = Records()
+        perf.maxWeight = maxRM(exerciseID: exerciseID, todate: input.startTime)
+        perf.max1RM = max1RM(exerciseID: exerciseID, todate: input.startTime)
+        perf.maxE1RM = maxE1RM(exerciseID: exerciseID, todate: input.startTime)
+        perf.maxVolume = maxVolume(exerciseID: exerciseID, todate: input.startTime)
+        if let reps = input.reps {
+            perf.maxXRM = maxXRM(exerciseID: exerciseID, reps: reps, todate: input.startTime)
+        }
+        return perf
     }
 
-    var setters: [Setter] {
-        fatalError("This table cannot be modified")
-    }
-}
-
-extension Workout: SQLAdaptable {
-    typealias Schema = CurrentSchema.Workout
-
-    init(row: Row) {
-        workoutID = row[Schema.workoutID]
-        date = row[Schema.date]
-        totalWeight = row[Schema.weight]
-        totalDuration = row[Schema.duration]
-        count = row[Schema.reps]
-    }
-
-    var setters: [Setter] {
-        fatalError("This table cannot be modified")
-    }
-}
-
-extension Workset: SQLAdaptable {
-    typealias Schema = CurrentSchema.Workset
-
-    init(row: Row) {
-        worksetID = row[Schema.worksetID]
-        exerciseID = row[Schema.exerciseID]
-        workoutID = row[Schema.workoutID]
-        exerciseName = row[Schema.exerciseName]
-        date = row[Schema.date]
-        reps = row[Schema.reps]
-        weight = row[Schema.weight]
-        duration = row[Schema.duration]
-        e1RM = row[Schema.e1RM]
-        maxE1RM = row[Schema.maxE1RM]
-        maxDuration = row[Schema.maxDuration]
-    }
-
-    var setters: [Setter] {
-        return [
-            Schema.exerciseName <- exerciseName,
-            Schema.exerciseID <- exerciseID,
-            Schema.workoutID <- workoutID!,
-            Schema.date <- date,
-            Schema.reps <- reps,
-            Schema.weight <- weight,
-            Schema.duration <- duration,
-            Schema.e1RM <- e1RM,
-            Schema.maxE1RM <- maxE1RM,
-            Schema.maxDuration <- maxDuration
-        ]
-    }
 }

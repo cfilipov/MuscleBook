@@ -19,11 +19,11 @@
 import Foundation
 
 enum Activation: Int64, Comparable {
-    case None
+    case None = 1
     case Light // Below average intensity and volume
-    case Normal // Above average intensity or volume
-    case High // High intensity or volume (> 80% best) or failure set
-    case Max // New PR
+    case Medium // Above average intensity or volume
+    case High // High intensity or volume (> 80% best)
+    case Max // New PR or failure set
 }
 
 func <(lhs: Activation, rhs: Activation) -> Bool {
@@ -31,73 +31,40 @@ func <(lhs: Activation, rhs: Activation) -> Bool {
 }
 
 extension Activation {
+    init(percent: Double) {
+        if percent > 1.0 {
+            self = .Max
+        }
+        else if percent >= 0.8 {
+            self = .High
+        }
+        else if percent < 0.5 {
+            self = .Light
+        }
+        else {
+            self = .Medium
+        }
+    }
+
     var color: UIColor {
         switch self {
         case .None: return UIColor.whiteColor()
-        case .Light: return UIColor(rgba: "#ffffb2")
-        case .Normal: return UIColor(rgba: "#fecc5c")
-        case .High: return UIColor(rgba: "#fd8d3c")
-        case .Max: return UIColor(rgba: "#e31a1c")
-        }
-    }
-
-    var alpha: CGFloat {
-        switch self {
-        case .None: return 0
-        case .Light: return 0.15
-        case .Normal: return 0.5
-        case .High: return 0.7
-        case .Max: return 1
-        }
-    }
-
-    init(value: Double?, max: Double?, avg: Double?, window: Double = 0.25) {
-        if let _  = value where max == nil {
-            self = .Max
-            return
-        }
-
-        guard let
-            value = value,
-            max = max,
-            avg = avg
-        else {
-            self = .None
-            return
-        }
-
-        let d = (avg * window)/2
-        if value > max + 1 {
-            self = .Max
-            return
-        }
-        else if value > (avg + d) {
-            self = .High
-            return
-        }
-        else if value > (avg - d) {
-            self = .Normal
-            return
-        }
-        else if value > 0 {
-            self = .Light
-            return
-        }
-        else {
-            self = .None
-            return
+        case .Light: return UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.15)
+        case .Medium: return UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.5)
+        case .High: return UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.8)
+        case .Max: return UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
         }
     }
 
     static var all: [Activation] {
-        return [.None, .Light, .Normal, .High, .Max]
+        return [.None, .Light, .Medium, .High, .Max]
     }
 
     var name: String {
         switch self {
         case .None: return "None"
         case .Light: return "Light"
-        case .Normal: return "Normal"
+        case .Medium: return "Medium"
         case .High: return "High"
         case .Max: return "Max"
         }

@@ -33,10 +33,9 @@ func ==(lhs: AnatomyViewConfig, rhs: AnatomyViewConfig) -> Bool {
 }
 
 extension AnatomyViewConfig {
-    convenience init(_ summary: [MuscleWorkSummary]) {
+    convenience init(_ summary: AnySequence<MuscleWorkSummary>) {
         let colorMapping = Dictionary(summary
-            .flatMap { $0.activation }
-            .map { return ($0.muscle, $0.color) }
+            .map { ($0.muscle, $0.activation.color) }
         )
         self.init(fillColors: colorMapping)
     }

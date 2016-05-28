@@ -67,11 +67,12 @@ class SideBySideAnatomyView: UIView {
     func configure(config: AnatomyViewConfig) -> AnatomyViewConfig {
         reset()
         var displayableConfig = config.fillColors
-        config.fillColors.forEach { muscle, color in
+        for (muscle, color) in config.fillColors {
             if setFillColor(color, muscle: muscle) == .Fail {
                 displayableConfig[muscle] = nil
                 print("Missing SVG for muscle: \(muscle)")
             }
+            break
         }
         return AnatomyViewConfig(fillColors: displayableConfig, orientation: nil)
     }

@@ -22,29 +22,7 @@ struct MuscleWorkSummary {
     let muscle: Muscle
     let exercise: ExerciseReference
     let movementClass: MuscleMovement.Classification
-    let e1RM: Double?
-    let maxE1RM: Double?
-    let avgE1RM: Double?
-    let volume: Double
-    let maxVolume: Double?
-    let avgVolume: Double?
-}
-
-extension MuscleWorkSummary {
-    var activation: MuscleActivation? {
-        return MuscleActivation(
-            muscle: muscle,
-            movementClass: movementClass,
-            intensity: Activation(
-                value: e1RM,
-                max: maxE1RM,
-                avg: avgE1RM
-            ),
-            volume: Activation(
-                value: volume,
-                max: maxVolume,
-                avg: avgVolume
-            )
-        )
-    }
+    let activation: Activation
+    let volume: Double?
+    let weight: Double?
 }

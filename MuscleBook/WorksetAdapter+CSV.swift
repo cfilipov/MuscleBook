@@ -74,23 +74,18 @@ final class WorksetCSVImporter {
         let date = NSDate.parseISO8601Date(dateStr)
         if weight == nil && duration == nil { return nil }
         let db = DB.sharedInstance
-        var workset = try Workset(
-            worksetID: nil,
-            exerciseID: exerciseID ?? db.match(name: exerciseName).generate().next()?.exerciseID,
-            workoutID: wID,
-            exerciseName: exerciseName,
-            date: date,
-            reps: reps,
-            weight: weight,
-            duration: duration,
-            e1RM: weight.flatMap { Workset.estimate1RM(reps: reps, weight: $0) },
-            maxE1RM: nil,
-            maxDuration: nil
+        return try Workset(input:
+            Workset.Input(
+                exerciseID: exerciseID ?? db.match(name: exerciseName).generate().next()?.exerciseID,
+                exerciseName: exerciseName,
+                startTime: date,
+                duration: duration!,
+                failure: false,
+                warmup: false,
+                reps: reps,
+                weight: weight
+            )
         )
-        workset.maxE1RM = workset.exerciseID.flatMap {
-            db.maxE1RM(exerciseID: $0, todate: date)?.e1RM
-        }
-        return workset
     }
 
 }

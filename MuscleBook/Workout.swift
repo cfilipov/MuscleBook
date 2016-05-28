@@ -18,10 +18,18 @@
 
 import Foundation
 
-struct Workout {    
+struct Workout {
     let workoutID: Int64?
-    let date: NSDate
-    let totalWeight: Double?
-    let totalDuration: Double?
-    let count: Int
+    let startTime: NSDate
+    let sets: Int
+    let reps: Int
+    let duration: Double
+    let restDuration: Double
+    let activeDuration: Double
+    let volume: Double?
+    let avePercentMaxVolume: Double?
+    let avePercentMaxDuration: Double
+    let aveIntensity: Double?
+    let maxDuration: Double
+    let maxActivation: MuscleBook.Activation
 }

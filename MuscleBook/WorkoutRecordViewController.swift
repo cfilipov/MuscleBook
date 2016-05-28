@@ -62,7 +62,7 @@ class WorkoutRecordViewController : FormViewController {
         if let exercise = db.dereference(record.exerciseReference) {
             section <<< LabelRow("exercise") {
                 $0.title = "Exercise"
-                $0.value = record.exerciseName
+                $0.value = record.input.exerciseName
                 $0.onCellSelection { cell, row in
                     let vc = ExerciseDetailViewController(exercise: exercise)
                     self.showViewController(vc, sender: nil)
@@ -79,31 +79,29 @@ class WorkoutRecordViewController : FormViewController {
 
         section <<< LabelRow() {
             $0.title = "Date"
-            $0.value = dateFormatter.stringFromDate(self.record.date)
+            $0.value = dateFormatter.stringFromDate(self.record.input.startTime)
         }
 
         section <<< LabelRow() {
             $0.title = "Time"
-            $0.value = timeFormatter.stringFromDate(self.record.date)
+            $0.value = timeFormatter.stringFromDate(self.record.input.startTime)
         }
 
         section <<< LabelRow() {
             $0.title = "Reps"
-            $0.value = String(self.record.reps)
+            $0.value = String(self.record.input.reps)
         }
 
-        if let weight = self.record.weight {
+        if let weight = self.record.input.weight {
             section <<< LabelRow() {
                 $0.title = "Weight"
                 $0.value = weightFormatter.stringFromNumber(weight)
             }
         }
 
-        if let duration = self.record.duration {
-            section <<< LabelRow() {
-                $0.title = "Duration"
-                $0.value = weightFormatter.stringFromNumber(duration)
-            }
+        section <<< LabelRow() {
+            $0.title = "Duration"
+            $0.value = weightFormatter.stringFromNumber(record.input.duration)
         }
 
         form +++ section

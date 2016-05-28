@@ -29,7 +29,7 @@ final class WorkoutViewController: FormViewController {
         let label = UILabel()
         label.textAlignment = .Right
         label.font = UIFont.systemFontOfSize(20)
-        label.text = self.dateFormatter.stringFromDate(self.workout.date)
+        label.text = self.dateFormatter.stringFromDate(self.workout.startTime)
         return label
     }()
     
@@ -78,19 +78,19 @@ final class WorkoutViewController: FormViewController {
 
             <<< LabelRow() {
                 $0.title = "Date"
-                $0.value = dateFormatter.stringFromDate(self.workout.date)
+                $0.value = dateFormatter.stringFromDate(self.workout.startTime)
             }
 
             <<< LabelRow() {
                 $0.title = "Time"
-                $0.value = timeFormatter.stringFromDate(self.workout.date)
+                $0.value = timeFormatter.stringFromDate(self.workout.startTime)
             }
 
             // TODO: Duration Row
             <<< LabelRow() {
                 $0.title = "Total Weight Moved"
-                if let totalWeight = workout.totalWeight {
-                    $0.value = weightFormatter.stringFromNumber(totalWeight)
+                if let volume = workout.volume {
+                    $0.value = weightFormatter.stringFromNumber(volume)
                     $0.hidden = false
                 } else {
                     $0.hidden = true
@@ -104,10 +104,9 @@ final class WorkoutViewController: FormViewController {
             }.cellSetup { cell, row in
                 cell.accessoryType = .DisclosureIndicator
             }.onCellSelection { _, _ in
-                let vc = CreateWorkoutRecordViewController(workoutID: self.workout.workoutID!) { record in
+                let vc = CreateWorkoutRecordViewController { record in
                     self.dismissViewControllerAnimated(true, completion: nil)
-                    if var record = record {
-                        record.worksetID = try! self.db.save(record)
+                    if let record = record {
                         self.worksetsSection <<< self.workoutRecordToRow(record)
                     }
                     self.updateAnatomyRow()
@@ -123,7 +122,7 @@ final class WorkoutViewController: FormViewController {
         let row = form.rowByTag("anatomy")
         if let workoutID = self.workout.workoutID {
             row?.baseValue = try! AnatomyViewConfig(
-                db.get(MuscleWorkSummary.self, workoutID: workoutID)
+                db.get(MuscleWorkSummary.self, workoutID: workoutID, movementClass: .Target)
             )
             row?.updateCell()
         }
@@ -131,8 +130,8 @@ final class WorkoutViewController: FormViewController {
 
     private func workoutRecordToRow(record: Workset) -> BaseRow {
         let row = LabelRow()
-        row.title = record.exerciseName
-        row.value = record.valueString
+        row.title = record.input.exerciseName
+//        row.value = record.valueString
         row.onCellSelection { cell, row in
             let vc = WorkoutRecordViewController(record: record)
             self.showViewController(vc, sender: nil)

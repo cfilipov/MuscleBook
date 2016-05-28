@@ -31,7 +31,7 @@ class VerifyWorksetsViewController: FormViewController {
         super.viewDidLoad()
 
         title = "Unknwon Exercises"
-        
+
 //        form += exercises.map { Section($0) }
     }
 }

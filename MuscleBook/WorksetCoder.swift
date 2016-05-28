@@ -35,32 +35,29 @@ extension Workset: ValueCoding {
         let date = aDecoder.decodeObjectForKey("Date") as! NSDate
         let reps = aDecoder.decodeObjectForKey("Reps") as! Int
         let weight = aDecoder.decodeObjectForKey("Weight") as? Double
-        let duration = aDecoder.decodeObjectForKey("Duration") as? Double
-        value = Workset(
-            worksetID: nil,
-            exerciseID: nil,
-            workoutID: nil,
-            exerciseName: exerciseName,
-            date: date,
-            reps: reps,
-            weight: weight,
-            duration: duration,
-            e1RM: nil,
-            maxE1RM: nil,
-            maxDuration: nil
+        let duration = aDecoder.decodeObjectForKey("Duration") as! Double
+        value = Workset(input:
+            Workset.Input(
+                exerciseID: nil,
+                exerciseName: exerciseName,
+                startTime: date,
+                duration: Double(duration),
+                failure: false,
+                warmup: false,
+                reps: reps,
+                weight: weight
+            )
         )
     }
 
     func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(value.exerciseName, forKey: "Exercise")
-        aCoder.encodeObject(value.date, forKey: "Date")
-        aCoder.encodeObject(value.reps, forKey: "Reps")
-        if let _ = value.weight {
-            aCoder.encodeObject(value.weight, forKey: "Weight")
+        aCoder.encodeObject(value.input.exerciseName, forKey: "Exercise")
+        aCoder.encodeObject(value.input.startTime, forKey: "Date")
+        aCoder.encodeObject(value.input.reps, forKey: "Reps")
+        if let _ = value.input.weight {
+            aCoder.encodeObject(value.input.weight, forKey: "Weight")
         }
-        if let _ = value.duration {
-            aCoder.encodeObject(value.duration, forKey: "Duration")
-        }
+        aCoder.encodeObject(value.input.duration, forKey: "Duration")
     }
 
 }
