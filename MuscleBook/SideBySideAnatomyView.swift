@@ -43,13 +43,14 @@ class SideBySideAnatomyView: UIView {
     }
 
     func setFillColor(color: UIColor, muscle: Muscle) -> SuccessOrFail {
+        var status = SuccessOrFail.Fail
         if anteriorView.setFillColor(color, muscle: muscle) == .Success {
-            return .Success
+            status = .Success
         }
         if posteriorView.setFillColor(color, muscle: muscle) == .Success {
-            return .Success
+            status = .Success
         }
-        return .Fail
+        return status
     }
 
     override func layoutSubviews() {
@@ -72,7 +73,6 @@ class SideBySideAnatomyView: UIView {
                 displayableConfig[muscle] = nil
                 print("Missing SVG for muscle: \(muscle)")
             }
-            break
         }
         return AnatomyViewConfig(fillColors: displayableConfig, orientation: nil)
     }

@@ -21,46 +21,80 @@ import Eureka
 
 class AnatomyDebugViewController: FormViewController {
 
-    let anatomyRow = AnatomyViewRow()
-    let anatomyView = AnatomySplitView()
+    lazy var colorGenerator: AnyGenerator<UIColor> = {
+        let palette = [
+            // http://www.graphviz.org/doc/info/colors.html
+            UIColor(rgba: "#8dd3c7"),
+            UIColor(rgba: "#ffffb3"),
+            UIColor(rgba: "#bebada"),
+            UIColor(rgba: "#fb8072"),
+            UIColor(rgba: "#80b1d3"),
+            UIColor(rgba: "#fdb462"),
+            UIColor(rgba: "#b3de69"),
+            UIColor(rgba: "#fccde5"),
+            UIColor(rgba: "#d9d9d9"),
+            UIColor(rgba: "#bc80bd"),
+            UIColor(rgba: "#ccebc5"),
+            UIColor(rgba: "#ffed6f"),
+            ]
+        return palette.repeatGenerator
+    }()
 
-    func config(forSelection string: String) -> AnatomyViewConfig {
-        switch string {
-        case Muscle.Legs.name:
-            return AnatomyViewConfig(
-                fillColors: [Muscle.Legs: UIColor.redColor()],
-                orientation: Muscle.Legs.orientation
-            )
-        case Muscle.PectoralisMajorSternal.name:
-            return AnatomyViewConfig(
-                fillColors: [Muscle.PectoralisMajorSternal: UIColor.redColor()],
-                orientation: Muscle.Legs.orientation
-            )
-        default: preconditionFailure()
-        }
+    lazy var displayableMuscles: [Muscle: UIColor] = {
+        let fillColors = Dictionary(Muscle.allMuscles.map { ($0, self.colorGenerator.next()!) })
+        var anatomyConfig = AnatomyViewConfig(fillColors: fillColors, orientation: nil)
+        let tmpAnatomyView = AnatomySplitView()
+        anatomyConfig = tmpAnatomyView.configure(anatomyConfig)
+        var displayableMuscles = Dictionary(anatomyConfig.fillColors.keys.map { ($0,self.colorGenerator.next()!) })
+        return displayableMuscles
+    }()
+
+    var anatomyConfig: AnatomyViewConfig {
+        return AnatomyViewConfig(fillColors: displayableMuscles, orientation: nil)
+    }
+
+    let whiteCircle = UIImage.circle(12, color: UIColor.whiteColor())
+
+    func updateAnatomyView() {
+        let anatomyRow = self.form.rowByTag("anatomy") as? SideBySideAnatomyViewRow
+        anatomyRow?.value = anatomyConfig
+        anatomyRow?.updateCell()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView?.contentInset = UIEdgeInsetsMake(-36, 0, 0, 0);
+
         title = "Anatomy Debug"
 
-        form +++ Section() <<< SegmentedRow<String>("segments"){
-            $0.options = [Muscle.Legs.name, Muscle.PectoralisMajorSternal.name]
-            $0.value = Muscle.Legs.name
-        }.onChange { row in
-            self.anatomyRow.value = self.config(forSelection: row.value!)
-            self.anatomyRow.updateCell()
-            self.anatomyView.reset()
-            self.anatomyView.configure(self.config(forSelection: row.value!))
+        form
+
+        +++ Section()
+
+        <<< SideBySideAnatomyViewRow("anatomy")
+
+        +++ SelectableSection<ImageCheckRow<Bool>, Bool>("Displayable Muscles", selectionType: .MultipleSelection)
+
+        for (muscle, color) in displayableMuscles {
+            form.last! <<< ImageCheckRow<Bool>(){ lrow in
+                lrow.title = muscle.name
+                lrow.selectableValue = false
+                lrow.value = nil
+            }.cellSetup { cell, _ in
+                cell.trueImage = UIImage.circle(12, color: color)
+                cell.falseImage = self.whiteCircle
+            }.onChange { row in
+                if row.value ?? false {
+                    self.displayableMuscles[muscle] = UIColor.whiteColor()
+                }
+                else {
+                    self.displayableMuscles[muscle] = color
+                }
+                self.updateAnatomyView()
+            }
         }
 
-        form +++ Section() <<< anatomyRow
-        anatomyRow.value = self.config(forSelection: Muscle.Legs.name)
-
-        anatomyView.frame = view.bounds.insetBy(dx: 0, dy: 80)
-        tableView?.tableFooterView = anatomyView
-        anatomyView.configure(config(forSelection: Muscle.Legs.name))
     }
-    
+
 }

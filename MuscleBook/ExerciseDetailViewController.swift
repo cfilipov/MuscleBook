@@ -50,7 +50,6 @@ class ExerciseDetailViewController : FormViewController {
     let whiteCircle = UIImage.circle(12, color: UIColor.whiteColor())
 
     init(exercise: Exercise) {
-
         self.exercise = exercise
         super.init(style: .Grouped)
         let muscles = exercise.exerciseID.flatMap {

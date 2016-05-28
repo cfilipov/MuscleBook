@@ -68,11 +68,6 @@ class RootViewController: FormViewController {
 
         +++ Section()
 
-//        <<< SegmentedRow<String>() {
-//            $0.options = ["Volume", "Intensity", "Duration"]
-//            $0.value = "Volume"
-//        }
-
         <<< PunchcardRow("punchcard") {
             $0.value = EFCalendarGraphAdapterDelegate()
             $0.onCellSelection { _, _ in

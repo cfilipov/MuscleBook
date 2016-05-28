@@ -71,6 +71,7 @@ class AnatomyView: UIView {
                 status = .Success
             }
         }
+        svgView.setNeedsDisplay()
         return status
     }
 

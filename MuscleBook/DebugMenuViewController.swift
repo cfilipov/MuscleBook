@@ -50,11 +50,11 @@ class DebugMenuViewController : FormViewController {
         }
 
         <<< LabelRow() {
-            $0.title = "Anatomy VC"
+            $0.title = "Anatomy"
         }.cellSetup { cell, row in
             cell.accessoryType = .DisclosureIndicator
         }.onCellSelection { cell, row in
-            let vc = AnatomyDebugViewController()
+            let vc = AnatomyDebugViewController2()
             self.showViewController(vc, sender: nil)
         }
 
