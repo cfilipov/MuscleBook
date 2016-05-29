@@ -51,13 +51,6 @@ class SettingsViewController : FormViewController {
             $0.controller = { AboutViewController() }
         }
 
-        +++ Section()
-
-        <<< PushViewControllerRow() {
-            $0.title = "Debug Menu"
-            $0.controller = { DebugMenuViewController() }
-        }
-
     }
 
 }

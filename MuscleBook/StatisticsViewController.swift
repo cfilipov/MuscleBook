@@ -21,34 +21,110 @@ import Eureka
 
 class StatisticsViewController : FormViewController {
     
-    let db = DB.sharedInstance
+    private let db = DB.sharedInstance
+
+    private let startDate = NSDate(timeIntervalSince1970: 0)
+
+    private let numberFormatter: NSNumberFormatter = {
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = .DecimalStyle
+        formatter.maximumFractionDigits = 0
+        return formatter
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = "Statistics"
 
-        form +++ Section()
+        form
 
-            <<< LabelRow() {
-                $0.title = "Total Exercises"
-                $0.value = String(db.count(Exercise))
-            }
+        +++ Section("Totals")
 
-            <<< LabelRow() {
-                $0.title = "Total Muscles"
-                $0.value = String(db.count(Muscle))
-            }
+        <<< LabelRow() {
+            $0.title = "Workouts"
+            $0.value = self
+                .numberFormatter
+                .stringFromNumber(db.count(Workout))
+        }
 
-            <<< LabelRow() {
-                $0.title = "Total Workout Sets"
-                $0.value = String(db.count(Workset))
-            }
+        <<< LabelRow() {
+            $0.title = "Sets"
+            $0.value = self
+                .numberFormatter
+                .stringFromNumber(db.count(Workset))
+        }
 
-            <<< LabelRow() {
-                $0.title = "Total Workouts"
-                $0.value = String(db.count(Workout))
+        <<< LabelRow() {
+            $0.title = "Reps"
+            $0.value = self
+                .numberFormatter
+                .stringFromOptionalNumber(db.totalReps(sinceDate: self.startDate))
+        }
+
+        <<< LabelRow() {
+            $0.title = "Distinct Exercises"
+            $0.value = self
+                .numberFormatter
+                .stringFromNumber(db.totalExercisesPerformed(sinceDate: self.startDate))
+        }
+
+        <<< LabelRow("volume") {
+            $0.title = "Volume"
+            $0.value = self
+                .numberFormatter
+                .stringFromOptionalNumber(db.totalVolume(sinceDate: self.startDate))
+            $0.hidden = "$volume == nil"
+        }
+
+        <<< LabelRow() {
+            $0.title = "PRs"
+            $0.value = self
+                .numberFormatter
+                .stringFromNumber(db.totalPRs(sinceDate: self.startDate))
+        }
+
+        <<< LabelRow("active_time") {
+            $0.title = "Active Time (min)"
+            if let d = db.totalActiveDuration(sinceDate: self.startDate) {
+                $0.value = self
+                    .numberFormatter
+                    .stringFromOptionalNumber(d / 60)
             }
+            $0.hidden = "$active_time == nil"
+        }
+
+        +++ Section("\"Big 3\"")
+
+        <<< LabelRow() {
+            $0.title = "Squat"
+            $0.value = self
+                .numberFormatter
+                .stringFromOptionalNumber(db.maxSquat(sinceDate: self.startDate)) ?? "N/A"
+        }
+
+        <<< LabelRow() {
+            $0.title = "Deadlift"
+            $0.value = self
+                .numberFormatter
+                .stringFromOptionalNumber(db.maxDeadlift(sinceDate: self.startDate)) ?? "N/A"
+        }
+
+        <<< LabelRow() {
+            $0.title = "Bench Press"
+            $0.value = self
+                .numberFormatter
+                .stringFromOptionalNumber(db.maxBench(sinceDate: self.startDate)) ?? "N/A"
+        }
+
+        <<< LabelRow() {
+            var total: Double = 0
+            total += db.maxSquat(sinceDate: self.startDate) ?? 0
+            total += db.maxDeadlift(sinceDate: self.startDate) ?? 0
+            total += db.maxBench(sinceDate: self.startDate) ?? 0
+            $0.title = "Total"
+            $0.value = self.numberFormatter.stringFromNumber(total)
+        }
 
     }
 }

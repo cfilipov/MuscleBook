@@ -408,6 +408,13 @@ extension NSDateFormatter {
     }
 }
 
+extension NSNumberFormatter {
+    public func stringFromOptionalNumber(number: NSNumber?) -> String? {
+        guard let number = number else { return nil }
+        return stringFromNumber(number)
+    }
+}
+
 infix operator ?= { associativity right }
 func ?=<T>(inout left: T, right: T?) {
     if let right = right {

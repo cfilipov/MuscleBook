@@ -21,12 +21,37 @@ import Eureka
 
 class CreateWorkoutRecordViewController: FormViewController {
 
-    private let db = DB.sharedInstance
+    enum Mode {
+        case ReadOnly
+        case Creating
+        case Editing
+        case Editable
 
+        static func isValidTransition(old: Mode, new: Mode) -> Bool {
+            switch (old, new) {
+            case (.Editing, .Editable): return true
+            case (.Editable, .Editing): return true
+            case (.ReadOnly, _): return false
+            case (.Creating, _): return false
+            default: return false
+            }
+        }
+    }
+
+    private let db = DB.sharedInstance
     private let callback: Workset? -> Void
     private let formatter = NSDateFormatter()
     private let cal = NSCalendar.currentCalendar()
     private let recordsFormatter = RelativeRecordsFormatter()
+
+    private var mode: Mode {
+        willSet(newMode) {
+            assert(Mode.isValidTransition(mode, new: newMode))
+        }
+        didSet {
+            refreshMode()
+        }
+    }
 
     private var records: Records?  {
         didSet {
@@ -107,42 +132,41 @@ class CreateWorkoutRecordViewController: FormViewController {
         return Workset(relativeRecords: rec)
     }
 
-    private var strRM: String? {
-        return recordsFormatter.format(
-            value: relativeRecords?.records.maxWeight?.input.weight,
-            percent: relativeRecords?.percentMaxWeight
+    private var cancelButton: UIBarButtonItem {
+        return UIBarButtonItem(
+            barButtonSystemItem: .Cancel,
+            target: self,
+            action: #selector(CreateWorkoutRecordViewController.cancelButtonPressed)
         )
     }
 
-    private var str1RM: String? {
-        return recordsFormatter.format(
-            value: relativeRecords?.records.max1RM?.input.weight,
-            percent: relativeRecords?.percent1RM
+    private var saveButton: UIBarButtonItem {
+        return UIBarButtonItem(
+            barButtonSystemItem: .Save,
+            target: self,
+            action: #selector(CreateWorkoutRecordViewController.saveButtonPressed)
         )
     }
 
-    private var strE1RM: String? {
-        return recordsFormatter.format(
-            value: relativeRecords?.records.maxE1RM?.input.weight,
-            percent: relativeRecords?.percentE1RM
+    private var editButton: UIBarButtonItem {
+        return UIBarButtonItem(
+            barButtonSystemItem: .Edit,
+            target: self,
+            action: #selector(CreateWorkoutRecordViewController.editButtonPressed)
         )
     }
 
-    private var strXRM: String? {
-        return recordsFormatter.format(
-            value: relativeRecords?.records.maxXRM?.input.weight,
-            percent: relativeRecords?.percentXRM
-        )
-    }
-
-    private var strVolume: String? {
-        return recordsFormatter.format(
-            value: relativeRecords?.records.maxVolume?.calculations?.volume,
-            percent: relativeRecords?.percentMaxVolume
-        )
-    }
-
-    init(callback: Workset? -> Void) {
+    init(workset: Workset? = nil, callback: Workset? -> Void = { _ in }) {
+        if let workset = workset {
+            self.startTime = workset.input.startTime
+            self.duration = workset.input.duration
+            self.exercise = workset.exerciseReference
+            self.reps = workset.input.reps
+            self.weight = workset.input.weight
+            self.warmup = workset.input.warmup
+            self.failure = workset.input.failure
+        }
+        self.mode = workset == nil ? .Creating : .Editable
         self.callback = callback
         super.init(style: .Grouped)
     }
@@ -160,21 +184,11 @@ class CreateWorkoutRecordViewController: FormViewController {
             self.exercise = db.newest(Workset)?.exerciseReference
         }
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .Cancel,
-            target: self,
-            action: #selector(CreateWorkoutRecordViewController.cancelButtonPressed)
-        )
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .Save,
-            target: self,
-            action: #selector(CreateWorkoutRecordViewController.saveButtonPressed)
-        )
-        
         form
 
-        +++ Section()
+        +++ Section() {
+            $0.tag = "input"
+        }
 
         <<< SelectExerciseRow("exercise") {
             $0.title = "Exercise"
@@ -200,6 +214,7 @@ class CreateWorkoutRecordViewController: FormViewController {
 
         <<< IntRow("reps") {
             $0.title = "Reps"
+            $0.value = self.reps
             $0.onChange { row in
                 self.reps = row.value
             }
@@ -207,6 +222,7 @@ class CreateWorkoutRecordViewController: FormViewController {
 
         <<< DecimalRow("weight") {
             $0.title = "Weight"
+            $0.value = self.weight
             $0.onChange { row in
                 self.weight = row.value
             }
@@ -214,6 +230,7 @@ class CreateWorkoutRecordViewController: FormViewController {
 
         <<< SwitchRow("Failure") {
             $0.title = $0.tag
+            $0.value = self.failure
             $0.onChange { row in
                 self.failure = row.value!
             }
@@ -221,100 +238,133 @@ class CreateWorkoutRecordViewController: FormViewController {
 
         <<< SwitchRow("Warmup"){
             $0.title = $0.tag
+            $0.value = self.warmup
             $0.onChange { row in
                 self.warmup = row.value!
             }
         }
 
-        +++ Section()
+        +++ Section("Calculations")  {
+            $0.tag = "calculations"
+            $0.hidden = .Function([], { form -> Bool in
+                return (form.sectionByTag("calculations")?.count ?? 0) > 0 ? false : true
+            })
+        }
 
         <<< LabelRow("e1rm") {
             $0.title = $0.tag
             $0.hidden = "$e1rm == nil"
-            $0.cellUpdate { cell, row in
-                row.value = self.recordsFormatter.format(value: self.workset?.calculations?.e1RM)
-                cell.detailTextLabel?.text = row.value
-            }
         }
 
         <<< LabelRow("Volume") {
             $0.title = $0.tag
             $0.hidden = "$Volume == nil"
-            $0.cellUpdate { cell, row in
-                row.value = self.recordsFormatter.format(value: self.workset?.calculations?.volume)
-                cell.detailTextLabel?.text = row.value
-            }
         }
 
-        +++ Section("Personal Records")
+        +++ Section("Personal Records") {
+            $0.tag = "prs"
+            $0.hidden = .Function([], { form -> Bool in
+                return (form.sectionByTag("prs")?.count ?? 0) > 0 ? false : true
+            })
+        }
 
         <<< LabelRow("RM") {
             $0.title = $0.tag
             $0.hidden = "$RM == nil"
-            self.formatter.dateStyle = .ShortStyle
-            self.formatter.timeStyle = .NoStyle
             $0.cellUpdate { cell, row in
-                row.value = self.strRM
-                cell.detailTextLabel?.text = row.value
+                if let maxWeight = self.records?.maxWeight {
+                    cell.accessoryType = .DisclosureIndicator
+                    row.onCellSelection { _, _ in
+                        let vc = CreateWorkoutRecordViewController(workset: maxWeight)
+                        self.showViewController(vc, sender: nil)
+                    }
+                } else {
+                    cell.accessoryType = .None
+                    row.onCellSelection { _, _ in }
+                }
             }
         }
 
         <<< LabelRow("OneRM") {
             $0.title = "1RM"
             $0.hidden = "$OneRM == nil"
-            self.formatter.dateStyle = .ShortStyle
-            self.formatter.timeStyle = .NoStyle
             $0.cellUpdate { cell, row in
-                row.value = self.str1RM
-                cell.detailTextLabel?.text = row.value
+                if let max1RM = self.records?.max1RM {
+                    cell.accessoryType = .DisclosureIndicator
+                    row.onCellSelection { _, _ in
+                        let vc = CreateWorkoutRecordViewController(workset: max1RM)
+                        self.showViewController(vc, sender: nil)
+                    }
+                } else {
+                    cell.accessoryType = .None
+                    row.onCellSelection { _, _ in }
+                }
             }
         }
 
         <<< LabelRow("e1RM") {
             $0.title = $0.tag
             $0.hidden = "$e1RM == nil"
-            self.formatter.dateStyle = .ShortStyle
-            self.formatter.timeStyle = .NoStyle
             $0.cellUpdate { cell, row in
-                row.value = self.strE1RM
-                cell.detailTextLabel?.text = row.value
+                if let maxE1RM = self.records?.maxE1RM {
+                    cell.accessoryType = .DisclosureIndicator
+                    row.onCellSelection { _, _ in
+                        let vc = CreateWorkoutRecordViewController(workset: maxE1RM)
+                        self.showViewController(vc, sender: nil)
+                    }
+                } else {
+                    cell.accessoryType = .None
+                    row.onCellSelection { _, _ in }
+                }
             }
         }
 
         <<< LabelRow("XRM") {
             $0.hidden = "$XRM == nil"
-            self.formatter.dateStyle = .ShortStyle
-            self.formatter.timeStyle = .NoStyle
             $0.cellUpdate { cell, row in
-                if let reps = self.reps {
-                    row.title = "\(reps)RM"
-                    row.value = self.strXRM
+                if let maxXRM = self.records?.maxXRM {
+                    cell.accessoryType = .DisclosureIndicator
+                    row.onCellSelection { _, _ in
+                        let vc = CreateWorkoutRecordViewController(workset: maxXRM)
+                        self.showViewController(vc, sender: nil)
+                    }
                 } else {
-                    row.value = nil
+                    cell.accessoryType = .None
+                    row.onCellSelection { _, _ in }
                 }
-                cell.detailTextLabel?.text = row.value
             }
         }
 
         <<< LabelRow("PastVolume") {
             $0.title = "Volume"
             $0.hidden = "$PastVolume == nil"
-            self.formatter.dateStyle = .ShortStyle
-            self.formatter.timeStyle = .NoStyle
             $0.cellUpdate { cell, row in
-                row.value = self.strVolume
-                cell.detailTextLabel?.text = row.value
+                if let maxVolume = self.records?.maxVolume {
+                    cell.accessoryType = .DisclosureIndicator
+                    row.onCellSelection { _, _ in
+                        let vc = CreateWorkoutRecordViewController(workset: maxVolume)
+                        self.showViewController(vc, sender: nil)
+                    }
+                } else {
+                    cell.accessoryType = .None
+                    row.onCellSelection { _, _ in }
+                }
             }
         }
 
         <<< LabelRow("Intensity") {
             $0.title = $0.tag
             $0.hidden = "$Intensity == nil"
-            $0.cellUpdate { cell, row in
-                row.value = self.recordsFormatter.format(percent: self.relativeRecords?.intensity)
-                cell.detailTextLabel?.text = row.value
-            }
         }
+
+        refreshMode()
+
+        if let input = input {
+            records = db.get(Records.self, input: input)
+            updateRelativeRecords()
+        }
+
+        updateCalculatedRows()
     }
 
     private func updateRelativeRecords() {
@@ -323,17 +373,90 @@ class CreateWorkoutRecordViewController: FormViewController {
     }
 
     private func updateCalculatedRows() {
-        form.rowByTag("e1rm")?.updateCell()
-        form.rowByTag("Volume")?.updateCell()
-        form.rowByTag("RM")?.updateCell()
-        form.rowByTag("OneRM")?.updateCell()
-        form.rowByTag("e1RM")?.updateCell()
-        form.rowByTag("XRM")?.updateCell()
-        form.rowByTag("PastVolume")?.updateCell()
-        form.rowByTag("Intensity")?.updateCell()
+        form.rowByTag("e1rm")?.value = recordsFormatter.format(
+            value: workset?.calculations?.e1RM
+        )
+        form.rowByTag("Volume")?.value = recordsFormatter.format(
+            value: workset?.calculations?.volume
+        )
+        form.rowByTag("RM")?.value = recordsFormatter.format(
+            value: relativeRecords?.records.maxWeight?.input.weight,
+            percent: relativeRecords?.percentMaxWeight
+        )
+        form.rowByTag("OneRM")?.value = recordsFormatter.format(
+            value: relativeRecords?.records.max1RM?.input.weight,
+            percent: relativeRecords?.percent1RM
+        )
+        form.rowByTag("e1RM")?.value = recordsFormatter.format(
+            value: relativeRecords?.records.maxE1RM?.input.weight,
+            percent: relativeRecords?.percentE1RM
+        )
+        if let xrmRow = form.rowByTag("XRM") as? LabelRow {
+            if let reps = reps {
+                xrmRow.title = "\(reps)RM"
+                xrmRow.value = recordsFormatter.format(
+                    value: relativeRecords?.records.maxXRM?.input.weight,
+                    percent: relativeRecords?.percentXRM
+                )
+            } else {
+                xrmRow.value = nil
+            }
+        }
+        form.rowByTag("PastVolume")?.value = self.recordsFormatter.format(
+            value: self.relativeRecords?.records.maxVolume?.calculations?.volume,
+            percent: self.relativeRecords?.percentMaxVolume
+        )
+        form.rowByTag("Intensity")?.value = self.recordsFormatter.format(
+            percent: self.relativeRecords?.intensity
+        )
+        form.sectionByTag("calculations")?.evaluateHidden()
+        form.sectionByTag("prs")?.evaluateHidden()
+        form.sectionByTag("calculations")?.reload()
+        form.sectionByTag("prs")?.reload()
     }
-    
+
+    private func enableInputFields() {
+        if let section = form.sectionByTag("input") {
+            for row in section {
+                row.disabled = false
+                row.evaluateDisabled()
+            }
+        }
+    }
+
+    private func disableInputFields() {
+        if let section = form.sectionByTag("input") {
+            for row in section {
+                row.disabled = true
+                row.evaluateDisabled()
+            }
+        }
+    }
+
+    private func refreshMode() {
+        switch mode {
+        case .ReadOnly:
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.rightBarButtonItem = nil
+            disableInputFields()
+        case .Creating:
+            navigationItem.leftBarButtonItem = cancelButton
+            navigationItem.rightBarButtonItem = saveButton
+            enableInputFields()
+        case .Editable:
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.rightBarButtonItem = editButton
+            disableInputFields()
+        case .Editing:
+            navigationItem.leftBarButtonItem = cancelButton
+            navigationItem.rightBarButtonItem = saveButton
+            enableInputFields()
+        }
+    }
+
     func cancelButtonPressed() {
+        assert(mode == .Editing || mode == .Creating)
+        if mode == .Editing { mode = .Editable }
         callback(nil)
     }
     
@@ -347,7 +470,15 @@ class CreateWorkoutRecordViewController: FormViewController {
         } catch let e {
             Alert(message: "\(e)")
         }
+        assert(mode == .Editing || mode == .Creating)
+        if mode == .Editing { mode = .Editable }
         callback(workset)
+    }
+
+    func editButtonPressed() {
+        assert(mode == .Editable)
+        mode = .Editing
+        updateCalculatedRows()
     }
 
 }

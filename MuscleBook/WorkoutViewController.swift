@@ -133,7 +133,7 @@ final class WorkoutViewController: FormViewController {
         row.title = record.input.exerciseName
 //        row.value = record.valueString
         row.onCellSelection { cell, row in
-            let vc = WorkoutRecordViewController(record: record)
+            let vc = CreateWorkoutRecordViewController(workset: record)
             self.showViewController(vc, sender: nil)
         }
         row.cellSetup { cell, row in

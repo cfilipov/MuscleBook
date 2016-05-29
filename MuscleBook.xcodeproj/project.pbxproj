@@ -909,6 +909,7 @@
 			isa = PBXGroup;
 			children = (
 				B2B326881C852162005F88E4 /* DebugMenuViewController.swift */,
+				B2BE3BC71C8021FC009198EA /* SettingsViewController.swift */,
 				B2C367AE1CB1C8640045824F /* DebugTimersViewController.swift */,
 				B2C367C21CB235000045824F /* AnatomyDebugViewController.swift */,
 				B23F0D051CF9506D006BF745 /* AnatomyDebugViewController2.swift */,
@@ -930,11 +931,9 @@
 		B2C367B21CB1D2E40045824F /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				B2BE3BC71C8021FC009198EA /* SettingsViewController.swift */,
 				B28440091CBB80A8008D0953 /* AboutViewController.swift */,
 				B23387581CB74F0C0027981A /* VerifyWorksetsViewController.swift */,
 				B205857C1C7C1F5500491328 /* StatisticsViewController.swift */,
-				B2C367B01CB1C8680045824F /* Debug */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -989,6 +988,7 @@
 				B2A52BAC1CA0AAB700268B6C /* MuscleListViewController.swift */,
 				B2A80D201C73B8AC0072928B /* RootViewController.swift */,
 				B23F0C741CF18775006BF745 /* MenuViewController.swift */,
+				B2C367B01CB1C8680045824F /* Debug */,
 				B2C367B31CB1D30A0045824F /* Exercise */,
 				B2C367B21CB1D2E40045824F /* Settings */,
 				B2C367B11CB1D2C30045824F /* Workout */,

@@ -340,7 +340,7 @@ extension DB {
         return date
     }
 
-    func totalExercises(sinceDate date: NSDate) -> Int {
+    func totalExercisesPerformed(sinceDate date: NSDate) -> Int {
         typealias W = Workset.Schema
         return db.scalar(W.table
             .select(W.exerciseID.distinct.count)
@@ -352,6 +352,14 @@ extension DB {
         typealias W = Workset.Schema
         return db.scalar(W.table
             .select(W.worksetID.count)
+            .filter(W.startTime.localDay >= date)
+        )
+    }
+
+    func totalReps(sinceDate date: NSDate) -> Int? {
+        typealias W = Workset.Schema
+        return db.scalar(W.table
+            .select(W.reps.sum)
             .filter(W.startTime.localDay >= date)
         )
     }
@@ -376,6 +384,39 @@ extension DB {
             .select(W.worksetID.count)
             .filter(W.startTime.localDay >= date &&
                 (W.intensity > 1.0 || W.intensity > 1.0)
+            )
+        )
+    }
+
+    func maxSquat(sinceDate date: NSDate) -> Double? {
+        typealias W = Workset.Schema
+        return db.scalar(W.table
+            .select(W.weight.max)
+            .filter(
+                W.startTime.localDay >= date &&
+                W.exerciseID == 973
+            )
+        )
+    }
+
+    func maxDeadlift(sinceDate date: NSDate) -> Double? {
+        typealias W = Workset.Schema
+        return db.scalar(W.table
+            .select(W.weight.max)
+            .filter(
+                W.startTime.localDay >= date &&
+                    W.exerciseID == 723
+            )
+        )
+    }
+
+    func maxBench(sinceDate date: NSDate) -> Double? {
+        typealias W = Workset.Schema
+        return db.scalar(W.table
+            .select(W.weight.max)
+            .filter(
+                W.startTime.localDay >= date &&
+                    W.exerciseID == 482
             )
         )
     }

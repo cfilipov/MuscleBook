@@ -31,7 +31,13 @@ class WorkoutsByDayViewController: FormViewController {
 
     let dateFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
-        formatter.dateFormat = "EEE, dd, hh:mm a"
+        formatter.dateFormat = "dd EEE"
+        return formatter
+    }()
+
+    let timeFormatter: NSDateFormatter = {
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "hh:mm a"
         return formatter
     }()
 
@@ -69,18 +75,6 @@ class WorkoutsByDayViewController: FormViewController {
 
     private func rebuildForm() {
         form.removeAll()
-        form +++ Section() <<< LabelRow() {
-            $0.title = "New Workout"
-        }.cellSetup { cell, row in
-            cell.accessoryType = .DisclosureIndicator
-        }.onCellSelection { cell, row in
-            let vc = CreateWorkoutRecordViewController { record in
-                self.rebuildForm()
-                self.dismissViewControllerAnimated(true, completion: nil)
-            }
-            self.presentModalViewController(vc)
-        }
-
         let allWorkouts = try! db.all(Workout)
         var curMonth: String? = nil
         var curSection: Section? = nil
@@ -101,7 +95,6 @@ class WorkoutsByDayViewController: FormViewController {
     private func workoutToRow(workout: Workout) -> BaseRow {
         let row = activeDayRow(workout)
         //let row = workout.reps > 0 ? activeDayRow(workout) : restDayRow(workout)
-        row.title = dateFormatter.stringFromDate(workout.startTime)
         return row
     }
 
@@ -109,21 +102,23 @@ class WorkoutsByDayViewController: FormViewController {
         let row = LabelRow()
         row.value = "Rest"
         row.hidden = "$show_rest_days == false"
+        row.title = dateFormatter.stringFromDate(workout.startTime)
         return row
     }
 
     private func activeDayRow(workout: Workout) -> BaseRow {
         let row = LabelRow()
-        if let volume = workout.volume {
-            row.value = weightFormatter.stringFromNumber(volume)
+        row.title = dateFormatter.stringFromDate(workout.startTime)
+        row.cellSetup { cell, row in
+            cell.detailTextLabel?.textColor = UIColor.blackColor()
+            cell.accessoryType = .DisclosureIndicator
+        }
+        row.cellUpdate { cell, row in
+            cell.detailTextLabel?.text = self.timeFormatter.stringFromDate(workout.startTime)
         }
         row.onCellSelection { cell, row in
             let vc = WorkoutViewController(workout: workout)
             self.showViewController(vc, sender: nil)
-        }
-        row.cellSetup { cell, row in
-            cell.detailTextLabel?.textColor = UIColor.blackColor()
-            cell.accessoryType = .DisclosureIndicator
         }
         return row
     }

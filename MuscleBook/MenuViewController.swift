@@ -55,6 +55,11 @@ class MenuViewController : FormViewController {
             <<< PushViewControllerRow() {
                 $0.title = "Settings"
                 $0.controller = { SettingsViewController() }
-        }
+            }
+            
+            <<< PushViewControllerRow() {
+                $0.title = "Debug Menu"
+                $0.controller = { DebugMenuViewController() }
+            }
     }
 }

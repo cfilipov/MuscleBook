@@ -51,7 +51,17 @@ class RootViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "✻", style: .Plain, target: self, action: #selector(onMenuButtonPresed))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .Organize,
+            target: self,
+            action: #selector(onMenuButtonPresed)
+        )
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .Add,
+            target: self,
+            action: #selector(onAddButtonPressed)
+        )
 
         let notification = CocoaNotification(name: UIApplicationDidReceiveMemoryWarningNotification)
         observer = CocoaObserver(notification, queue: self.mainQueue, handler: { (notification: NSNotification) in
@@ -105,6 +115,13 @@ class RootViewController: FormViewController {
     func onMenuButtonPresed() {
         let vc = MenuViewController()
         self.showViewController(vc, sender: nil)
+    }
+
+    func onAddButtonPressed() {
+        let vc = CreateWorkoutRecordViewController { record in
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
+        presentModalViewController(vc)
     }
 
 }
