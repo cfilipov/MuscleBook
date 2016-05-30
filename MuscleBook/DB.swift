@@ -106,6 +106,19 @@ extension DB {
         return rowid
     }
 
+    func delete(workset: Workset) throws {
+        precondition(workset.worksetID != 0)
+        precondition(workset.workoutID != 0)
+        typealias WS = Workset.Schema
+        typealias WO = Workout.Schema
+        try db.transaction { [unowned self] in
+            try self.db.run(WS.table.filter(WS.worksetID == workset.worksetID).delete())
+            let count = self.db.scalar(WS.table.select(WS.worksetID.count).filter(WS.workoutID == workset.workoutID))
+            guard count == 0 else { return }
+            try self.db.run(WO.table.filter(WO.workoutID == workset.workoutID).delete())
+        }
+    }
+
     func save(movement: MuscleMovement) throws -> Int64 {
         return try db.run(MuscleMovement.Schema.table.insert(movement))
     }
@@ -116,7 +129,7 @@ extension DB {
         return try self.db.run(Workset.Schema.table.insert(workset))
     }
 
-    func save(input: Workset.Input) throws -> Workset? {
+    func save(input: Workset.Input) throws -> Workset {
         let records = get(Records.self, input: input)
         let relativeRecords = RelativeRecords(input: input, records: records)
         var workset: Workset?
@@ -137,7 +150,7 @@ extension DB {
         assert(workset!.worksetID != 0)
         assert(workset!.workoutID != 0)
         try self.recalculate(workoutID: workoutID)
-        return workset
+        return workset!
     }
 
     func save(worksetInputs: [Workset.Input]) throws {
@@ -401,7 +414,7 @@ extension DB {
                 .select(W.workoutID.count)
                 .filter(W.startTime.localDay == date.localDay)
         )
-        return count > 0 ? true : false
+        return count == 0 ? true : false
     }
 
     func lastRestDay() -> NSDate? {
@@ -416,6 +429,15 @@ extension DB {
             }
         }
         return date
+    }
+
+    func get(type: ExerciseReference.Type, date: NSDate) throws -> AnySequence<ExerciseReference> {
+        typealias WS = Workset.Schema
+        return try db.prepare(WS.table
+            .select(WS.exerciseID, WS.exerciseName)
+            .filter(WS.startTime.localDay == date.localDay)
+            .group(WS.exerciseID)
+        )
     }
 
     func totalExercisesPerformed(sinceDate date: NSDate) -> Int {
@@ -642,12 +664,6 @@ extension DB {
     func newest(type: Workset.Type) -> Workset? {
         typealias W = Workset.Schema
         return db.pluck(W.table.order(W.startTime.desc))
-    }
-
-    func delete(workset: Workset) throws -> Int {
-        typealias W = Workset.Schema
-        let query = W.table.filter(W.worksetID == workset.worksetID)
-        return try db.run(query.delete())
     }
 
     func recalculateAllWorksets(after startTime: NSDate = NSDate(timeIntervalSince1970: 0)) throws {

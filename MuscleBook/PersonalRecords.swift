@@ -89,7 +89,7 @@ struct RelativeRecords {
     }
 
     var intensity: Double? {
-        return [percentMaxWeight, percent1RM, percentE1RM]
+        return [percentMaxWeight, percent1RM]
             .flatMap{$0}.maxElement()
     }
 

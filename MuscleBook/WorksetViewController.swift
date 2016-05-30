@@ -21,6 +21,13 @@ import Eureka
 
 class WorksetViewController: FormViewController {
 
+    enum Result {
+        case Cancelled
+        case Updated(Workset)
+        case Created(Workset)
+        case Deleted(Workset)
+    }
+
     enum Mode {
         case ReadOnly
         case Creating
@@ -39,7 +46,7 @@ class WorksetViewController: FormViewController {
     }
 
     private let db = DB.sharedInstance
-    private let callback: Workset? -> Void
+    private let callback: Result -> Void
     private let formatter = NSDateFormatter()
     private let cal = NSCalendar.currentCalendar()
     private let recordsFormatter = RelativeRecordsFormatter()
@@ -70,6 +77,9 @@ class WorksetViewController: FormViewController {
         }
         didSet {
             refreshMode()
+            form.rowByTag("delete")?.evaluateHidden()
+            form.sectionByTag("section_delete")?.evaluateHidden()
+            form.sectionByTag("section_delete")?.reload()
         }
     }
 
@@ -176,7 +186,7 @@ class WorksetViewController: FormViewController {
         )
     }
 
-    init(workset: Workset? = nil, callback: Workset? -> Void = { _ in }) {
+    init(workset: Workset? = nil, callback: Result -> Void = { _ in }) {
         if let workset = workset {
             self.startTime = workset.input.startTime
             self.duration = workset.input.duration
@@ -292,9 +302,9 @@ class WorksetViewController: FormViewController {
 
         +++ Section("Personal Records") {
             $0.tag = "prs"
-            $0.hidden = .Function([], { form -> Bool in
+            $0.hidden = Condition.Function([]) { form -> Bool in
                 return (form.sectionByTag("prs")?.count ?? 0) > 0 ? false : true
-            })
+            }
         }
 
         <<< LabelRow("RM") {
@@ -387,6 +397,42 @@ class WorksetViewController: FormViewController {
             $0.hidden = "$intensity == nil"
         }
 
+        +++ Section() {
+            $0.tag = "section_delete"
+            $0.hidden = Condition.Function([]) { form -> Bool in
+                return (form.sectionByTag("section_delete")?.count ?? 0) > 0 ? false : true
+            }
+        }
+
+        <<< ButtonRow() {
+            $0.title = "Delete"
+            $0.tag = "delete"
+            $0.hidden = Condition.Function([]) { form -> Bool in
+                if case .Editing(_) = self.mode { return false }
+                else { return true }
+            }
+            $0.cellUpdate { cell, _ in
+                cell.textLabel?.textColor = UIColor.redColor()
+                let font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+                cell.textLabel?.font = UIFont.boldSystemFontOfSize(font.pointSize)
+            }
+            $0.onCellSelection { _, _ in
+                if case .Editing(let workset) = self.mode {
+                    let effectedWorkouts = self.db.count(Workout.self, after: workset.input.startTime)
+                    var message = "Are you sure you want to delete this set?"
+                    if effectedWorkouts > 0 {
+                        message += "\n\nDeleting this set will effect \(effectedWorkouts) other workouts."
+                    }
+                    WarnAlert(message: message) {
+                        AlertOnError {
+                            try self.db.delete(workset)
+                            self.callback(Result.Deleted(workset))
+                        }
+                    }
+                } else { fatalError("Unexpected mode: \(self.mode)") }
+            }
+        }
+
         refreshMode()
 
         if let input = input {
@@ -446,8 +492,11 @@ class WorksetViewController: FormViewController {
         )
         form.sectionByTag("calculations")?.evaluateHidden()
         form.sectionByTag("prs")?.evaluateHidden()
+        form.rowByTag("delete")?.evaluateHidden()
+        form.sectionByTag("section_delete")?.evaluateHidden()
         form.sectionByTag("calculations")?.reload()
         form.sectionByTag("prs")?.reload()
+        form.sectionByTag("section_delete")?.reload()
     }
 
     private func enableInputFields() {
@@ -498,7 +547,7 @@ class WorksetViewController: FormViewController {
         case let .Editing(workset):
             mode = .Editable(workset)
         case .Creating:
-            callback(nil)
+            callback(Result.Cancelled)
         default:
             fatalError("Unexpected mode: \(mode)")
         }
@@ -521,7 +570,7 @@ class WorksetViewController: FormViewController {
         case .Creating:
             AlertOnError {
                 let workset = try self.db.save(input)
-                self.callback(workset)
+                self.callback(Result.Created(workset))
             }
         default:
             fatalError("Unexpected mode: \(mode)")

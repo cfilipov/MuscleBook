@@ -60,13 +60,6 @@ final class WorkoutSummaryViewController: FormViewController {
         return formatter
     }()
 
-    lazy var worksetsSection: Section = {
-        let worksets = try! self.db.worksets(workoutID: self.workout.workoutID)
-        var section = Section("Sets")
-        section += worksets.map(self.workoutRecordToRow)
-        return section
-    }()
-
     private let timeFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
         formatter.timeStyle = .ShortStyle
@@ -171,7 +164,9 @@ final class WorkoutSummaryViewController: FormViewController {
             $0.disabled = true
         }
 
-        form +++ worksetsSection
+        +++ Section("Sets") {
+            $0.tag = "worksets"
+        }
 
         updateRows()
     }
@@ -190,6 +185,8 @@ final class WorkoutSummaryViewController: FormViewController {
             db.get(MuscleWorkSummary.self, workoutID: workout.workoutID, movementClass: .Target)
         )
         form.rowByTag("anatomy")?.updateCell()
+        form.sectionByTag("worksets")?.removeAll()
+        form.sectionByTag("worksets")?.appendContentsOf(buildWorksetRows())
     }
 
     private func workoutRecordToRow(workset: Workset) -> BaseRow {
@@ -197,13 +194,25 @@ final class WorkoutSummaryViewController: FormViewController {
         row.title = workset.input.exerciseName
         row.value = workset.shortString
         row.onCellSelection { cell, row in
-            let vc = WorksetViewController(workset: workset)
+            let vc = WorksetViewController(workset: workset) { result in
+                self.dismissViewControllerAnimated(true, completion: nil)
+                if case .Deleted(_) = result where self.workout.sets == 1 {
+                    self.navigationController?.popViewControllerAnimated(true)
+                } else {
+                    self.updateRows()
+                }
+            }
             self.showViewController(vc, sender: nil)
         }
         row.cellSetup { cell, row in
             cell.accessoryType = .DisclosureIndicator
         }
         return row
+    }
+
+    private func buildWorksetRows() -> [BaseRow] {
+        let worksets = try! self.db.worksets(workoutID: self.workout.workoutID)
+        return worksets.map(self.workoutRecordToRow)
     }
 
     func onAddButtonPressed() {

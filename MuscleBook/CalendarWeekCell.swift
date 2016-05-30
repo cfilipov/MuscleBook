@@ -62,7 +62,7 @@ class CalendarWeekCell : Cell<NSDate>, CellType, CVCalendarViewDelegate , CVCale
         if let date = row.value {
             calendarView.presentedDate = CVDate(date: date)
             calendarView.contentController.refreshPresentedMonth()
-            calendarView.toggleCurrentDayView()
+//            calendarView.toggleCurrentDayView()
         }
     }
 

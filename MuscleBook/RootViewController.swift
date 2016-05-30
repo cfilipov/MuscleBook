@@ -27,6 +27,7 @@ class RootViewController: FormViewController {
     private let mainQueue = NSOperationQueue.mainQueue()
     private var workoutCounts: [NSDate: Int] = [:]
     private var observer: CocoaObserver? = nil
+    private let cal = NSCalendar.currentCalendar()
 
     let weightFormatter: NSNumberFormatter = {
         let formatter = NSNumberFormatter()
@@ -36,12 +37,26 @@ class RootViewController: FormViewController {
 
     private var selectedDate: NSDate = NSDate() {
         didSet {
-            let anatomyRow = self.form.rowByTag("anatomy") as? SideBySideAnatomyViewRow
-            anatomyRow?.value = try! AnatomyViewConfig(
-                db.get(MuscleWorkSummary.self, date: selectedDate, movementClass: .Target)
-            )
-            anatomyRow?.updateCell()
+            refresh()
         }
+    }
+
+    private var daysSinceWorkout: Int? {
+        guard let startDate = db.lastWorkoutDay() else { return nil }
+        let endDate = NSDate()
+        let unit = NSCalendarUnit.Day
+        let components = cal.components(unit, fromDate: startDate, toDate: endDate, options: [])
+        guard components.day > 0 else { return nil }
+        return components.day
+    }
+
+    private var daysSinceRestDay: Int? {
+        guard let startDate = db.lastRestDay() else { return nil }
+        let endDate = NSDate()
+        let unit = NSCalendarUnit.Day
+        let components = cal.components(unit, fromDate: startDate, toDate: endDate, options: [])
+        guard components.day > 0 else { return nil }
+        return components.day
     }
 
     deinit {
@@ -86,6 +101,18 @@ class RootViewController: FormViewController {
             }
         }
 
+        <<< LabelRow() {
+            $0.title = "Last Workout"
+            $0.tag = "last_workout"
+            $0.hidden = "$last_workout == nil"
+        }
+
+        <<< LabelRow() {
+            $0.title = "Last Rest Day"
+            $0.tag = "last_rest_day"
+            $0.hidden = "$last_rest_day == nil"
+        }
+
         <<< CalendarWeekRow("workout_week") {
             $0.numberOfDotsForDate = { date -> Int in
                 self.workoutCounts[date] ?? 0
@@ -98,13 +125,40 @@ class RootViewController: FormViewController {
 
         <<< SideBySideAnatomyViewRow("anatomy")
 
+        <<< TextAreaRow() {
+            $0.tag = "exercises"
+            $0.hidden = "$exercises == nil"
+            $0.textAreaHeight = .Dynamic(initialTextViewHeight: 20)
+            $0.disabled = true
+        }
+
         form.rowByTag("workout_week")?.baseValue = NSDate()
+
+        refresh()
     }
 
     private func refresh() {
         workoutCounts = Dictionary(try! db.countByDay(Workout))
-        self.form.rowByTag("anatomy")?.updateCell()
-        self.form.rowByTag("workout_week")?.updateCell()
+        form.rowByTag("anatomy")?.value = try! AnatomyViewConfig(
+            db.get(MuscleWorkSummary.self, date: selectedDate, movementClass: .Target)
+        )
+        form.rowByTag("anatomy")?.updateCell()
+        form.rowByTag("workout_week")?.updateCell()
+        form.rowByTag("last_workout")?.value = formatDaysAgo(daysSinceWorkout)
+        form.rowByTag("last_rest_day")?.value = formatDaysAgo(daysSinceRestDay)
+        form.rowByTag("exercises")?.value = exercises
+        form.rowByTag("exercises")?.updateCell()
+    }
+
+    private var exercises: String? {
+        let exercises = try! db.get(ExerciseReference.self, date: selectedDate).map { $0.name }
+        guard exercises.count > 0 else { return nil }
+        return exercises.joinWithSeparator(", ")
+    }
+
+    private func formatDaysAgo(days: Int?) -> String? {
+        guard let days = days else { return nil }
+        return "\(days) days ago"
     }
 
     override func viewWillAppear(animated: Bool) {
