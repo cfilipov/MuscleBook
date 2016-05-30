@@ -202,6 +202,7 @@ class WorksetViewController: FormViewController {
         self.originalWorkset = workset
         self.callback = callback
         super.init(style: .Grouped)
+        hidesBottomBarWhenPushed = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -211,6 +212,8 @@ class WorksetViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView?.contentInset = UIEdgeInsetsMake(-36, 0, 0, 0)
+        
         if exercise == nil {
             self.exercise = db.newest(Workset)?.exerciseReference
         }

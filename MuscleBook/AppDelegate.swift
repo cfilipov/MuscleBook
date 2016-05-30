@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Profiler.trace("App Launch").start()
         Dropbox.setupWithAppKey("apsa8g46ubfs32k")
         Fabric.with([Crashlytics.self])
-        UIView.appearance().tintColor = UIColor(rgba: "#ff0000")
+        window?.tintColor = UIColor(rgba: "#ff0000")
         DB.sharedInstance
         Profiler.trace("App Launch").end()
         return true

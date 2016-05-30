@@ -43,19 +43,18 @@ class ExercisesListViewController: UITableViewController, TypedRowControllerType
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         title = "Exercises"
-
-        tableView!.reloadData()
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
-        tableView!.tableHeaderView = searchController.searchBar
+        tableView?.tableHeaderView = searchController.searchBar
+        tableView?.reloadData()
+        tableView?.setContentOffset(CGPoint(x: 0, y: 44), animated: false)
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

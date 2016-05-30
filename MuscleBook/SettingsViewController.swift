@@ -32,6 +32,18 @@ class SettingsViewController : FormViewController {
 
         +++ Section()
 
+        <<< PushViewControllerRow() {
+            $0.title = "About"
+            $0.controller = { AboutViewController() }
+        }
+        
+        <<< PushViewControllerRow() {
+            $0.title = "Debug Menu"
+            $0.controller = { DebugMenuViewController() }
+        }
+
+        +++ Section()
+
         <<< ButtonRow() {
             $0.title = "Export to CSV"
         }.onCellSelection { _, _ in
@@ -43,14 +55,6 @@ class SettingsViewController : FormViewController {
             )
             self.presentViewController(vc, animated: true, completion: nil)
         }
-
-        +++ Section()
-
-        <<< PushViewControllerRow() {
-            $0.title = "About"
-            $0.controller = { AboutViewController() }
-        }
-
     }
 
 }

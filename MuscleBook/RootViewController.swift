@@ -66,11 +66,11 @@ class RootViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .Organize,
-            target: self,
-            action: #selector(onMenuButtonPresed)
-        )
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(
+//            barButtonSystemItem: .Organize,
+//            target: self,
+//            action: #selector(onMenuButtonPresed)
+//        )
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .Add,
@@ -83,9 +83,10 @@ class RootViewController: FormViewController {
             self.refresh()
         })
 
-        tableView?.contentInset = UIEdgeInsetsMake(-36, 0, 0, 0);
+        tableView?.contentInset = UIEdgeInsetsMake(-36, 0, 0, 0)
 
-        title = "Muscle Book"
+        title = "Days"
+        navigationItem.title = "Muscle Book"
 
         let date = NSDate()
 
@@ -164,11 +165,6 @@ class RootViewController: FormViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         refresh()
-    }
-
-    func onMenuButtonPresed() {
-        let vc = MenuViewController()
-        self.showViewController(vc, sender: nil)
     }
 
     func onAddButtonPressed() {

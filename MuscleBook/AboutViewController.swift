@@ -48,6 +48,11 @@ class AboutViewController : FormViewController {
             $0.value = info["CFBundleVersion"] as? String
         }
 
+        <<< PushViewControllerRow() {
+            $0.title = "Credits"
+            $0.controller = { CreditsViewController() }
+        }
+
     }
     
 }

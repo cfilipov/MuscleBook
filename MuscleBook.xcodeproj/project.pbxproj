@@ -29,7 +29,6 @@
 		B23386C11CB48C680027981A /* MuscleWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23386C01CB48C680027981A /* MuscleWorkout.swift */; };
 		B23387591CB74F0C0027981A /* VerifyWorksetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23387581CB74F0C0027981A /* VerifyWorksetsViewController.swift */; };
 		B23668E91CB341EF00C0CEFB /* FormItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23668E81CB341EF00C0CEFB /* FormItems.swift */; };
-		B23F0C751CF18775006BF745 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23F0C741CF18775006BF745 /* MenuViewController.swift */; };
 		B23F0CD81CF4BFDB006BF745 /* Schema20160524095754146.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23F0CD71CF4BFDB006BF745 /* Schema20160524095754146.swift */; };
 		B23F0CDC1CF693A2006BF745 /* Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23F0CDB1CF693A2006BF745 /* Schema.swift */; };
 		B23F0CE71CF7E685006BF745 /* PersonalRecords.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23F0CE61CF7E685006BF745 /* PersonalRecords.swift */; };
@@ -72,6 +71,7 @@
 		B284400A1CBB80A8008D0953 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28440091CBB80A8008D0953 /* AboutViewController.swift */; };
 		B28440301CBB880D008D0953 /* musclebook.db in Resources */ = {isa = PBXBuildFile; fileRef = B284402F1CBB8808008D0953 /* musclebook.db */; };
 		B29485E21C8122730032DF0A /* Profiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29485E11C8122730032DF0A /* Profiler.swift */; };
+		B29B45AE1CFCF39800E03478 /* CreditsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29B45AD1CFCF39800E03478 /* CreditsViewController.swift */; };
 		B29EA5261C866F4200F2E261 /* ValueCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29EA5251C866F4200F2E261 /* ValueCoding.swift */; };
 		B2A52B851CA0A62200268B6C /* libYACYAML.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A52B801CA0A5FB00268B6C /* libYACYAML.a */; };
 		B2A52BA31CA0A74500268B6C /* JAMStyledBezierPath.m in Sources */ = {isa = PBXBuildFile; fileRef = B2A52B8F1CA0A74500268B6C /* JAMStyledBezierPath.m */; };
@@ -441,7 +441,6 @@
 		B23386C01CB48C680027981A /* MuscleWorkout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MuscleWorkout.swift; sourceTree = "<group>"; };
 		B23387581CB74F0C0027981A /* VerifyWorksetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyWorksetsViewController.swift; sourceTree = "<group>"; };
 		B23668E81CB341EF00C0CEFB /* FormItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormItems.swift; sourceTree = "<group>"; };
-		B23F0C741CF18775006BF745 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		B23F0CD71CF4BFDB006BF745 /* Schema20160524095754146.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schema20160524095754146.swift; sourceTree = "<group>"; };
 		B23F0CDB1CF693A2006BF745 /* Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schema.swift; sourceTree = "<group>"; };
 		B23F0CE61CF7E685006BF745 /* PersonalRecords.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonalRecords.swift; sourceTree = "<group>"; };
@@ -489,6 +488,7 @@
 		B28440091CBB80A8008D0953 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		B284402F1CBB8808008D0953 /* musclebook.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = musclebook.db; path = MuscleBook/musclebook.db; sourceTree = SOURCE_ROOT; };
 		B29485E11C8122730032DF0A /* Profiler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Profiler.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B29B45AD1CFCF39800E03478 /* CreditsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditsViewController.swift; sourceTree = "<group>"; };
 		B29EA5251C866F4200F2E261 /* ValueCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValueCoding.swift; sourceTree = "<group>"; };
 		B2A52B791CA0A5FB00268B6C /* YACYAML.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = YACYAML.xcodeproj; path = Extern/YACYAML/YACYAML.xcodeproj; sourceTree = "<group>"; };
 		B2A52B8E1CA0A74500268B6C /* JAMStyledBezierPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMStyledBezierPath.h; sourceTree = "<group>"; };
@@ -910,7 +910,6 @@
 			isa = PBXGroup;
 			children = (
 				B2B326881C852162005F88E4 /* DebugMenuViewController.swift */,
-				B2BE3BC71C8021FC009198EA /* SettingsViewController.swift */,
 				B2C367AE1CB1C8640045824F /* DebugTimersViewController.swift */,
 				B2C367C21CB235000045824F /* AnatomyDebugViewController.swift */,
 				B23F0D051CF9506D006BF745 /* AnatomyDebugViewController2.swift */,
@@ -932,8 +931,8 @@
 			isa = PBXGroup;
 			children = (
 				B28440091CBB80A8008D0953 /* AboutViewController.swift */,
+				B29B45AD1CFCF39800E03478 /* CreditsViewController.swift */,
 				B23387581CB74F0C0027981A /* VerifyWorksetsViewController.swift */,
-				B205857C1C7C1F5500491328 /* StatisticsViewController.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -942,7 +941,6 @@
 			isa = PBXGroup;
 			children = (
 				B2BCB5351C76F2970046F5A1 /* ExerciseDetailViewController.swift */,
-				B2BCB5331C76EFCF0046F5A1 /* ExercisesListViewController.swift */,
 				B25E864A1C7FA7BE00253A62 /* SelectExerciseViewController.swift */,
 			);
 			name = Exercise;
@@ -984,10 +982,12 @@
 		B2E7C5751C6900AE00E60C07 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B2A80D201C73B8AC0072928B /* RootViewController.swift */,
+				B2BCB5331C76EFCF0046F5A1 /* ExercisesListViewController.swift */,
 				B2A52BAE1CA0AC5800268B6C /* AnatomyDiagramViewController.swift */,
 				B2A52BAC1CA0AAB700268B6C /* MuscleListViewController.swift */,
-				B2A80D201C73B8AC0072928B /* RootViewController.swift */,
-				B23F0C741CF18775006BF745 /* MenuViewController.swift */,
+				B205857C1C7C1F5500491328 /* StatisticsViewController.swift */,
+				B2BE3BC71C8021FC009198EA /* SettingsViewController.swift */,
 				B2C367B01CB1C8680045824F /* Debug */,
 				B2C367B31CB1D30A0045824F /* Exercise */,
 				B2C367B21CB1D2E40045824F /* Settings */,
@@ -1391,9 +1391,9 @@
 				B23387591CB74F0C0027981A /* VerifyWorksetsViewController.swift in Sources */,
 				B2A52BA31CA0A74500268B6C /* JAMStyledBezierPath.m in Sources */,
 				B23668E91CB341EF00C0CEFB /* FormItems.swift in Sources */,
-				B23F0C751CF18775006BF745 /* MenuViewController.swift in Sources */,
 				B25E86961C800BA300253A62 /* Users.swift in Sources */,
 				B2A52BA81CA0A74500268B6C /* UIImage+SVG.m in Sources */,
+				B29B45AE1CFCF39800E03478 /* CreditsViewController.swift in Sources */,
 				B2BE3BC81C8021FC009198EA /* SettingsViewController.swift in Sources */,
 				B2E7C58A1C69043300E60C07 /* SplitSwipeView.swift in Sources */,
 				B29485E21C8122730032DF0A /* Profiler.swift in Sources */,

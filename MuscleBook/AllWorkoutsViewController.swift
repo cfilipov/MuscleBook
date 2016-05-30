@@ -61,6 +61,7 @@ class AllWorkoutsViewController: FormViewController {
 
     init() {
         super.init(style: .Grouped)
+        hidesBottomBarWhenPushed = true
     }
 
     required init?(coder aDecoder: NSCoder) {

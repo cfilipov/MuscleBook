@@ -79,7 +79,7 @@ extension Exercise: SQLAdaptable {
 }
 
 extension ExerciseReference: SQLAdaptable {
-    typealias Schema = CurrentSchema.Exercise
+    typealias Schema = CurrentSchema.ExerciseReference
 
     init(row: Row) {
         exerciseID = row[Schema.exerciseID]
@@ -88,7 +88,7 @@ extension ExerciseReference: SQLAdaptable {
 
     var setters: [Setter] {
         return [
-            Schema.exerciseID <- rowid,
+            Schema.exerciseID <- self.exerciseID,
             Schema.name <- self.name
         ]
     }

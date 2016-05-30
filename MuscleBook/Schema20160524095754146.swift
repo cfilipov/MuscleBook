@@ -65,6 +65,11 @@ extension Schema20160524095754146 {
     typealias MuscleMovementClassification = Prev.MuscleMovementClassification
     typealias MuscleMovement = Prev.MuscleMovement
 
+    enum ExerciseReference {
+        static let exerciseID = Expression<Int64?>("exercise_id")
+        static let name = Expression<String>("exercise_name")
+    }
+
     /* Rename column `name` to `exercise_name` */
 
     enum Exercise {
