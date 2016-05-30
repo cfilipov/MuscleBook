@@ -19,7 +19,7 @@
 import UIKit
 import Eureka
 
-class WorkoutsByDayViewController: FormViewController {
+class AllWorkoutsViewController: FormViewController {
     private let db = DB.sharedInstance
 
     let weightFormatter: NSNumberFormatter = {
@@ -117,7 +117,7 @@ class WorkoutsByDayViewController: FormViewController {
             cell.detailTextLabel?.text = self.timeFormatter.stringFromDate(workout.startTime)
         }
         row.onCellSelection { cell, row in
-            let vc = WorkoutViewController(workout: workout)
+            let vc = WorkoutSummaryViewController(workout: workout)
             self.showViewController(vc, sender: nil)
         }
         return row

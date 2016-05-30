@@ -19,7 +19,7 @@
 import UIKit
 import Eureka
 
-class CreateWorkoutRecordViewController: FormViewController {
+class WorksetViewController: FormViewController {
 
     enum Mode {
         case ReadOnly
@@ -44,6 +44,13 @@ class CreateWorkoutRecordViewController: FormViewController {
     private let cal = NSCalendar.currentCalendar()
     private let recordsFormatter = RelativeRecordsFormatter()
     private let originalWorkset: Workset?
+
+    let numberFormatter: NSNumberFormatter = {
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = .DecimalStyle
+        formatter.maximumFractionDigits = 0
+        return formatter
+    }()
 
     private var mode: Mode {
         willSet(newMode) {
@@ -133,16 +140,11 @@ class CreateWorkoutRecordViewController: FormViewController {
         return relativeRecords.calculations
     }
 
-//    private var workset: Workset? {
-//        guard let rec = relativeRecords else { return nil }
-//        return Workset(relativeRecords: rec)
-//    }
-
     private var cancelButton: UIBarButtonItem {
         return UIBarButtonItem(
             barButtonSystemItem: .Cancel,
             target: self,
-            action: #selector(CreateWorkoutRecordViewController.cancelButtonPressed)
+            action: #selector(WorksetViewController.cancelButtonPressed)
         )
     }
 
@@ -150,7 +152,7 @@ class CreateWorkoutRecordViewController: FormViewController {
         return UIBarButtonItem(
             barButtonSystemItem: .Save,
             target: self,
-            action: #selector(CreateWorkoutRecordViewController.saveButtonPressed)
+            action: #selector(WorksetViewController.saveButtonPressed)
         )
     }
 
@@ -158,7 +160,7 @@ class CreateWorkoutRecordViewController: FormViewController {
         return UIBarButtonItem(
             barButtonSystemItem: .Edit,
             target: self,
-            action: #selector(CreateWorkoutRecordViewController.editButtonPressed)
+            action: #selector(WorksetViewController.editButtonPressed)
         )
     }
 
@@ -230,6 +232,7 @@ class CreateWorkoutRecordViewController: FormViewController {
         <<< DecimalRow("weight") {
             $0.title = "Weight"
             $0.value = self.weight
+            $0.formatter = self.numberFormatter
             $0.onChange { row in
                 self.weight = row.value
             }
@@ -282,7 +285,7 @@ class CreateWorkoutRecordViewController: FormViewController {
                 if let maxWeight = self.records?.maxWeight {
                     cell.accessoryType = .DisclosureIndicator
                     row.onCellSelection { _, _ in
-                        let vc = CreateWorkoutRecordViewController(workset: maxWeight)
+                        let vc = WorksetViewController(workset: maxWeight)
                         self.showViewController(vc, sender: nil)
                     }
                 } else {
@@ -299,7 +302,7 @@ class CreateWorkoutRecordViewController: FormViewController {
                 if let max1RM = self.records?.max1RM {
                     cell.accessoryType = .DisclosureIndicator
                     row.onCellSelection { _, _ in
-                        let vc = CreateWorkoutRecordViewController(workset: max1RM)
+                        let vc = WorksetViewController(workset: max1RM)
                         self.showViewController(vc, sender: nil)
                     }
                 } else {
@@ -316,7 +319,7 @@ class CreateWorkoutRecordViewController: FormViewController {
                 if let maxE1RM = self.records?.maxE1RM {
                     cell.accessoryType = .DisclosureIndicator
                     row.onCellSelection { _, _ in
-                        let vc = CreateWorkoutRecordViewController(workset: maxE1RM)
+                        let vc = WorksetViewController(workset: maxE1RM)
                         self.showViewController(vc, sender: nil)
                     }
                 } else {
@@ -332,7 +335,7 @@ class CreateWorkoutRecordViewController: FormViewController {
                 if let maxXRM = self.records?.maxXRM {
                     cell.accessoryType = .DisclosureIndicator
                     row.onCellSelection { _, _ in
-                        let vc = CreateWorkoutRecordViewController(workset: maxXRM)
+                        let vc = WorksetViewController(workset: maxXRM)
                         self.showViewController(vc, sender: nil)
                     }
                 } else {
@@ -349,7 +352,7 @@ class CreateWorkoutRecordViewController: FormViewController {
                 if let maxVolume = self.records?.maxVolume {
                     cell.accessoryType = .DisclosureIndicator
                     row.onCellSelection { _, _ in
-                        let vc = CreateWorkoutRecordViewController(workset: maxVolume)
+                        let vc = WorksetViewController(workset: maxVolume)
                         self.showViewController(vc, sender: nil)
                     }
                 } else {

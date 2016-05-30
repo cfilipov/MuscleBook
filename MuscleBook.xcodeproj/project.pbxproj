@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A22DE6781CA64B91001759CF /* CreateWorkoutRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22DE6771CA64B91001759CF /* CreateWorkoutRecordViewController.swift */; };
+		A22DE6781CA64B91001759CF /* WorksetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22DE6771CA64B91001759CF /* WorksetViewController.swift */; };
 		A23B0A2D1CF0D1B100AD924F /* PunchcardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23B0A2C1CF0D1B100AD924F /* PunchcardCell.swift */; };
 		A23B0A2F1CF0D67B00AD924F /* EFCalendarGraphAdapterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23B0A2E1CF0D67B00AD924F /* EFCalendarGraphAdapterDelegate.swift */; };
 		A23B0A371CF0E62F00AD924F /* EFCalendarGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = A23B0A341CF0E62F00AD924F /* EFCalendarGraph.m */; };
@@ -85,8 +85,8 @@
 		B2A52BAD1CA0AAB700268B6C /* MuscleListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A52BAC1CA0AAB700268B6C /* MuscleListViewController.swift */; };
 		B2A52BAF1CA0AC5800268B6C /* AnatomyDiagramViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A52BAE1CA0AC5800268B6C /* AnatomyDiagramViewController.swift */; };
 		B2A52BB91CA0C0E100268B6C /* Anterior.svg in Resources */ = {isa = PBXBuildFile; fileRef = B2A52BB81CA0C0E100268B6C /* Anterior.svg */; };
-		B2A52BBB1CA0D1B100268B6C /* WorkoutsByDayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A52BBA1CA0D1B100268B6C /* WorkoutsByDayViewController.swift */; };
-		B2A52BBD1CA0E03F00268B6C /* WorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A52BBC1CA0E03F00268B6C /* WorkoutViewController.swift */; };
+		B2A52BBB1CA0D1B100268B6C /* AllWorkoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A52BBA1CA0D1B100268B6C /* AllWorkoutsViewController.swift */; };
+		B2A52BBD1CA0E03F00268B6C /* WorkoutSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A52BBC1CA0E03F00268B6C /* WorkoutSummaryViewController.swift */; };
 		B2A52BC41CA1185100268B6C /* ImageCheckCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A52BC31CA1185100268B6C /* ImageCheckCell.swift */; };
 		B2A80D211C73B8AC0072928B /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A80D201C73B8AC0072928B /* RootViewController.swift */; };
 		B2B326891C852162005F88E4 /* DebugMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B326881C852162005F88E4 /* DebugMenuViewController.swift */; };
@@ -112,7 +112,6 @@
 		B2DD36BA1C6C50A2002F8576 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2DD36B91C6C50A2002F8576 /* Util.swift */; };
 		B2E1A38A1C72B1DD00B0B653 /* Eureka.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E1A3871C72B1CF00B0B653 /* Eureka.framework */; };
 		B2E1A38B1C72B1DD00B0B653 /* Eureka.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B2E1A3871C72B1CF00B0B653 /* Eureka.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B2E1A38F1C72B21100B0B653 /* WorkoutRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E1A38E1C72B21100B0B653 /* WorkoutRecordViewController.swift */; };
 		B2E293D31CA9E08E009BC21A /* DB.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E293D21CA9E08E009BC21A /* DB.swift */; };
 		B2E293D81CA9F166009BC21A /* WorksetCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E293D71CA9F166009BC21A /* WorksetCoder.swift */; };
 		B2E293DA1CA9FB50009BC21A /* WorksetAdapter+Dropbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E293D91CA9FB50009BC21A /* WorksetAdapter+Dropbox.swift */; };
@@ -421,7 +420,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A22DE6771CA64B91001759CF /* CreateWorkoutRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CreateWorkoutRecordViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		A22DE6771CA64B91001759CF /* WorksetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = WorksetViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		A23B0A2C1CF0D1B100AD924F /* PunchcardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PunchcardCell.swift; sourceTree = "<group>"; };
 		A23B0A2E1CF0D67B00AD924F /* EFCalendarGraphAdapterDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EFCalendarGraphAdapterDelegate.swift; sourceTree = "<group>"; };
 		A23B0A331CF0E62F00AD924F /* EFCalendarGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFCalendarGraph.h; sourceTree = "<group>"; };
@@ -511,8 +510,8 @@
 		B2A52BAC1CA0AAB700268B6C /* MuscleListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MuscleListViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2A52BAE1CA0AC5800268B6C /* AnatomyDiagramViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AnatomyDiagramViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2A52BB81CA0C0E100268B6C /* Anterior.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Anterior.svg; path = MuscleBook/Anterior.svg; sourceTree = SOURCE_ROOT; };
-		B2A52BBA1CA0D1B100268B6C /* WorkoutsByDayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = WorkoutsByDayViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		B2A52BBC1CA0E03F00268B6C /* WorkoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = WorkoutViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B2A52BBA1CA0D1B100268B6C /* AllWorkoutsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AllWorkoutsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B2A52BBC1CA0E03F00268B6C /* WorkoutSummaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = WorkoutSummaryViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2A52BC31CA1185100268B6C /* ImageCheckCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ImageCheckCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2A80D201C73B8AC0072928B /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = RootViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2B326881C852162005F88E4 /* DebugMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DebugMenuViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -536,7 +535,6 @@
 		B2D9F6C91C75A17400D4D8DC /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		B2DD36B91C6C50A2002F8576 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Util.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2E1A3811C72B1CF00B0B653 /* Eureka.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Eureka.xcodeproj; path = Submodules/Eureka/Eureka.xcodeproj; sourceTree = "<group>"; };
-		B2E1A38E1C72B21100B0B653 /* WorkoutRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = WorkoutRecordViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2E293B91CA9E03A009BC21A /* SQLite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SQLite.xcodeproj; path = Submodules/SQLite.swift/SQLite.xcodeproj; sourceTree = "<group>"; };
 		B2E293D21CA9E08E009BC21A /* DB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DB.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2E293D71CA9F166009BC21A /* WorksetCoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = WorksetCoder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -920,10 +918,9 @@
 		B2C367B11CB1D2C30045824F /* Workout */ = {
 			isa = PBXGroup;
 			children = (
-				A22DE6771CA64B91001759CF /* CreateWorkoutRecordViewController.swift */,
-				B2E1A38E1C72B21100B0B653 /* WorkoutRecordViewController.swift */,
-				B2A52BBA1CA0D1B100268B6C /* WorkoutsByDayViewController.swift */,
-				B2A52BBC1CA0E03F00268B6C /* WorkoutViewController.swift */,
+				A22DE6771CA64B91001759CF /* WorksetViewController.swift */,
+				B2A52BBA1CA0D1B100268B6C /* AllWorkoutsViewController.swift */,
+				B2A52BBC1CA0E03F00268B6C /* WorkoutSummaryViewController.swift */,
 			);
 			name = Workout;
 			sourceTree = "<group>";
@@ -1387,7 +1384,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2C367AF1CB1C8640045824F /* DebugTimersViewController.swift in Sources */,
-				B2E1A38F1C72B21100B0B653 /* WorkoutRecordViewController.swift in Sources */,
 				B25E86871C800BA300253A62 /* Async.swift in Sources */,
 				B23387591CB74F0C0027981A /* VerifyWorksetsViewController.swift in Sources */,
 				B2A52BA31CA0A74500268B6C /* JAMStyledBezierPath.m in Sources */,
@@ -1417,8 +1413,8 @@
 				B25E86481C7F874500253A62 /* JAMSVGImage+Extensions.m in Sources */,
 				B2E293D81CA9F166009BC21A /* WorksetCoder.swift in Sources */,
 				B25E86911C800BA300253A62 /* OAuth.swift in Sources */,
-				B2A52BBB1CA0D1B100268B6C /* WorkoutsByDayViewController.swift in Sources */,
-				B2A52BBD1CA0E03F00268B6C /* WorkoutViewController.swift in Sources */,
+				B2A52BBB1CA0D1B100268B6C /* AllWorkoutsViewController.swift in Sources */,
+				B2A52BBD1CA0E03F00268B6C /* WorkoutSummaryViewController.swift in Sources */,
 				B2BCB5341C76EFCF0046F5A1 /* ExercisesListViewController.swift in Sources */,
 				B2843FC21CB8A1E2008D0953 /* SideBySideAnatomyView.swift in Sources */,
 				B2C367A51CB188080045824F /* CHCSVParser.m in Sources */,
@@ -1451,7 +1447,7 @@
 				B25E864B1C7FA7BE00253A62 /* SelectExerciseViewController.swift in Sources */,
 				B247AEEA1C9CD74C00A501B0 /* Model.swift in Sources */,
 				B2E2946E1CACA1D2009BC21A /* CalendarWeekCell.swift in Sources */,
-				A22DE6781CA64B91001759CF /* CreateWorkoutRecordViewController.swift in Sources */,
+				A22DE6781CA64B91001759CF /* WorksetViewController.swift in Sources */,
 				B23180DA1C76DDCF0043BFE4 /* Exercise.swift in Sources */,
 				B23F0D061CF9506D006BF745 /* AnatomyDebugViewController2.swift in Sources */,
 				B25E85831C7D6C3700253A62 /* Workset.swift in Sources */,

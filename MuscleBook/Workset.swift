@@ -79,4 +79,16 @@ extension Workset {
             calculations: calculations
         )
     }
+
+    var shortString: String {
+        if let reps = input.reps, weight = input.weight {
+            return "\(reps)@\(weight)"
+        }
+        else if let reps = input.reps {
+            return "\(reps)r"
+        }
+        else {
+            return "\(input.duration)s"
+        }
+    }
 }

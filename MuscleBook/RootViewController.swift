@@ -81,7 +81,7 @@ class RootViewController: FormViewController {
         <<< PunchcardRow("punchcard") {
             $0.value = EFCalendarGraphAdapterDelegate()
             $0.onCellSelection { _, _ in
-                let vc = WorkoutsByDayViewController()
+                let vc = AllWorkoutsViewController()
                 self.showViewController(vc, sender: nil)
             }
         }
@@ -118,7 +118,7 @@ class RootViewController: FormViewController {
     }
 
     func onAddButtonPressed() {
-        let vc = CreateWorkoutRecordViewController { record in
+        let vc = WorksetViewController { record in
             self.dismissViewControllerAnimated(true, completion: nil)
         }
         presentModalViewController(vc)

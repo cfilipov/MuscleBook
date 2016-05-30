@@ -34,7 +34,7 @@ class MenuViewController : FormViewController {
 
             <<< PushViewControllerRow() {
                 $0.title = "Workouts"
-                $0.controller = { WorkoutsByDayViewController() }
+                $0.controller = { AllWorkoutsViewController() }
             }
 
             <<< PushViewControllerRow() {
