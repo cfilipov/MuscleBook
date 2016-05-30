@@ -19,7 +19,7 @@ This app is not targeted at beginner lifters, but there is no reason a beginner 
 - Musculature visualizations
 - Intensity and volume calculations
 - Export to CSV *(currently broken in 0.0.1)*
-- Track personal records (PRs)
+- Track personal records (PRs): 1RM, e1RM, xRM
 - Calculate and track [Estimated one-rep max](http://www.exrx.net/Calculators/OneRepMax.html) (e1RM)
 - Exercise search
 - Muscle & muscle groups browser
