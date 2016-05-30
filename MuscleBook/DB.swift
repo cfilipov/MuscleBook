@@ -26,6 +26,10 @@ typealias CurrentSchema = Schema20160524095754146
 
 class DB {
 
+    enum Error: ErrorType {
+        case CannotInsertWorkset
+    }
+
     static let sharedInstance = DB()
 
     static let path = NSSearchPathForDirectoriesInDomains(
@@ -106,30 +110,104 @@ extension DB {
         return try db.run(MuscleMovement.Schema.table.insert(movement))
     }
 
-    func save(workset: Workset) throws {
-        try db.transaction {
-            var w = workset
-            let wID = self.workoutID(forStartTime: workset.input.startTime, duration: workset.input.duration)
-            w.workoutID = wID
-            try self.db.run(Workset.Schema.table.insert(w))
-            try self.recalculate(workoutID: wID)
-        }
+    private func save(workset: Workset) throws -> Int64 {
+        precondition(workset.worksetID == 0)
+        precondition(workset.workoutID != 0)
+        return try self.db.run(Workset.Schema.table.insert(workset))
     }
 
-    func save(worksets: [Workset]) throws {
+    func save(input: Workset.Input) throws -> Workset? {
+        let records = get(Records.self, input: input)
+        let relativeRecords = RelativeRecords(input: input, records: records)
+        var workset: Workset?
+        var workoutID: Int64 = 0
         try db.transaction {
-            for w in worksets {
-                try self.save(w)
+            workoutID = try self.getOrCreate(Workout.self, input: input)
+            assert(workoutID != 0)
+            let incompleteWorkset = Workset(
+                worksetID: 0,
+                workoutID: workoutID,
+                input: input,
+                calculations: relativeRecords.calculations
+            )
+            let worksetID = try self.save(incompleteWorkset)
+            workset = incompleteWorkset.copy(worksetID: worksetID)
+        }
+        assert(workoutID != 0)
+        assert(workset!.worksetID != 0)
+        assert(workset!.workoutID != 0)
+        try self.recalculate(workoutID: workoutID)
+        return workset
+    }
+
+    func save(worksetInputs: [Workset.Input]) throws {
+        try db.transaction {
+            for i in worksetInputs {
+                try self.save(i)
             }
         }
     }
 
-    func update(workset: Workset) throws {
+    func update(workset workset: Workset, input: Workset.Input) throws -> Workset {
+        let records = get(Records.self, input: input)
+        let relativeRecords = RelativeRecords(input: input, records: records)
+        let newWorkset = workset.copy(input: input, calculations: relativeRecords.calculations)
+        try update(newWorkset)
+        try recalculateAllWorksets(after: newWorkset.input.startTime)
+        return newWorkset
+    }
+
+    func count(type: Workout.Type, after startTime: NSDate) -> Int {
+        typealias WO = Workout.Schema
+        return db.scalar(
+            WO.table
+                .select(WO.workoutID.count)
+                .filter(WO.startTime > startTime)
+        )
+    }
+
+    private func getOrCreate(type: Workout.Type, input: Workset.Input) throws -> Int64 {
+        typealias WS = Workset.Schema
+        typealias WO = Workout.Schema
+        guard let lastWorkset: Workset = db.pluck(WS.table.order(WS.startTime.desc)) else {
+            return try create(Workout.self, startDate: input.startTime)
+        }
+        let diff = input.startTime.timeIntervalSinceDate(lastWorkset.input.startTime)
+        /* TODO: Inserting new worksets into the past is not supported right now */
+        guard diff > 0 else {
+            throw Error.CannotInsertWorkset
+        }
+        if diff < 3600 {
+            return lastWorkset.workoutID
+        } else {
+            return try create(Workout.self, startDate: input.startTime)
+        }
+    }
+
+    private func create(type: Workout.Type, startDate: NSDate) throws -> Int64 {
+        typealias WO = Workout.Schema
+        return try db.run(
+            WO.table.insert(
+                WO.startTime <- startDate,
+                WO.sets <- 0,
+                WO.reps <- 0,
+                WO.duration <- 0,
+                WO.restDuration <- 0,
+                WO.activeDuration <- 0,
+                WO.avePercentMaxDuration <- 0,
+                WO.maxDuration <- 0,
+                WO.maxActivation <- MuscleBook.Activation.None
+            )
+        )
+    }
+
+    private func update(workset: Workset) throws {
+        precondition(workset.worksetID != 0)
+        precondition(workset.workoutID != 0)
         typealias W = Workset.Schema
-        try db.run(
-            W.table
-                .filter(W.worksetID == workset.worksetID!)
-                .update(workset.setters)
+        try db.run(W.table
+            .filter(W.worksetID == workset.worksetID)
+            .update(workset.setters)
         )
     }
 
@@ -149,7 +227,7 @@ extension DB {
         return db.scalar(Workout.Schema.table.count)
     }
 
-    func count(type: Workout.Type, date: NSDate) -> Int {
+    func count(type: Workout.Type, forDay date: NSDate) -> Int {
         return db.scalar(
             Workout.Schema.table.filter(
                 Workout.Schema.startTime.localDay == date.localDay
@@ -494,7 +572,7 @@ extension DB {
         writer.finishLine()
         try all(Workset).forEach { workset in
             writer.writeField(workset.input.startTime.datatypeValue)
-            writer.writeField(workset.workoutID?.description ?? "")
+            writer.writeField(workset.workoutID.description)
             writer.writeField(workset.input.exerciseID?.description ?? "")
             writer.writeField(workset.input.exerciseName)
             writer.writeField(workset.input.reps?.description ?? "")
@@ -527,7 +605,7 @@ extension DB {
     func startDate(workout: Workout) -> NSDate? {
         let row = db.pluck(Workset.Schema.table
             .select(Workset.Schema.startTime.min)
-            .filter(Workset.Schema.workoutID == workout.workoutID!)
+            .filter(Workset.Schema.workoutID == workout.workoutID)
             .limit(1)
         )
         return row?[Workset.Schema.startTime.min]
@@ -536,7 +614,7 @@ extension DB {
     func endDate(workout: Workout) -> NSDate? {
         let row = db.pluck(Workset.Schema.table
             .select(Workset.Schema.startTime.max)
-            .filter(Workset.Schema.workoutID == workout.workoutID!)
+            .filter(Workset.Schema.workoutID == workout.workoutID)
             .limit(1)
         )
         return row?[Workset.Schema.startTime.max]
@@ -568,30 +646,18 @@ extension DB {
 
     func delete(workset: Workset) throws -> Int {
         typealias W = Workset.Schema
-        guard let worksetID = workset.worksetID else {
-            fatalError("Identifier required to delete workset \(workset)")
-        }
-        let query = W.table.filter(W.worksetID == worksetID)
+        let query = W.table.filter(W.worksetID == workset.worksetID)
         return try db.run(query.delete())
     }
 
-    func workoutID(forStartTime date: NSDate, duration: Double) -> Int64 {
-//        nextAvailableRowID(Workout)
-        fatalError()
-    }
-
-    func recalculateAllWorksets() throws {
+    func recalculateAllWorksets(after startTime: NSDate = NSDate(timeIntervalSince1970: 0)) throws {
         typealias W = Workset.Schema
-        for workset: Workset in try db.prepare(W.table) {
+        for workset: Workset in try db.prepare(W.table.filter(W.startTime >= startTime)) {
             guard let records = get(Records.self, input: workset.input) else { continue }
             let relRecords = RelativeRecords(input: workset.input, records: records)
-            var newWorkset = Workset(relativeRecords: relRecords)
-            newWorkset.worksetID = workset.worksetID
-            newWorkset.workoutID = workset.workoutID
+            let newWorkset = workset.copy(input: workset.input, calculations: relRecords.calculations)
             try update(newWorkset)
-            if let workoutID = workset.workoutID {
-                try recalculate(workoutID: workoutID)
-            }
+            try recalculate(workoutID: workset.workoutID)
         }
     }
 

@@ -30,7 +30,7 @@ struct Records {
 
 struct RelativeRecords {
     let input: Workset.Input
-    let records: Records
+    let records: Records?
 
     var e1RM: Double? {
         guard let
@@ -50,7 +50,7 @@ struct RelativeRecords {
 
     var percentMaxWeight: Double? {
         guard let
-            maxRM = records.maxWeight?.input.weight,
+            maxRM = records?.maxWeight?.input.weight,
             weight = input.weight
             else { return nil }
         return weight / maxRM
@@ -58,7 +58,7 @@ struct RelativeRecords {
 
     var percent1RM: Double? {
         guard let
-            max1RM = records.max1RM?.input.weight,
+            max1RM = records?.max1RM?.input.weight,
             weight = input.weight
             else { return nil }
         return weight / max1RM
@@ -66,7 +66,7 @@ struct RelativeRecords {
 
     var percentE1RM: Double? {
         guard let
-            maxE1RM = records.maxE1RM?.input.weight,
+            maxE1RM = records?.maxE1RM?.input.weight,
             e1RM = e1RM
             else { return nil }
         return e1RM / maxE1RM
@@ -74,7 +74,7 @@ struct RelativeRecords {
 
     var percentXRM: Double? {
         guard let
-            maxXRM = records.maxXRM?.input.weight,
+            maxXRM = records?.maxXRM?.input.weight,
             weight = input.weight
             else { return nil }
         return weight / maxXRM
@@ -82,14 +82,14 @@ struct RelativeRecords {
 
     var percentMaxVolume: Double? {
         guard let
-            maxVolume = records.maxVolume?.calculations?.volume,
+            maxVolume = records?.maxVolume?.calculations.volume,
             volume = volume
             else { return nil }
         return volume / maxVolume
     }
 
     var intensity: Double? {
-        return [percentMaxWeight, percent1RM, percentE1RM, percentXRM]
+        return [percentMaxWeight, percent1RM, percentE1RM]
             .flatMap{$0}.maxElement()
     }
 
@@ -104,24 +104,13 @@ struct RelativeRecords {
         return Activation(percent: maxActivation)
     }
 
-    var calculations: Workset.Calculations? {
+    var calculations: Workset.Calculations {
         return Workset.Calculations(
             volume: volume,
             e1RM: e1RM,
             percentMaxVolume: percentMaxVolume,
             intensity: intensity,
             activation: activation
-        )
-    }
-}
-
-extension Workset {
-    init(relativeRecords: RelativeRecords) {
-        self = Workset(
-            worksetID: nil,
-            workoutID: nil,
-            input: relativeRecords.input,
-            calculations: relativeRecords.calculations
         )
     }
 }

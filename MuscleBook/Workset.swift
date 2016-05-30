@@ -36,10 +36,10 @@ struct Workset {
         var intensity: Double?
         var activation: Activation
     }
-    var worksetID: Int64?
-    var workoutID: Int64?
-    var input: Input
-    var calculations: Calculations?
+    let worksetID: Int64
+    let workoutID: Int64
+    let input: Input
+    let calculations: Calculations
 }
 
 // http://www.exrx.net/Calculators/OneRepMax.html
@@ -53,12 +53,30 @@ func estimate1RM(reps reps: Int, weight: Double) -> Double? {
 }
 
 extension Workset {
-    init(input: Input) {
-        self = Workset(
-            worksetID: nil,
-            workoutID: nil,
+    func copy(worksetID worksetID: Int64, workoutID: Int64) -> Workset {
+        return Workset(
+            worksetID: worksetID,
+            workoutID: workoutID,
+            input: self.input,
+            calculations: self.calculations
+        )
+    }
+
+    func copy(worksetID worksetID: Int64) -> Workset {
+        return Workset(
+            worksetID: worksetID,
+            workoutID: self.workoutID,
+            input: self.input,
+            calculations: self.calculations
+        )
+    }
+
+    func copy(input input: Input, calculations: Calculations) -> Workset {
+        return Workset(
+            worksetID: self.worksetID,
+            workoutID: self.workoutID,
             input: input,
-            calculations: nil
+            calculations: calculations
         )
     }
 }

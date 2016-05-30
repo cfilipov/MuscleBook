@@ -46,7 +46,7 @@ final class WorkoutViewController: FormViewController {
     }()
 
     lazy var worksetsSection: Section = {
-        let worksets = try! self.db.worksets(workoutID: self.workout.workoutID!)
+        let worksets = try! self.db.worksets(workoutID: self.workout.workoutID)
         var section = Section("Workout Sets")
         section += worksets.map(self.workoutRecordToRow)
         return section
@@ -120,12 +120,10 @@ final class WorkoutViewController: FormViewController {
 
     private func updateAnatomyRow() {
         let row = form.rowByTag("anatomy")
-        if let workoutID = self.workout.workoutID {
-            row?.baseValue = try! AnatomyViewConfig(
-                db.get(MuscleWorkSummary.self, workoutID: workoutID, movementClass: .Target)
-            )
-            row?.updateCell()
-        }
+        row?.baseValue = try! AnatomyViewConfig(
+            db.get(MuscleWorkSummary.self, workoutID: workout.workoutID, movementClass: .Target)
+        )
+        row?.updateCell()
     }
 
     private func workoutRecordToRow(record: Workset) -> BaseRow {

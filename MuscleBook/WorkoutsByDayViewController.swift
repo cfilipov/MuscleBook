@@ -37,7 +37,7 @@ class WorkoutsByDayViewController: FormViewController {
 
     let timeFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
-        formatter.dateFormat = "hh:mm a"
+        formatter.dateFormat = "h:mm a"
         return formatter
     }()
 

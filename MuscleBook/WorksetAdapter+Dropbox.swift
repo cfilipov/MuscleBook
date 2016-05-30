@@ -19,38 +19,38 @@
 import Foundation
 
 extension Workset {
-    static func importFromDropbox(file: String, completion: (SuccessOrFail -> Void)?) {
-        let t = Profiler.trace(String(Workset), #function).start()
-        Dropbox.authorizedClient!
-            .files
-            .download(path: file, destination: self.dropboxDestination(NSURL.cacheUUID()))
-            .response { response, error in
-                t.end()
-                Profiler.trace("Dropbox import").start()
-                defer {
-                    Profiler.trace("Dropbox import").end()
-                    completion?(.Success)
-                }
-                guard let (_, url) = response else { return }
-                let sets = Workset.fromYAML(url.path!)
-                try! DB.sharedInstance.save(sets)
-        }
-    }
-
-    static func downloadFromDropbox(file: String, completion: (NSURL? -> Void)?) {
-        let t = Profiler.trace(String(Workset), #function).start()
-        Dropbox.authorizedClient!
-            .files
-            .download(path: file, destination: self.dropboxDestination(NSURL.cacheUUID()))
-            .response { response, error in
-                t.end()
-                completion?(response?.1)
-        }
-    }
-
-    static func dropboxDestination(destination: NSURL) -> (url: NSURL, response: NSHTTPURLResponse) -> NSURL {
-        return { _, _ in return destination }
-    }
+//    static func importFromDropbox(file: String, completion: (SuccessOrFail -> Void)?) {
+//        let t = Profiler.trace(String(Workset), #function).start()
+//        Dropbox.authorizedClient!
+//            .files
+//            .download(path: file, destination: self.dropboxDestination(NSURL.cacheUUID()))
+//            .response { response, error in
+//                t.end()
+//                Profiler.trace("Dropbox import").start()
+//                defer {
+//                    Profiler.trace("Dropbox import").end()
+//                    completion?(.Success)
+//                }
+//                guard let (_, url) = response else { return }
+//                let sets = Workset.fromYAML(url.path!)
+//                try! DB.sharedInstance.save(sets)
+//        }
+//    }
+//
+//    static func downloadFromDropbox(file: String, completion: (NSURL? -> Void)?) {
+//        let t = Profiler.trace(String(Workset), #function).start()
+//        Dropbox.authorizedClient!
+//            .files
+//            .download(path: file, destination: self.dropboxDestination(NSURL.cacheUUID()))
+//            .response { response, error in
+//                t.end()
+//                completion?(response?.1)
+//        }
+//    }
+//
+//    static func dropboxDestination(destination: NSURL) -> (url: NSURL, response: NSHTTPURLResponse) -> NSURL {
+//        return { _, _ in return destination }
+//    }
 
 //    static func uploadToDropbox(file: String, completion: (SuccessOrFail -> Void)?) {
 //        guard let sets = try! all() else { completion?(.Fail); return }

@@ -215,7 +215,7 @@ extension Workset: SQLAdaptable {
 
     var setters: [Setter] {
         return [
-            Schema.workoutID <- workoutID!,
+            Schema.workoutID <- workoutID,
             Schema.exerciseID <- input.exerciseID,
             Schema.exerciseName <- input.exerciseName,
             Schema.startTime <- input.startTime,
@@ -224,12 +224,12 @@ extension Workset: SQLAdaptable {
             Schema.warmup <- input.warmup,
             Schema.reps <- input.reps,
             Schema.weight <- input.weight,
-            Schema.volume <- calculations?.volume,
-            Schema.e1RM <- calculations?.e1RM,
-            Schema.percentMaxVolume <- calculations?.percentMaxVolume,
+            Schema.volume <- calculations.volume,
+            Schema.e1RM <- calculations.e1RM,
+            Schema.percentMaxVolume <- calculations.percentMaxVolume,
             Schema.percentMaxDuration <- 0,
-            Schema.intensity <- calculations?.intensity,
-            Schema.activation <- calculations!.activation
+            Schema.intensity <- calculations.intensity,
+            Schema.activation <- calculations.activation
         ]
     }
 }

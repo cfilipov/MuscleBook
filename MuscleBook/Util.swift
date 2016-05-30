@@ -210,15 +210,24 @@ func orderedZip<S: SequenceType where S.Generator.Element: Comparable>(s1: S, _ 
     return OrderedZipSequence<S>(s1, s2)
 }
 
+func AlertOnError(style: UIAlertControllerStyle = .Alert, buttonTitle: String = "OK", block: Void throws -> Void) {
+    do {
+        try block()
+    } catch let e {
+        Alert(message: "\(e)")
+    }
+}
+
 func Alert(title: String? = nil, message: String, style: UIAlertControllerStyle = .Alert, buttonTitle: String = "OK", completion: ((UIAlertAction) -> Void)? = nil) {
-    let alert = UIAlertController(title: title, message: message, preferredStyle: .ActionSheet)
+    let alert = UIAlertController(title: title, message: message, preferredStyle: style)
     alert.addAction(UIAlertAction(title: buttonTitle, style: .Default, handler: completion))
     UIViewController.topVC!.presentViewController(alert, animated: true, completion: nil)
 }
 
-func WarnAlert(title: String? = nil, message: String, style: UIAlertControllerStyle = .Alert, cancelButtonTitle: String = "Cancel", actionButtonTitle: String = "Continue", completion: ((UIAlertAction) -> Void)) {
-    let alert = UIAlertController(title: title, message: message, preferredStyle: .ActionSheet)
-    alert.addAction(UIAlertAction(title: actionButtonTitle, style: .Destructive, handler: completion))
+func WarnAlert(@autoclosure when condition: Void -> Bool = true, title: String? = nil, message: String, style: UIAlertControllerStyle = .Alert, cancelButtonTitle: String = "Cancel", actionButtonTitle: String = "Continue", completion: Void -> Void) {
+    guard condition() == true else { completion(); return }
+    let alert = UIAlertController(title: title, message: message, preferredStyle: style)
+    alert.addAction(UIAlertAction(title: actionButtonTitle, style: .Destructive, handler: { _ in completion()}))
     alert.addAction(UIAlertAction(title: cancelButtonTitle, style: .Default, handler: nil))
     UIViewController.topVC!.presentViewController(alert, animated: true, completion: nil)
 }

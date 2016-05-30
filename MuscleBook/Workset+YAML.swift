@@ -18,13 +18,13 @@
 
 import Foundation
 
-extension Workset {
-    static func fromYAML(file: String) -> [Workset] {
-        return Workset.decode(YACYAMLKeyedUnarchiver.unarchiveObjectWithFile(file) as? [AnyObject])
+extension Workset.Input {
+    static func fromYAML(file: String) -> [Workset.Input] {
+        return Workset.Input.decode(YACYAMLKeyedUnarchiver.unarchiveObjectWithFile(file) as? [AnyObject])
     }
 }
 
-extension SequenceType where Generator.Element == Workset {
+extension SequenceType where Generator.Element == Workset.Input {
     func toYAML() -> NSData {
         return YACYAMLKeyedArchiver.archivedDataWithRootObject(self.encoded)
     }

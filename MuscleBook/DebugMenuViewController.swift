@@ -65,24 +65,24 @@ class DebugMenuViewController : FormViewController {
 
         +++ Section()
 
-        <<< LabelRow() {
-            $0.title = "Link Dropbox Account"
-            $0.hidden = Dropbox.authorizedClient == nil ? false : true
-        }.onCellSelection { _, _ in
-            Dropbox.authorizeFromController(self)
-        }
-
-        <<< LabelRow("import_csv") {
-            $0.title = "Import CSV"
-            $0.disabled = "$import_csv != nil"
-            $0.hidden = Dropbox.authorizedClient == nil ? true : false
-        }.onCellSelection(onImportCSV)
-
-        <<< LabelRow("sync_dropbox") {
-            $0.title = "Sync Dropbox"
-            $0.disabled = "$sync_dropbox != nil"
-            $0.hidden = Dropbox.authorizedClient == nil ? true : false
-        }.onCellSelection(onSyncWithDropbox)
+//        <<< LabelRow() {
+//            $0.title = "Link Dropbox Account"
+//            $0.hidden = Dropbox.authorizedClient == nil ? false : true
+//        }.onCellSelection { _, _ in
+//            Dropbox.authorizeFromController(self)
+//        }
+//
+//        <<< LabelRow("import_csv") {
+//            $0.title = "Import CSV"
+//            $0.disabled = "$import_csv != nil"
+//            $0.hidden = Dropbox.authorizedClient == nil ? true : false
+//        }.onCellSelection(onImportCSV)
+//
+//        <<< LabelRow("sync_dropbox") {
+//            $0.title = "Sync Dropbox"
+//            $0.disabled = "$sync_dropbox != nil"
+//            $0.hidden = Dropbox.authorizedClient == nil ? true : false
+//        }.onCellSelection(onSyncWithDropbox)
 
         +++ Section()
 
@@ -97,57 +97,57 @@ class DebugMenuViewController : FormViewController {
         }
     }
 
-    private func onSyncWithDropbox(cell: LabelCell, row: LabelRow) {
-        WarnAlert(message: "Are you sure you want to sync?") { _ in
-            row.value = "Syncing..."
-            row.reload()
-            Workset.importFromDropbox("/WorkoutLog.yaml") { status in
-                guard .Success == status else {
-                    Alert(message: "Failed to sync with dropbox")
-                    return
-                }
-                row.value = nil
-                row.disabled = false
-                row.reload()
-                Alert(message: "Sync Complete")
-            }
-        }
-    }
+//    private func onSyncWithDropbox(cell: LabelCell, row: LabelRow) {
+//        WarnAlert(message: "Are you sure you want to sync?") { _ in
+//            row.value = "Syncing..."
+//            row.reload()
+//            Workset.importFromDropbox("/WorkoutLog.yaml") { status in
+//                guard .Success == status else {
+//                    Alert(message: "Failed to sync with dropbox")
+//                    return
+//                }
+//                row.value = nil
+//                row.disabled = false
+//                row.reload()
+//                Alert(message: "Sync Complete")
+//            }
+//        }
+//    }
 
-    private func onImportCSV(cell: LabelCell, row: LabelRow) {
-        guard db.count(Workset) == 0 else {
-            Alert(message: "Cannot import data, you already have data.")
-            return
-        }
-        WarnAlert(message: "Import Data from Dropbox?") { _ in
-            row.value = "Importing..."
-            row.reload()
-            Workset.downloadFromDropbox("/WorkoutLog.csv") { url in
-                guard let url = url else {
-                    row.value = nil
-                    row.reload()
-                    Alert(message: "Failed to import CSV data")
-                    return
-                }
-                row.value = "Importing..."
-                row.reload()
-                do {
-                    let importCount = try self.db.importCSV(Workset.self, fromURL: url)
-                    row.value = nil
-                    row.disabled = false
-                    row.reload()
-                    Alert("Import Complete", message: "\(importCount) records imported.") { _ in
-//                        let vc = VerifyWorksetsViewController()
-//                        self.presentModalViewController(vc)
-                    }
-                } catch {
-                    row.value = nil
-                    row.reload()
-                    Alert(message: "Failed to import CSV data")
-                    return
-                }
-            }
-        }
-    }
+//    private func onImportCSV(cell: LabelCell, row: LabelRow) {
+//        guard db.count(Workset) == 0 else {
+//            Alert(message: "Cannot import data, you already have data.")
+//            return
+//        }
+//        WarnAlert(message: "Import Data from Dropbox?") { _ in
+//            row.value = "Importing..."
+//            row.reload()
+//            Workset.downloadFromDropbox("/WorkoutLog.csv") { url in
+//                guard let url = url else {
+//                    row.value = nil
+//                    row.reload()
+//                    Alert(message: "Failed to import CSV data")
+//                    return
+//                }
+//                row.value = "Importing..."
+//                row.reload()
+//                do {
+//                    let importCount = try self.db.importCSV(Workset.self, fromURL: url)
+//                    row.value = nil
+//                    row.disabled = false
+//                    row.reload()
+//                    Alert("Import Complete", message: "\(importCount) records imported.") { _ in
+////                        let vc = VerifyWorksetsViewController()
+////                        self.presentModalViewController(vc)
+//                    }
+//                } catch {
+//                    row.value = nil
+//                    row.reload()
+//                    Alert(message: "Failed to import CSV data")
+//                    return
+//                }
+//            }
+//        }
+//    }
 
 }

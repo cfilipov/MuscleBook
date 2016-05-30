@@ -19,7 +19,7 @@
 import Foundation
 
 struct Workout {
-    let workoutID: Int64?
+    let workoutID: Int64
     let startTime: NSDate
     let sets: Int
     let reps: Int

@@ -24,8 +24,8 @@ class CreateWorkoutRecordViewController: FormViewController {
     enum Mode {
         case ReadOnly
         case Creating
-        case Editing
-        case Editable
+        case Editing(Workset)
+        case Editable(Workset)
 
         static func isValidTransition(old: Mode, new: Mode) -> Bool {
             switch (old, new) {
@@ -43,6 +43,7 @@ class CreateWorkoutRecordViewController: FormViewController {
     private let formatter = NSDateFormatter()
     private let cal = NSCalendar.currentCalendar()
     private let recordsFormatter = RelativeRecordsFormatter()
+    private let originalWorkset: Workset?
 
     private var mode: Mode {
         willSet(newMode) {
@@ -127,10 +128,15 @@ class CreateWorkoutRecordViewController: FormViewController {
         )
     }
 
-    private var workset: Workset? {
-        guard let rec = relativeRecords else { return nil }
-        return Workset(relativeRecords: rec)
+    private var calculations: Workset.Calculations? {
+        guard let relativeRecords = relativeRecords else { return nil }
+        return relativeRecords.calculations
     }
+
+//    private var workset: Workset? {
+//        guard let rec = relativeRecords else { return nil }
+//        return Workset(relativeRecords: rec)
+//    }
 
     private var cancelButton: UIBarButtonItem {
         return UIBarButtonItem(
@@ -165,8 +171,11 @@ class CreateWorkoutRecordViewController: FormViewController {
             self.weight = workset.input.weight
             self.warmup = workset.input.warmup
             self.failure = workset.input.failure
+            self.mode = .Editable(workset)
+        } else {
+            self.mode = .Creating
         }
-        self.mode = workset == nil ? .Creating : .Editable
+        self.originalWorkset = workset
         self.callback = callback
         super.init(style: .Grouped)
     }
@@ -177,8 +186,6 @@ class CreateWorkoutRecordViewController: FormViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.title = "Add Data Point"
 
         if exercise == nil {
             self.exercise = db.newest(Workset)?.exerciseReference
@@ -374,28 +381,28 @@ class CreateWorkoutRecordViewController: FormViewController {
 
     private func updateCalculatedRows() {
         form.rowByTag("e1rm")?.value = recordsFormatter.format(
-            value: workset?.calculations?.e1RM
+            value: relativeRecords?.calculations.e1RM
         )
         form.rowByTag("Volume")?.value = recordsFormatter.format(
-            value: workset?.calculations?.volume
+            value: relativeRecords?.calculations.volume
         )
         form.rowByTag("RM")?.value = recordsFormatter.format(
-            value: relativeRecords?.records.maxWeight?.input.weight,
+            value: records?.maxWeight?.input.weight,
             percent: relativeRecords?.percentMaxWeight
         )
         form.rowByTag("OneRM")?.value = recordsFormatter.format(
-            value: relativeRecords?.records.max1RM?.input.weight,
+            value: records?.max1RM?.input.weight,
             percent: relativeRecords?.percent1RM
         )
         form.rowByTag("e1RM")?.value = recordsFormatter.format(
-            value: relativeRecords?.records.maxE1RM?.input.weight,
+            value: records?.maxE1RM?.input.weight,
             percent: relativeRecords?.percentE1RM
         )
         if let xrmRow = form.rowByTag("XRM") as? LabelRow {
             if let reps = reps {
                 xrmRow.title = "\(reps)RM"
                 xrmRow.value = recordsFormatter.format(
-                    value: relativeRecords?.records.maxXRM?.input.weight,
+                    value: records?.maxXRM?.input.weight,
                     percent: relativeRecords?.percentXRM
                 )
             } else {
@@ -403,7 +410,7 @@ class CreateWorkoutRecordViewController: FormViewController {
             }
         }
         form.rowByTag("PastVolume")?.value = self.recordsFormatter.format(
-            value: self.relativeRecords?.records.maxVolume?.calculations?.volume,
+            value: self.records?.maxVolume?.calculations.volume,
             percent: self.relativeRecords?.percentMaxVolume
         )
         form.rowByTag("Intensity")?.value = self.recordsFormatter.format(
@@ -436,18 +443,22 @@ class CreateWorkoutRecordViewController: FormViewController {
     private func refreshMode() {
         switch mode {
         case .ReadOnly:
+            self.title = "Data Point"
             navigationItem.leftBarButtonItem = nil
             navigationItem.rightBarButtonItem = nil
             disableInputFields()
         case .Creating:
+            self.title = "Add Data Point"
             navigationItem.leftBarButtonItem = cancelButton
             navigationItem.rightBarButtonItem = saveButton
             enableInputFields()
         case .Editable:
+            self.title = "Data Point"
             navigationItem.leftBarButtonItem = nil
             navigationItem.rightBarButtonItem = editButton
             disableInputFields()
         case .Editing:
+            self.title = "Editing"
             navigationItem.leftBarButtonItem = cancelButton
             navigationItem.rightBarButtonItem = saveButton
             enableInputFields()
@@ -455,30 +466,50 @@ class CreateWorkoutRecordViewController: FormViewController {
     }
 
     func cancelButtonPressed() {
-        assert(mode == .Editing || mode == .Creating)
-        if mode == .Editing { mode = .Editable }
-        callback(nil)
+        switch mode {
+        case let .Editing(workset):
+            mode = .Editable(workset)
+        case .Creating:
+            callback(nil)
+        default:
+            fatalError("Unexpected mode: \(mode)")
+        }
     }
     
     func saveButtonPressed() {
-        guard let workset = workset else {
+        guard let input = input else {
             Alert(message: "Could not save data point, mising required fields.")
             return
         }
-        do {
-            try db.save(workset)
-        } catch let e {
-            Alert(message: "\(e)")
+        switch mode {
+        case let .Editing(workset):
+            let effectedWorkouts = db.count(Workout.self, after: workset.input.startTime)
+            WarnAlert(when: effectedWorkouts > 0, message: "Are you sure you want to save this change? Changes to this set will effect \(effectedWorkouts) other workouts.") {
+                AlertOnError {
+                    let newWorkset = try self.db.update(workset: workset, input: input)
+                    self.mode = .Editable(newWorkset)
+                }
+            }
+        case .Creating:
+            AlertOnError {
+                let workset = try self.db.save(input)
+                self.callback(workset)
+            }
+        default:
+            fatalError("Unexpected mode: \(mode)")
         }
-        assert(mode == .Editing || mode == .Creating)
-        if mode == .Editing { mode = .Editable }
-        callback(workset)
     }
 
     func editButtonPressed() {
-        assert(mode == .Editable)
-        mode = .Editing
-        updateCalculatedRows()
+        switch mode {
+        case let .Editable(workset):
+            let effectedWorkouts = db.count(Workout.self, after: workset.input.startTime)
+            WarnAlert(when: effectedWorkouts > 0, message: "Are you sure you want to edit this set? Changes to this set will effect \(effectedWorkouts) other workouts.") {
+                self.mode = .Editing(workset)
+            }
+        default:
+            fatalError("Unexpected mode: \(mode)")
+        }
     }
 
 }
