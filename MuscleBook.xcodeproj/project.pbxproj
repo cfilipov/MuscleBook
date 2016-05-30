@@ -60,6 +60,7 @@
 		B25E86951C800BA300253A62 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E86801C800BA300253A62 /* Team.swift */; };
 		B25E86961C800BA300253A62 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E86811C800BA300253A62 /* Users.swift */; };
 		B25E86971C800BA300253A62 /* UsersRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E86821C800BA300253A62 /* UsersRoutes.swift */; };
+		B277439E1CFBFBE4007F2CE2 /* TimerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B277439D1CFBFBE4007F2CE2 /* TimerRow.swift */; };
 		B27D2FA51CB4845800C219E8 /* Schema20160410215418161.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27D2FA41CB4845800C219E8 /* Schema20160410215418161.swift */; };
 		B2843FC21CB8A1E2008D0953 /* SideBySideAnatomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2843FC11CB8A1E2008D0953 /* SideBySideAnatomyView.swift */; };
 		B2843FE71CB8A33B008D0953 /* SideBySideAnatomyViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2843FE61CB8A33B008D0953 /* SideBySideAnatomyViewCell.swift */; };
@@ -475,6 +476,7 @@
 		B25E86801C800BA300253A62 /* Team.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
 		B25E86811C800BA300253A62 /* Users.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		B25E86821C800BA300253A62 /* UsersRoutes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersRoutes.swift; sourceTree = "<group>"; };
+		B277439D1CFBFBE4007F2CE2 /* TimerRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerRow.swift; sourceTree = "<group>"; };
 		B27D2F951CB480CF00C219E8 /* SQLiteMigrationManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SQLiteMigrationManager.xcodeproj; path = Submodules/SQLiteMigrationManager.swift/SQLiteMigrationManager.xcodeproj; sourceTree = "<group>"; };
 		B27D2FA41CB4845800C219E8 /* Schema20160410215418161.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schema20160410215418161.swift; sourceTree = "<group>"; };
 		B2843FC11CB8A1E2008D0953 /* SideBySideAnatomyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBySideAnatomyView.swift; sourceTree = "<group>"; };
@@ -819,6 +821,7 @@
 			isa = PBXGroup;
 			children = (
 				B2E2945E1CAC781A009BC21A /* AnatomyViewCell.swift */,
+				B277439D1CFBFBE4007F2CE2 /* TimerRow.swift */,
 				A23B0A2C1CF0D1B100AD924F /* PunchcardCell.swift */,
 				B2843FE61CB8A33B008D0953 /* SideBySideAnatomyViewCell.swift */,
 				B2E2946D1CACA1D2009BC21A /* CalendarWeekCell.swift */,
@@ -1453,6 +1456,7 @@
 				B25E85831C7D6C3700253A62 /* Workset.swift in Sources */,
 				B207A7A81C63072300BD4DC9 /* AppDelegate.swift in Sources */,
 				B2A52BA91CA0A74500268B6C /* JAMSVGButton.m in Sources */,
+				B277439E1CFBFBE4007F2CE2 /* TimerRow.swift in Sources */,
 				B2A52BAA1CA0A74500268B6C /* JAMSVGImageView.m in Sources */,
 				A23B0A2F1CF0D67B00AD924F /* EFCalendarGraphAdapterDelegate.swift in Sources */,
 				B284400A1CBB80A8008D0953 /* AboutViewController.swift in Sources */,

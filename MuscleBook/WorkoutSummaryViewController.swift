@@ -46,6 +46,13 @@ final class WorkoutSummaryViewController: FormViewController {
         return formatter
     }()
 
+    let minutesFormatter: NSNumberFormatter = {
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = .DecimalStyle
+        formatter.maximumFractionDigits = 1
+        return formatter
+    }()
+
     let percentFormatter: NSNumberFormatter = {
         let formatter = NSNumberFormatter()
         formatter.numberStyle = .PercentStyle
@@ -97,12 +104,14 @@ final class WorkoutSummaryViewController: FormViewController {
             $0.title = "Date"
             $0.tag = "date"
             $0.dateFormatter = self.dateFormatter
+            $0.disabled = true
         }
 
         <<< DateRow() {
             $0.title = "Time"
             $0.tag = "time"
             $0.dateFormatter = self.timeFormatter
+            $0.disabled = true
         }
 
         <<< SideBySideAnatomyViewRow("anatomy")
@@ -112,6 +121,7 @@ final class WorkoutSummaryViewController: FormViewController {
             $0.tag = "total_volume"
             $0.hidden = "$total_volume == nil"
             $0.formatter = self.numberFormatter
+            $0.disabled = true
         }
 
         <<< DecimalRow() {
@@ -119,6 +129,7 @@ final class WorkoutSummaryViewController: FormViewController {
             $0.title = "Ave Pct. Volume"
             $0.hidden = "$ave_rel_volume == nil"
             $0.formatter = self.percentFormatter
+            $0.disabled = true
         }
 
         <<< DecimalRow() {
@@ -126,33 +137,38 @@ final class WorkoutSummaryViewController: FormViewController {
             $0.tag = "ave_intensity"
             $0.hidden = "$ave_intensity == nil"
             $0.formatter = self.percentFormatter
+            $0.disabled = true
         }
 
         <<< DecimalRow() {
             $0.title = "Active Time (min)"
             $0.tag = "active_duration"
             $0.hidden = "$active_duration == nil"
-            $0.formatter = self.numberFormatter
+            $0.formatter = self.minutesFormatter
+            $0.disabled = true
         }
 
         <<< DecimalRow() {
             $0.title = "Rest Time (min)"
             $0.tag = "rest_duration"
             $0.hidden = "$rest_duration == nil"
-            $0.formatter = self.numberFormatter
+            $0.formatter = self.minutesFormatter
+            $0.disabled = true
         }
 
         <<< DecimalRow() {
             $0.title = "Total Time (min)"
             $0.tag = "total_duration"
             $0.hidden = "$total_duration == nil"
-            $0.formatter = self.numberFormatter
+            $0.formatter = self.minutesFormatter
+            $0.disabled = true
         }
 
         <<< LabelRow() {
             $0.title = "Max Activation"
             $0.tag = "activation"
             $0.hidden = "$activation == nil"
+            $0.disabled = true
         }
 
         form +++ worksetsSection

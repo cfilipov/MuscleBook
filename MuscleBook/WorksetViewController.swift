@@ -27,7 +27,7 @@ class WorksetViewController: FormViewController {
         case Editing(Workset)
         case Editable(Workset)
 
-        static func isValidTransition(old: Mode, new: Mode) -> Bool {
+        static func isValidTransition(old old: Mode, new: Mode) -> Bool {
             switch (old, new) {
             case (.Editing, .Editable): return true
             case (.Editable, .Editing): return true
@@ -52,9 +52,21 @@ class WorksetViewController: FormViewController {
         return formatter
     }()
 
+    private let timeFormatter: NSDateFormatter = {
+        let formatter = NSDateFormatter()
+        formatter.timeStyle = .ShortStyle
+        return formatter
+    }()
+
+    let dateFormatter: NSDateFormatter = {
+        let formatter = NSDateFormatter()
+        formatter.dateStyle = .FullStyle
+        return formatter
+    }()
+
     private var mode: Mode {
         willSet(newMode) {
-            assert(Mode.isValidTransition(mode, new: newMode))
+            assert(Mode.isValidTransition(old: mode, new: newMode))
         }
         didSet {
             refreshMode()
@@ -207,17 +219,24 @@ class WorksetViewController: FormViewController {
             }
         }
 
-        <<< DateTimeInlineRow("date") {
-            $0.value = self.startTime
-            $0.cellUpdate { cell, row in
-                self.formatter.dateStyle = .MediumStyle
-                self.formatter.timeStyle = .NoStyle
-                let dayPart = self.formatter.stringFromDate(row.value!)
-                cell.textLabel?.text = dayPart
-                self.formatter.dateStyle = .NoStyle
-                self.formatter.timeStyle = .ShortStyle
-                let timePart = self.formatter.stringFromDate(row.value!)
-                cell.detailTextLabel?.text = timePart
+        <<< LabelRow() {
+            $0.title = "Date"
+            $0.tag = "date"
+        }
+
+        <<< LabelRow() {
+            $0.title = "Time"
+            $0.tag = "time"
+        }
+
+        <<< TimerRow() {
+            $0.title = "Duration"
+            $0.tag = "duration"
+            $0.value = self.duration
+            $0.onChange { row in
+                print("Timer: \(row.value)")
+                self.startTime ?= row.startTime
+                self.duration = row.value
             }
         }
 
@@ -345,9 +364,9 @@ class WorksetViewController: FormViewController {
             }
         }
 
-        <<< LabelRow("PastVolume") {
+        <<< LabelRow("past_volume") {
             $0.title = "Volume"
-            $0.hidden = "$PastVolume == nil"
+            $0.hidden = "$past_volume == nil"
             $0.cellUpdate { cell, row in
                 if let maxVolume = self.records?.maxVolume {
                     cell.accessoryType = .DisclosureIndicator
@@ -362,9 +381,10 @@ class WorksetViewController: FormViewController {
             }
         }
 
-        <<< LabelRow("Intensity") {
-            $0.title = $0.tag
-            $0.hidden = "$Intensity == nil"
+        <<< LabelRow() {
+            $0.title = "Intensity"
+            $0.tag = "intensity"
+            $0.hidden = "$intensity == nil"
         }
 
         refreshMode()
@@ -383,6 +403,11 @@ class WorksetViewController: FormViewController {
     }
 
     private func updateCalculatedRows() {
+        print("Start Time: \(startTime)")
+        form.rowByTag("date")?.value = dateFormatter.stringFromDate(startTime)
+        form.rowByTag("date")?.updateCell() // wtf? why?
+        form.rowByTag("time")?.value = timeFormatter.stringFromDate(startTime)
+        form.rowByTag("time")?.updateCell()
         form.rowByTag("e1rm")?.value = recordsFormatter.format(
             value: relativeRecords?.calculations.e1RM
         )
@@ -412,11 +437,11 @@ class WorksetViewController: FormViewController {
                 xrmRow.value = nil
             }
         }
-        form.rowByTag("PastVolume")?.value = self.recordsFormatter.format(
+        form.rowByTag("past_volume")?.value = self.recordsFormatter.format(
             value: self.records?.maxVolume?.calculations.volume,
             percent: self.relativeRecords?.percentMaxVolume
         )
-        form.rowByTag("Intensity")?.value = self.recordsFormatter.format(
+        form.rowByTag("intensity")?.value = self.recordsFormatter.format(
             percent: self.relativeRecords?.intensity
         )
         form.sectionByTag("calculations")?.evaluateHidden()
@@ -480,7 +505,7 @@ class WorksetViewController: FormViewController {
     }
     
     func saveButtonPressed() {
-        guard let input = input else {
+        guard let input = input where input.duration > 0 else {
             Alert(message: "Could not save data point, mising required fields.")
             return
         }
