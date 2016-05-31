@@ -21,6 +21,13 @@ import Foundation
 struct ExerciseReference {
     let exerciseID: Int64?
     let name: String
+    let count: Int
+
+    init(exerciseID: Int64?, name: String, count: Int = 0) {
+        self.exerciseID = exerciseID
+        self.name = name
+        self.count = count
+    }
 }
 
 extension ExerciseReference: Equatable {}

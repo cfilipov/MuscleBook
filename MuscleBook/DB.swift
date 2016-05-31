@@ -85,11 +85,21 @@ extension DB {
     }
 
     func all(type: Exercise.Type) throws -> [ExerciseReference] {
-        return Array(
-            try db.prepare(
-                Exercise.Schema.table.order(Exercise.Schema.name)
-            )
+        typealias R = ExerciseReference.Schema
+        typealias E = Exercise.Schema
+        typealias W = Workset.Schema
+        let rows = try db.prepare(E.table
+            .select(E.table[E.exerciseID], E.table[E.name], W.worksetID.count)
+            .join(.LeftOuter, W.table, on: W.table[W.exerciseID] == E.table[E.exerciseID])
+            .group(E.table[E.exerciseID])
         )
+        return rows.map {
+            return ExerciseReference(
+                exerciseID: $0[R.exerciseID],
+                name: $0[R.name],
+                count: $0[W.worksetID.count]
+            )
+        }
     }
 
     func all(type: Workout.Type) throws -> AnySequence<Workout> {
@@ -281,6 +291,24 @@ extension DB {
 
     func match(name name: String) throws -> AnySequence<ExerciseReference> {
         return try db.prepare(Exercise.Schema.match(name: name))
+    }
+
+    func match2(name name: String) throws -> [ExerciseReference] {
+        typealias E = Exercise.Schema
+        typealias W = Workset.Schema
+        let rows = try db.prepare(E.search
+            .select(E.search[E.exerciseID], E.search[E.name], W.worksetID.count)
+            .join(.LeftOuter, W.table, on: W.table[W.exerciseID] == E.search[E.exerciseID])
+            .group(E.search[E.exerciseID])
+            .match("*"+name+"*")
+        )
+        return rows.map {
+            return ExerciseReference(
+                exerciseID: $0[E.search[E.exerciseID]],
+                name: $0[E.name],
+                count: $0[W.worksetID.count]
+            )
+        }
     }
 
     func find(exactName name: String) -> ExerciseReference? {

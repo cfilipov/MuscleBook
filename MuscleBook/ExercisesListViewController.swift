@@ -21,10 +21,21 @@ import Eureka
 
 class ExercisesListViewController: UITableViewController, TypedRowControllerType {
 
+    enum SortBy: Int {
+        case Alpha = 0
+        case Count
+    }
+
     private let db = DB.sharedInstance
 
     var row: RowOf<ExerciseReference>!
     var completionCallback : ((UIViewController) -> ())?
+
+    private var sortBy = SortBy.Alpha {
+        didSet {
+            tableView.reloadData()
+        }
+    }
 
     private let formatter = NSDateFormatter()
     private let searchController = UISearchController(searchResultsController: nil)
@@ -35,8 +46,32 @@ class ExercisesListViewController: UITableViewController, TypedRowControllerType
     }()
 
     var exercises: [ExerciseReference] {
-        return searchController.active ? filteredExercises : allExercises
+        let ex = searchController.active ? filteredExercises : allExercises
+        switch sortBy {
+        case .Alpha: return ex.sort { a, b in a.name < b.name }
+        case .Count: return ex.sort { a, b in a.count > b.count }
+        }
     }
+
+    private lazy var segmentedControl: UISegmentedControl = {
+        let control = UISegmentedControl(items: ["Az", "123"])
+        control.addTarget(self, action: #selector(orderSegmentValueChanged), forControlEvents: .ValueChanged)
+        control.selectedSegmentIndex = 0
+        return control
+    }()
+
+    private var flexibleItem: UIBarButtonItem {
+        return UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
+    }
+
+    private lazy var segmentBarButtonItem: UIBarButtonItem = {
+        let item = UIBarButtonItem(customView: self.segmentedControl)
+        return item
+    }()
+
+    private lazy var items: [UIBarButtonItem] = {
+        return [self.segmentBarButtonItem, self.flexibleItem]
+    }()
 
     init() {
         super.init(style: .Plain)
@@ -49,6 +84,7 @@ class ExercisesListViewController: UITableViewController, TypedRowControllerType
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Exercises"
+        navigationItem.rightBarButtonItem = self.segmentBarButtonItem
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
@@ -64,8 +100,9 @@ class ExercisesListViewController: UITableViewController, TypedRowControllerType
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier("ExerciseCell")
         let ex = exercises[indexPath.row]
-        if cell == nil { cell = UITableViewCell() }
+        if cell == nil { cell = UITableViewCell(style: .Value1, reuseIdentifier: "ExerciseCell") }
         cell!.textLabel?.text = ex.name
+        cell?.detailTextLabel?.text = ex.count > 0 ? String(ex.count) : nil
         return cell!
     }
 
@@ -83,8 +120,12 @@ class ExercisesListViewController: UITableViewController, TypedRowControllerType
             tableView!.reloadData()
             return
         }
-        filteredExercises = Array(try! db.match(name: searchText))
+        filteredExercises = try! db.match2(name: searchText)
         tableView!.reloadData()
+    }
+
+    func orderSegmentValueChanged() {
+        sortBy = SortBy(rawValue: segmentedControl.selectedSegmentIndex)!
     }
 }
 

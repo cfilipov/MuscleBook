@@ -84,6 +84,7 @@ extension ExerciseReference: SQLAdaptable {
     init(row: Row) {
         exerciseID = row[Schema.exerciseID]
         name = row[Schema.name]
+        count = 0
     }
 
     var setters: [Setter] {

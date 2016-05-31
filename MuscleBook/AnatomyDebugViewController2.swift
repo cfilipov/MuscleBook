@@ -146,12 +146,35 @@ class AnatomyDebugViewController2: UIViewController {
 
     func functionButtonPressed() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        alert.addAction(UIAlertAction(title: "Select All", style: .Destructive) { _ in
+            self.muscles.indices.forEach { self.selectMuscle(atRow: $0) }
+            self.tableView.reloadData()
+            })
         alert.addAction(UIAlertAction(title: "Reset", style: .Destructive) { _ in
             self.selections.removeAll()
+            self.anatomyView.reset()
             self.tableView.reloadData()
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
         presentViewController(alert, animated: true, completion: nil)
+    }
+
+    func selectMuscle(atRow row: Int) {
+        selections.insert(row)
+        anatomyView.setFillColor(
+            muscles[row].color,
+            muscle: muscles[row].muscle
+        )
+        anatomyView.setNeedsDisplay()
+    }
+
+    func deselectMuscle(atRow row: Int) {
+        selections.remove(row)
+        anatomyView.setFillColor(
+            UIColor.whiteColor(),
+            muscle: muscles[row].muscle
+        )
+        anatomyView.setNeedsDisplay()
     }
 }
 
@@ -171,21 +194,12 @@ extension AnatomyDebugViewController2: UITableViewDataSource, UITableViewDelegat
 
     func tableView(table: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if selections.contains(indexPath.row) {
-            selections.remove(indexPath.row)
-            anatomyView.setFillColor(
-                UIColor.whiteColor(),
-                muscle: muscles[indexPath.row].muscle
-            )
+            deselectMuscle(atRow: indexPath.row)
         } else {
-            selections.insert(indexPath.row)
-            anatomyView.setFillColor(
-                muscles[indexPath.row].color,
-                muscle: muscles[indexPath.row].muscle
-            )
+            selectMuscle(atRow: indexPath.row)
         }
         _ = tableView(table, cellForRowAtIndexPath: indexPath)
         table.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
-        anatomyView.setNeedsDisplay()
     }
 
 }
