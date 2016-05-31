@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		A22DE6781CA64B91001759CF /* WorksetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22DE6771CA64B91001759CF /* WorksetViewController.swift */; };
 		A23B0A2D1CF0D1B100AD924F /* PunchcardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23B0A2C1CF0D1B100AD924F /* PunchcardCell.swift */; };
-		A23B0A2F1CF0D67B00AD924F /* EFCalendarGraphAdapterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23B0A2E1CF0D67B00AD924F /* EFCalendarGraphAdapterDelegate.swift */; };
 		A23B0A371CF0E62F00AD924F /* EFCalendarGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = A23B0A341CF0E62F00AD924F /* EFCalendarGraph.m */; };
 		A23B0A381CF0E62F00AD924F /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A23B0A361CF0E62F00AD924F /* NSDate+Utilities.m */; };
 		A255E2551CBBA3A0009742BB /* SQLiteMigrationManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E795011CBBA26C004FF320 /* SQLiteMigrationManager.framework */; };
@@ -72,6 +71,7 @@
 		B28440301CBB880D008D0953 /* musclebook.db in Resources */ = {isa = PBXBuildFile; fileRef = B284402F1CBB8808008D0953 /* musclebook.db */; };
 		B29485E21C8122730032DF0A /* Profiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29485E11C8122730032DF0A /* Profiler.swift */; };
 		B29B45AE1CFCF39800E03478 /* CreditsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29B45AD1CFCF39800E03478 /* CreditsViewController.swift */; };
+		B29B45CB1CFD29D600E03478 /* ExerciseStatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29B45CA1CFD29D600E03478 /* ExerciseStatisticsViewController.swift */; };
 		B29EA5261C866F4200F2E261 /* ValueCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29EA5251C866F4200F2E261 /* ValueCoding.swift */; };
 		B2A52B851CA0A62200268B6C /* libYACYAML.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A52B801CA0A5FB00268B6C /* libYACYAML.a */; };
 		B2A52BA31CA0A74500268B6C /* JAMStyledBezierPath.m in Sources */ = {isa = PBXBuildFile; fileRef = B2A52B8F1CA0A74500268B6C /* JAMStyledBezierPath.m */; };
@@ -423,7 +423,6 @@
 /* Begin PBXFileReference section */
 		A22DE6771CA64B91001759CF /* WorksetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = WorksetViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		A23B0A2C1CF0D1B100AD924F /* PunchcardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PunchcardCell.swift; sourceTree = "<group>"; };
-		A23B0A2E1CF0D67B00AD924F /* EFCalendarGraphAdapterDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EFCalendarGraphAdapterDelegate.swift; sourceTree = "<group>"; };
 		A23B0A331CF0E62F00AD924F /* EFCalendarGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFCalendarGraph.h; sourceTree = "<group>"; };
 		A23B0A341CF0E62F00AD924F /* EFCalendarGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFCalendarGraph.m; sourceTree = "<group>"; };
 		A23B0A351CF0E62F00AD924F /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
@@ -489,6 +488,8 @@
 		B284402F1CBB8808008D0953 /* musclebook.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = musclebook.db; path = MuscleBook/musclebook.db; sourceTree = SOURCE_ROOT; };
 		B29485E11C8122730032DF0A /* Profiler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Profiler.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B29B45AD1CFCF39800E03478 /* CreditsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditsViewController.swift; sourceTree = "<group>"; };
+		B29B45C91CFD127500E03478 /* MuscleBook.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MuscleBook.entitlements; sourceTree = "<group>"; };
+		B29B45CA1CFD29D600E03478 /* ExerciseStatisticsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseStatisticsViewController.swift; sourceTree = "<group>"; };
 		B29EA5251C866F4200F2E261 /* ValueCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValueCoding.swift; sourceTree = "<group>"; };
 		B2A52B791CA0A5FB00268B6C /* YACYAML.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = YACYAML.xcodeproj; path = Extern/YACYAML/YACYAML.xcodeproj; sourceTree = "<group>"; };
 		B2A52B8E1CA0A74500268B6C /* JAMStyledBezierPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMStyledBezierPath.h; sourceTree = "<group>"; };
@@ -630,12 +631,12 @@
 		B207A7A61C63072300BD4DC9 /* MuscleBook */ = {
 			isa = PBXGroup;
 			children = (
+				B29B45C91CFD127500E03478 /* MuscleBook.entitlements */,
 				B2BD94B31C67260E00653556 /* MuscleBook-Bridging-Header.h */,
 				B207A7A71C63072300BD4DC9 /* AppDelegate.swift */,
 				B23668E81CB341EF00C0CEFB /* FormItems.swift */,
 				B29485E11C8122730032DF0A /* Profiler.swift */,
 				B2DD36B91C6C50A2002F8576 /* Util.swift */,
-				A23B0A2E1CF0D67B00AD924F /* EFCalendarGraphAdapterDelegate.swift */,
 				B23387181CB4F8640027981A /* Database */,
 				B2F8CF241C97238D003A6796 /* Extern */,
 				B2A80D1B1C72EDC00072928B /* Form Cells */,
@@ -942,6 +943,7 @@
 			children = (
 				B2BCB5351C76F2970046F5A1 /* ExerciseDetailViewController.swift */,
 				B25E864A1C7FA7BE00253A62 /* SelectExerciseViewController.swift */,
+				B29B45CA1CFD29D600E03478 /* ExerciseStatisticsViewController.swift */,
 			);
 			name = Exercise;
 			sourceTree = "<group>";
@@ -1069,6 +1071,11 @@
 					B207A7A31C63072300BD4DC9 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 9HMMG3T4Z7;
+						SystemCapabilities = {
+							com.apple.HealthKit = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -1433,6 +1440,7 @@
 				B23F0D031CF8CE70006BF745 /* SQLValues.swift in Sources */,
 				B25E868F1C800BA300253A62 /* FilesRoutes.swift in Sources */,
 				B25E86881C800BA300253A62 /* Auth.swift in Sources */,
+				B29B45CB1CFD29D600E03478 /* ExerciseStatisticsViewController.swift in Sources */,
 				B2C367A81CB188470045824F /* WorksetAdapter+CSV.swift in Sources */,
 				B2B326891C852162005F88E4 /* DebugMenuViewController.swift in Sources */,
 				B2E2945F1CAC781A009BC21A /* AnatomyViewCell.swift in Sources */,
@@ -1458,7 +1466,6 @@
 				B2A52BA91CA0A74500268B6C /* JAMSVGButton.m in Sources */,
 				B277439E1CFBFBE4007F2CE2 /* TimerRow.swift in Sources */,
 				B2A52BAA1CA0A74500268B6C /* JAMSVGImageView.m in Sources */,
-				A23B0A2F1CF0D67B00AD924F /* EFCalendarGraphAdapterDelegate.swift in Sources */,
 				B284400A1CBB80A8008D0953 /* AboutViewController.swift in Sources */,
 				A23B0A2D1CF0D1B100AD924F /* PunchcardCell.swift in Sources */,
 				B23F0CDC1CF693A2006BF745 /* Schema.swift in Sources */,

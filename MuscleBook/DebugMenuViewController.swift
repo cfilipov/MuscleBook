@@ -63,8 +63,6 @@ class DebugMenuViewController : FormViewController {
             $0.controller = { VerifyWorksetsViewController() }
         }
 
-        +++ Section()
-
 //        <<< LabelRow() {
 //            $0.title = "Link Dropbox Account"
 //            $0.hidden = Dropbox.authorizedClient == nil ? false : true
@@ -85,6 +83,12 @@ class DebugMenuViewController : FormViewController {
 //        }.onCellSelection(onSyncWithDropbox)
 
         +++ Section()
+
+        <<< ButtonRow() {
+            $0.title = "Recalculate All Workouts"
+        }.onCellSelection { _, _ in
+            try! self.db.recalculateAllWorksets()
+        }
 
         <<< ButtonRow() {
             $0.title = "Export Database"

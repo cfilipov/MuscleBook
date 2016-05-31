@@ -248,6 +248,11 @@ extension DB {
         )
     }
 
+    func count(type: Exercise.Type, exerciseID: Int64) -> Int {
+        typealias WS = Workset.Schema
+        return db.scalar(WS.table.select(WS.exerciseID.count).filter(WS.exerciseID == exerciseID))
+    }
+
     func countByDay(type: Workout.Type) throws -> [(NSDate, Int)] {
         let cal = NSCalendar.currentCalendar()
         let date = Workout.Schema.startTime
@@ -379,11 +384,19 @@ extension DB {
         }
     }
 
+//    func activationByDay() throws -> [(NSDate, Activation)] {
+//        let cal = NSCalendar.currentCalendar()
+//        return try all(Workout).map { workout in
+//            let date = cal.startOfDayForDate(workout.startTime)
+//            return (date, workout.maxActivation)
+//        }
+//    }
+
     func activationByDay() throws -> [NSDate: Activation] {
         let cal = NSCalendar.currentCalendar()
-        typealias W = Workset.Schema
+        typealias W = Workout.Schema
         let res = try db.prepare(W.table
-            .select(W.startTime, W.activation)
+            .select(W.startTime, W.maxActivation.max)
             .group(W.startTime.localDay)
             .order(W.startTime.localDay)
         )
@@ -391,7 +404,26 @@ extension DB {
             res.lazy.map {
                 (
                     cal.startOfDayForDate($0[W.startTime]),
-                    $0.get(W.activation)
+                    $0.get(W.maxActivation.max)!
+                )
+            }
+        )
+    }
+
+    func activationByDay(exerciseID exerciseID: Int64) throws -> [NSDate: Activation] {
+        let cal = NSCalendar.currentCalendar()
+        typealias W = Workset.Schema
+        let res = try db.prepare(W.table
+            .select(W.startTime, W.activation.max)
+            .filter(W.exerciseID == exerciseID)
+            .group(W.startTime.localDay)
+            .order(W.startTime.localDay)
+        )
+        return Dictionary(
+            res.lazy.map {
+                (
+                    cal.startOfDayForDate($0[W.startTime]),
+                    $0.get(W.activation.max)!
                 )
             }
         )
@@ -706,8 +738,7 @@ extension DB {
             avePcVolume = row[WS.percentMaxVolume.average],
             avePercentMaxDuration = row[WS.percentMaxDuration.average],
             aveIntensity = row[WS.intensity.average],
-            maxDuration = row[WS.duration.max],
-            maxActivation = row.get(WS.activation.max)
+            maxDuration = row[WS.duration.max]
             else { return .Fail }
         let lastDuration = db.scalar(WS.table
             .select(WS.duration)
@@ -717,6 +748,7 @@ extension DB {
         )
         let duration = endTime.timeIntervalSinceDate(startTime) + lastDuration
         let restDuration = duration - activeDuration
+        let activation = Activation(percent: max(aveIntensity, avePcVolume))
         try db.run(WO.table
             .filter(WS.workoutID == workoutID)
             .update(
@@ -731,7 +763,7 @@ extension DB {
                 WO.avePercentMaxDuration <- avePercentMaxDuration,
                 WO.aveIntensity <- aveIntensity,
                 WO.maxDuration <- maxDuration,
-                WO.maxActivation <- maxActivation
+                WO.maxActivation <- activation
             )
         )
         return .Success

@@ -23,7 +23,11 @@ final class WorkoutSummaryViewController: FormViewController {
 
     private let db = DB.sharedInstance
 
-    private let workout: Workout
+    private var workout: Workout {
+        didSet {
+            updateRows()
+        }
+    }
 
     lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -80,6 +84,8 @@ final class WorkoutSummaryViewController: FormViewController {
 
         title = "Workout Summary"
 
+        tableView?.contentInset = UIEdgeInsetsMake(-36, 0, 0, 0)
+
         /* TODO: Not supporting adding sets to past workouts for now */
         if db.count(Workout.self, after: workout.startTime) == 0 {
             navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -91,7 +97,9 @@ final class WorkoutSummaryViewController: FormViewController {
 
         form
 
-        +++ Section("Summary")
+        +++ Section() {
+            $0.tag = "summary"
+        }
 
         <<< DateRow() {
             $0.title = "Date"
@@ -179,14 +187,19 @@ final class WorkoutSummaryViewController: FormViewController {
         form.rowByTag("ave_intensity")?.value = workout.aveIntensity
         form.rowByTag("active_duration")?.value = workout.activeDuration / 60
         form.rowByTag("rest_duration")?.value = workout.restDuration / 60
-        form.rowByTag("total_duration")?.value = workout.restDuration / 60
+        form.rowByTag("total_duration")?.value = workout.duration / 60
         form.rowByTag("activation")?.value = workout.maxActivation.name
         form.rowByTag("anatomy")?.value = try! AnatomyViewConfig(
             db.get(MuscleWorkSummary.self, workoutID: workout.workoutID, movementClass: .Target)
         )
         form.rowByTag("anatomy")?.updateCell()
+        form.sectionByTag("summary")?.reload()
         form.sectionByTag("worksets")?.removeAll()
         form.sectionByTag("worksets")?.appendContentsOf(buildWorksetRows())
+    }
+
+    private func updateWorkout() {
+        workout = db.get(Workout.self, workoutID: workout.workoutID)!
     }
 
     private func workoutRecordToRow(workset: Workset) -> BaseRow {
@@ -218,7 +231,7 @@ final class WorkoutSummaryViewController: FormViewController {
     func onAddButtonPressed() {
         let vc = WorksetViewController { record in
             self.dismissViewControllerAnimated(true, completion: nil)
-            self.updateRows()
+            self.updateWorkout()
         }
         presentModalViewController(vc)
     }

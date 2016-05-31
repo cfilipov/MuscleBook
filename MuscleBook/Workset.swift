@@ -52,6 +52,19 @@ func estimate1RM(reps reps: Int, weight: Double) -> Double? {
     else { return round(weight / 0.75) }
 }
 
+func calculateWilks(weight: Double, bodyweight x: Double) -> Double {
+    precondition(x > 0)
+    precondition(weight > 0)
+    // TODO: calculate female coef. too
+    let a = -216.0475144
+    let b = 16.2606339
+    let c = -0.002388645
+    let d = -0.00113732
+    let e = 7.01863E-06
+    let f = -1.291E-08
+    return weight / (a + (b*x) + (c*pow(x, 2) + (d*pow(x, 3) + (e*pow(x, 4) + (f*pow(x, 5))))))
+}
+
 extension Workset {
     func copy(worksetID worksetID: Int64, workoutID: Int64) -> Workset {
         return Workset(

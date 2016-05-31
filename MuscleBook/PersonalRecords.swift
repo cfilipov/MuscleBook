@@ -48,6 +48,11 @@ struct RelativeRecords {
         return Double(reps) * weight
     }
 
+    var wilks: Double? {
+        guard let weight = input.weight else { return nil }
+        fatalError()
+    }
+
     var percentMaxWeight: Double? {
         guard let
             maxRM = records?.maxWeight?.input.weight,
@@ -89,18 +94,18 @@ struct RelativeRecords {
     }
 
     var intensity: Double? {
-        return [percentMaxWeight, percent1RM]
-            .flatMap{$0}.maxElement()
+        if records == nil { return 1.0 }
+        return [percentMaxWeight, percent1RM].flatMap{$0}.maxElement()
     }
 
     var activation: Activation {
-        guard input.warmup == false else { return .None }
+        guard input.warmup == false else { return .Light }
         if input.failure { return .Max }
         guard let
             intensity = intensity,
-            percentMaxWeight = percentMaxWeight
-            else { return .None }
-        let maxActivation = max(intensity, percentMaxWeight)
+            percentMaxVolume = percentMaxVolume
+            else { return .Light }
+        let maxActivation = max(intensity, percentMaxVolume)
         return Activation(percent: maxActivation)
     }
 

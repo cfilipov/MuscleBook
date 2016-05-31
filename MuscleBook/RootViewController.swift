@@ -66,12 +66,6 @@ class RootViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        navigationItem.leftBarButtonItem = UIBarButtonItem(
-//            barButtonSystemItem: .Organize,
-//            target: self,
-//            action: #selector(onMenuButtonPresed)
-//        )
-
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .Add,
             target: self,
@@ -95,7 +89,7 @@ class RootViewController: FormViewController {
         +++ Section()
 
         <<< PunchcardRow("punchcard") {
-            $0.value = EFCalendarGraphAdapterDelegate()
+            $0.value = WorkoutPunchcardDelegate()
             $0.onCellSelection { _, _ in
                 let vc = AllWorkoutsViewController()
                 self.showViewController(vc, sender: nil)
@@ -169,9 +163,31 @@ class RootViewController: FormViewController {
 
     func onAddButtonPressed() {
         let vc = WorksetViewController { record in
+            self.refresh()
             self.dismissViewControllerAnimated(true, completion: nil)
         }
         presentModalViewController(vc)
     }
 
+}
+
+private class WorkoutPunchcardDelegate: PunchcardDelegate {
+    private let db = DB.sharedInstance
+    private let cal = NSCalendar.currentCalendar()
+    private let activations: [NSDate: Activation]
+
+    override init() {
+        activations = try! db.activationByDay()
+    }
+
+    override func calendarGraph(calendarGraph: EFCalendarGraph!, valueForDate date: NSDate!, daysAfterStartDate: UInt, daysBeforeEndDate: UInt) -> AnyObject! {
+        guard let activation = activations[cal.startOfDayForDate(date)] else { return 0 }
+        switch activation {
+        case .None: return 0
+        case .Light: return 1
+        case .Medium: return 1
+        case .High: return 5
+        case .Max: return 5
+        }
+    }
 }

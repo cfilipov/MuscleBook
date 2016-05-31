@@ -19,7 +19,17 @@
 import UIKit
 import Eureka
 
-class PunchcardCell : Cell<EFCalendarGraphAdapterDelegate>, CellType {
+@objc class PunchcardDelegate: NSObject, EFCalendarGraphDataSource {
+    func numberOfDataPointsInCalendarGraph(calendarGraph: EFCalendarGraph!) -> UInt {
+        return 360
+    }
+
+    func calendarGraph(calendarGraph: EFCalendarGraph!, valueForDate date: NSDate!, daysAfterStartDate: UInt, daysBeforeEndDate: UInt) -> AnyObject! {
+        return 0
+    }
+}
+
+class PunchcardCell : Cell<PunchcardDelegate>, CellType {
     
     let punchcardView: EFCalendarGraph = {
         let v = EFCalendarGraph(endDate: NSDate())
@@ -66,7 +76,7 @@ class PunchcardCell : Cell<EFCalendarGraphAdapterDelegate>, CellType {
     
 }
 
-final class PunchcardRow: Row<EFCalendarGraphAdapterDelegate, PunchcardCell>, RowType {
+final class PunchcardRow: Row<PunchcardDelegate, PunchcardCell>, RowType {
     
     required init(tag: String?) {
         super.init(tag: tag)

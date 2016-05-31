@@ -49,6 +49,10 @@ class ExerciseDetailViewController : FormViewController {
     let anatomyRow = SideBySideAnatomyViewRow("anatomy")
     let whiteCircle = UIImage.circle(12, color: UIColor.whiteColor())
 
+    private var performanceCount: Int {
+        return db.count(Exercise.self, exerciseID: exercise.exerciseID!)
+    }
+
     init(exercise: Exercise) {
         self.exercise = exercise
         super.init(style: .Grouped)
@@ -74,6 +78,8 @@ class ExerciseDetailViewController : FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView?.contentInset = UIEdgeInsetsMake(-36, 0, 0, 0)
+        
         title = "Exercise"
 
         form +++ Section()
@@ -104,6 +110,12 @@ class ExerciseDetailViewController : FormViewController {
         }
 
         <<< anatomyRow
+
+        <<< PushViewControllerRow() {
+            $0.title = "Statistics"
+            $0.controller = { ExerciseStatisticsViewController(exercise: self.exercise.exerciseReference) }
+            $0.hidden = self.performanceCount == 0 ? true : false
+        }
 
         if let s = musclesDictionary[.Target] where !s.isEmpty {
             form +++ Section("Target Muscles") <<< s.map(rowForMuscle)

@@ -32,18 +32,11 @@ func <(lhs: Activation, rhs: Activation) -> Bool {
 
 extension Activation {
     init(percent: Double) {
-        if percent > 1.0 {
-            self = .Max
-        }
-        else if percent >= 0.8 {
-            self = .High
-        }
-        else if percent < 0.5 {
-            self = .Light
-        }
-        else {
-            self = .Medium
-        }
+        if percent == 0 { self = .None }
+        else if percent > 1.0 { self = .Max }
+        else if percent >= 0.8 { self = .High }
+        else if percent < 0.5 { self = .Light }
+        else { self = .Medium }
     }
 
     var color: UIColor {
