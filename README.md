@@ -11,7 +11,7 @@ This app is not targeted at beginner lifters, but there is no reason a beginner 
 
 **This software is a work in progress, expect bugs. Seriously, look at the version number, it's not even close to 1.0.**
 
-<img src="Screenshot.png" style="width: 200px;" />
+<img src="Screenshot.png" width="200px" />
 
 ## Features
 
