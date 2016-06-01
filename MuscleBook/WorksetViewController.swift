@@ -224,11 +224,29 @@ class WorksetViewController: FormViewController {
             $0.tag = "input"
         }
 
-        <<< SelectExerciseRow("exercise") {
+        <<< LabelRow() {
             $0.title = "Exercise"
-            $0.value = exercise
-            $0.onChange { row in
-                self.exercise = row.value
+            $0.tag = "exercise"
+            $0.cellSetup { cell, row in
+                cell.accessoryType = .DisclosureIndicator
+                cell.showErrorAccessoryView(self.exercise?.exerciseID == nil)
+            }
+            $0.onCellSelection { cell, row in
+                switch self.mode {
+                case .Creating: fallthrough
+                case .Editing(_):
+                    let vc = ExercisesListViewController { ref in
+                        self.navigationController?.popViewControllerAnimated(true)
+                        self.exercise = ref
+                    }
+                    self.showViewController(vc, sender: nil)
+                case .ReadOnly: fallthrough
+                case .Editable(_):
+                    if let ref = self.exercise, ex = self.db.dereference(ref) {
+                        let vc = ExerciseDetailViewController(exercise: ex)
+                        self.showViewController(vc, sender: nil)
+                    }
+                }
             }
         }
 
@@ -452,7 +470,7 @@ class WorksetViewController: FormViewController {
     }
 
     private func updateCalculatedRows() {
-        print("Start Time: \(startTime)")
+        form.rowByTag("exercise")?.value = exercise?.name
         form.rowByTag("date")?.value = dateFormatter.stringFromDate(startTime)
         form.rowByTag("date")?.updateCell() // wtf? why?
         form.rowByTag("time")?.value = timeFormatter.stringFromDate(startTime)

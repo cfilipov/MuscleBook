@@ -66,9 +66,9 @@ class ExerciseStatisticsViewController : FormViewController {
         }
 
         <<< IntRow() {
-            $0.title = "Days"
-            $0.tag = "days"
-            $0.hidden = "$days == nil"
+            $0.title = "Workouts"
+            $0.tag = "workouts"
+            $0.hidden = "$workouts == nil"
             $0.disabled = true
         }
 
@@ -79,7 +79,12 @@ class ExerciseStatisticsViewController : FormViewController {
             $0.disabled = true
         }
 
-        +++ Section("Records")
+        +++ Section("Records") {
+            $0.tag = "records"
+            $0.hidden = Condition.Function([]) { form -> Bool in
+                return (form.sectionByTag("prs")?.count ?? 0) > 0 ? false : true
+            }
+        }
 
         <<< DecimalRow() {
             $0.title = "RM"
@@ -129,7 +134,7 @@ class ExerciseStatisticsViewController : FormViewController {
     }
 
     private func updateRows() {
-        form.rowByTag("days")?.value = try? db.activationByDay(exerciseID: exerciseID).count ?? 0
+        form.rowByTag("workouts")?.value = db.count(Workout.self, exerciseID: exerciseID)
         form.rowByTag("sets")?.value = db.count(Exercise.self, exerciseID: exerciseID)
         if let row = form.rowByTag("rm") as? DecimalRow {
             let maxWeight = db.maxRM(exerciseID: exerciseID)
@@ -151,7 +156,7 @@ class ExerciseStatisticsViewController : FormViewController {
             row.value = maxvol?.calculations.volume
             row.onCellSelection { _, _ in self.showWorkset(maxvol) }
         }
-        
+        form.sectionByTag("records")?.evaluateHidden()
     }
 
     private func showWorkset(workset: Workset?) {

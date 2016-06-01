@@ -24,6 +24,7 @@ IB_DESIGNABLE
 @property (nonatomic, strong) UIColor *zeroColor;
 @property (nonatomic, assign) BOOL automaticallyAdjustsFrameToContent;
 @property (nonatomic, assign, readonly) CGSize contentSize;
+@property (nonatomic, strong) NSDate *startDate;
 
 - (instancetype)initWithStartDate:(NSDate *)startDate;
 - (instancetype)initWithEndDate:(NSDate *)endDate;

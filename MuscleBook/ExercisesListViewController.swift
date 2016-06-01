@@ -19,38 +19,37 @@
 import UIKit
 import Eureka
 
-class ExercisesListViewController: UITableViewController, TypedRowControllerType {
+class ExercisesListViewController: UITableViewController {
 
-    enum SortBy: Int {
-        case Alpha = 0
-        case Count
+    enum Mode {
+        case Browse
+        case Select(callback: ExerciseReference -> Void)
+
+        var title: String {
+            switch self {
+            case .Browse: return "Exercises"
+            case .Select(_): return "Select an Exercise"
+            }
+        }
     }
 
     private let db = DB.sharedInstance
+    private let mode: Mode
 
-    var row: RowOf<ExerciseReference>!
-    var completionCallback : ((UIViewController) -> ())?
-
-    private var sortBy = SortBy.Alpha {
+    private var sort = Exercise.SortType.Alphabetical {
         didSet {
-            tableView.reloadData()
+            updateFilteredExercises()
+            updateUnfilteredExercises()
         }
     }
 
     private let formatter = NSDateFormatter()
     private let searchController = UISearchController(searchResultsController: nil)
     private var filteredExercises: [ExerciseReference] = []
-
-    private lazy var allExercises: [ExerciseReference] = {
-        return (try? self.db.all(Exercise)) ?? []
-    }()
+    private var unfilteredExercises: [ExerciseReference] = []
 
     var exercises: [ExerciseReference] {
-        let ex = searchController.active ? filteredExercises : allExercises
-        switch sortBy {
-        case .Alpha: return ex.sort { a, b in a.name < b.name }
-        case .Count: return ex.sort { a, b in a.count > b.count }
-        }
+        return searchController.active ? filteredExercises : unfilteredExercises
     }
 
     private lazy var segmentedControl: UISegmentedControl = {
@@ -73,24 +72,31 @@ class ExercisesListViewController: UITableViewController, TypedRowControllerType
         return [self.segmentBarButtonItem, self.flexibleItem]
     }()
 
+    init(callback: ExerciseReference -> Void) {
+        mode = .Select(callback: callback)
+        super.init(style: .Plain)
+    }
+
     init() {
+        mode = .Browse
         super.init(style: .Plain)
     }
 
     required init?(coder aDecoder: NSCoder) {
+        mode = .Browse
         super.init(coder: aDecoder)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Exercises"
+        title = mode.title
         navigationItem.rightBarButtonItem = self.segmentBarButtonItem
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
-        tableView?.tableHeaderView = searchController.searchBar
-        tableView?.reloadData()
         tableView?.setContentOffset(CGPoint(x: 0, y: 44), animated: false)
+        tableView?.tableHeaderView = searchController.searchBar
+        updateUnfilteredExercises()
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -101,36 +107,57 @@ class ExercisesListViewController: UITableViewController, TypedRowControllerType
         var cell = tableView.dequeueReusableCellWithIdentifier("ExerciseCell")
         let ex = exercises[indexPath.row]
         if cell == nil { cell = UITableViewCell(style: .Value1, reuseIdentifier: "ExerciseCell") }
-        cell!.textLabel?.text = ex.name
+        cell?.textLabel?.text = ex.name
         cell?.detailTextLabel?.text = ex.count > 0 ? String(ex.count) : nil
+        switch mode {
+        case .Browse: cell?.accessoryType = .DisclosureIndicator
+        case .Select(_): cell?.accessoryType = .DetailButton
+        }
         return cell!
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let ref = exercises[indexPath.row]
-        let ex = db.dereference(ref)
-        let vc = ExerciseDetailViewController(exercise: ex!)
+        switch mode {
+        case .Browse:
+            let ex = db.dereference(ref)
+            let vc = ExerciseDetailViewController(exercise: ex!)
+            showViewController(vc, sender: nil)
+            searchController.active = false
+        case .Select(let callback):
+            callback(ref)
+        }
+    }
+
+    override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
+        let ref = exercises[indexPath.row]
+        guard let exercise = db.dereference(ref) else { return }
+        let vc = ExerciseDetailViewController(exercise: exercise)
         showViewController(vc, sender: nil)
         searchController.active = false
     }
 
-    private func filterContentForSearchText(searchText: String, scope: String = "All") {
-        guard !searchText.isEmpty else {
-            filteredExercises = allExercises
-            tableView!.reloadData()
-            return
-        }
-        filteredExercises = try! db.match2(name: searchText)
-        tableView!.reloadData()
+    func orderSegmentValueChanged() {
+        sort = Exercise.SortType(rawValue: segmentedControl.selectedSegmentIndex)!
     }
 
-    func orderSegmentValueChanged() {
-        sortBy = SortBy(rawValue: segmentedControl.selectedSegmentIndex)!
+    private func updateFilteredExercises() {
+        defer { tableView?.reloadData() }
+        guard let searchText = searchController.searchBar.text where !searchText.isEmpty else {
+            filteredExercises = unfilteredExercises
+            return
+        }
+        filteredExercises = try! db.match2(name: searchText, sort: sort)
+    }
+
+    private func updateUnfilteredExercises() {
+        unfilteredExercises = try! self.db.all(Exercise.self, sort: sort)
+        tableView?.reloadData()
     }
 }
 
 extension ExercisesListViewController: UISearchResultsUpdating {
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        filterContentForSearchText(searchController.searchBar.text!)
+        updateFilteredExercises()
     }
 }

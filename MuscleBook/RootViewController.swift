@@ -88,8 +88,9 @@ class RootViewController: FormViewController {
 
         +++ Section()
 
-        <<< PunchcardRow("punchcard") {
+        <<< PunchcardRow() {
             $0.value = WorkoutPunchcardDelegate()
+            $0.tag = "punchcard"
             $0.onCellSelection { _, _ in
                 let vc = AllWorkoutsViewController()
                 self.showViewController(vc, sender: nil)
@@ -125,6 +126,12 @@ class RootViewController: FormViewController {
             $0.hidden = "$exercises == nil"
             $0.textAreaHeight = .Dynamic(initialTextViewHeight: 20)
             $0.disabled = true
+        }
+
+        <<< LabelRow() {
+            $0.title = "Rest Day"
+            $0.tag = "rest_day"
+            $0.hidden = "$exercises != nil"
         }
 
         form.rowByTag("workout_week")?.baseValue = NSDate()

@@ -11,7 +11,7 @@ This app is not targeted at beginner lifters, but there is no reason a beginner 
 
 **This software is a work in progress, expect bugs. Seriously, look at the version number, it's not even close to 1.0.**
 
-<img src="Screenshot.png" style="width: 200px;" />
+<img src="Screenshot.png" width="200px" />
 
 ## Features
 
@@ -55,6 +55,10 @@ Muscle Book aims to be a useful tool for all lifters regardless of routine, lift
 ## Changes
 
 A list of changes can be found in the [CHANGELOG](CHANGELOG.md).
+
+## Contributing
+
+Contributions are very welcome. You don't need to know how to program to contribute to this project. Check out the [Contributions](CONTRIBUTING.md) page for more details.
 
 ## License
 

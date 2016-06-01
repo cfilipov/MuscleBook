@@ -38,7 +38,6 @@
 		B25E85831C7D6C3700253A62 /* Workset.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E85821C7D6C3700253A62 /* Workset.swift */; };
 		B25E861E1C7EBD8700253A62 /* AnatomySplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E861D1C7EBD8700253A62 /* AnatomySplitView.swift */; };
 		B25E86481C7F874500253A62 /* JAMSVGImage+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = B25E86471C7F874500253A62 /* JAMSVGImage+Extensions.m */; };
-		B25E864B1C7FA7BE00253A62 /* SelectExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E864A1C7FA7BE00253A62 /* SelectExerciseViewController.swift */; };
 		B25E86851C800BA300253A62 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = B25E866D1C800BA300253A62 /* LICENSE */; };
 		B25E86861C800BA300253A62 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = B25E866E1C800BA300253A62 /* README.md */; };
 		B25E86871C800BA300253A62 /* Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E86701C800BA300253A62 /* Async.swift */; };
@@ -451,7 +450,6 @@
 		B25E861D1C7EBD8700253A62 /* AnatomySplitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AnatomySplitView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B25E86461C7F874500253A62 /* JAMSVGImage+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "JAMSVGImage+Extensions.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		B25E86471C7F874500253A62 /* JAMSVGImage+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "JAMSVGImage+Extensions.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		B25E864A1C7FA7BE00253A62 /* SelectExerciseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SelectExerciseViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B25E86681C7FD48200253A62 /* NSDate+YACYAMLPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSDate+YACYAMLPrivate.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		B25E866D1C800BA300253A62 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		B25E866E1C800BA300253A62 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -942,7 +940,6 @@
 			isa = PBXGroup;
 			children = (
 				B2BCB5351C76F2970046F5A1 /* ExerciseDetailViewController.swift */,
-				B25E864A1C7FA7BE00253A62 /* SelectExerciseViewController.swift */,
 				B29B45CA1CFD29D600E03478 /* ExerciseStatisticsViewController.swift */,
 			);
 			name = Exercise;
@@ -1455,7 +1452,6 @@
 				B2BCB5361C76F2970046F5A1 /* ExerciseDetailViewController.swift in Sources */,
 				B2843FF51CBB3480008D0953 /* Activation.swift in Sources */,
 				B2E294141CAA5630009BC21A /* ExerciseCoder.swift in Sources */,
-				B25E864B1C7FA7BE00253A62 /* SelectExerciseViewController.swift in Sources */,
 				B247AEEA1C9CD74C00A501B0 /* Model.swift in Sources */,
 				B2E2946E1CACA1D2009BC21A /* CalendarWeekCell.swift in Sources */,
 				A22DE6781CA64B91001759CF /* WorksetViewController.swift in Sources */,

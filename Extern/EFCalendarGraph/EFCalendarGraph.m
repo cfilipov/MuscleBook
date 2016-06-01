@@ -25,7 +25,6 @@ const NSInteger EFCalendarGraphDaysInWeek = 7;
 @property (nonatomic, strong) NSArray *dataByColumns;
 @property (nonatomic, strong) NSArray *layersByColumns;
 @property (nonatomic, strong) NSDate *endDate;
-@property (nonatomic, strong) NSDate *startDate;
 //@property (nonatomic, strong) NSArray *values;
 
 @property (nonatomic, assign, readonly) CGFloat minWidth;

@@ -19,30 +19,6 @@
 import UIKit
 import Eureka
 
-final class SelectExerciseRow : SelectorRow<ExerciseReference, PushSelectorCell<ExerciseReference>, SelectExerciseViewController>, RowType {
-
-    required init(tag: String?) {
-        super.init(tag: tag)
-        presentationMode = .Show(
-            controllerProvider: ControllerProvider.Callback {
-                return SelectExerciseViewController()
-            },
-            completionCallback: { vc in
-                vc.navigationController?.popViewControllerAnimated(true)
-            }
-        )
-        displayValueFor = {
-            guard let exerciseRef = $0 else { return "" }
-            return exerciseRef.name
-        }
-    }
-
-    override func customUpdateCell() {
-        super.customUpdateCell()
-        cell.showErrorAccessoryView(value?.exerciseID == nil)
-    }
-}
-
 public final class PushViewControllerRow : _ButtonRowOf<String>, RowType {
     public required init(tag: String?) {
         super.init(tag: tag)

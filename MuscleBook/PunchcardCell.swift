@@ -21,7 +21,7 @@ import Eureka
 
 @objc class PunchcardDelegate: NSObject, EFCalendarGraphDataSource {
     func numberOfDataPointsInCalendarGraph(calendarGraph: EFCalendarGraph!) -> UInt {
-        return 360
+        return 364
     }
 
     func calendarGraph(calendarGraph: EFCalendarGraph!, valueForDate date: NSDate!, daysAfterStartDate: UInt, daysBeforeEndDate: UInt) -> AnyObject! {

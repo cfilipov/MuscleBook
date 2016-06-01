@@ -28,6 +28,7 @@ class DB {
 
     enum Error: ErrorType {
         case CannotInsertWorkset
+        case RecalculateWorkoutFailed
     }
 
     static let sharedInstance = DB()
@@ -76,6 +77,22 @@ class DB {
 
 // MARK:
 
+extension Exercise {
+    enum SortType: Int {
+        case Alphabetical = 0
+        case Count
+
+        private func column(scope scope: SchemaType) -> Expressible {
+            typealias E = Exercise.Schema
+            typealias W = Workset.Schema
+            switch self {
+            case .Alphabetical: return scope[E.name]
+            case .Count: return W.workoutID.distinct.count.desc
+            }
+        }
+    }
+}
+
 extension DB {
 
     func all(type: Workset.Type) throws -> AnySequence<Workset> {
@@ -84,20 +101,22 @@ extension DB {
         )
     }
 
-    func all(type: Exercise.Type) throws -> [ExerciseReference] {
+    func all(type: Exercise.Type, sort: Exercise.SortType) throws -> [ExerciseReference] {
         typealias R = ExerciseReference.Schema
         typealias E = Exercise.Schema
         typealias W = Workset.Schema
+
         let rows = try db.prepare(E.table
-            .select(E.table[E.exerciseID], E.table[E.name], W.worksetID.count)
+            .select(E.table[E.exerciseID], E.table[E.name], W.workoutID.distinct.count)
             .join(.LeftOuter, W.table, on: W.table[W.exerciseID] == E.table[E.exerciseID])
             .group(E.table[E.exerciseID])
+            .order(sort.column(scope: E.table))
         )
         return rows.map {
             return ExerciseReference(
                 exerciseID: $0[R.exerciseID],
                 name: $0[R.name],
-                count: $0[W.worksetID.count]
+                count: $0[W.workoutID.distinct.count]
             )
         }
     }
@@ -155,11 +174,11 @@ extension DB {
             )
             let worksetID = try self.save(incompleteWorkset)
             workset = incompleteWorkset.copy(worksetID: worksetID)
+            try self.recalculate(workoutID: workoutID)
         }
         assert(workoutID != 0)
         assert(workset!.worksetID != 0)
         assert(workset!.workoutID != 0)
-        try self.recalculate(workoutID: workoutID)
         return workset!
     }
 
@@ -263,6 +282,15 @@ extension DB {
         return db.scalar(WS.table.select(WS.exerciseID.count).filter(WS.exerciseID == exerciseID))
     }
 
+    func count(type: Workout.Type, exerciseID: Int64) -> Int {
+        typealias WS = Workset.Schema
+        return db.scalar(
+            WS.table
+                .select(WS.workoutID.distinct.count)
+                .filter(WS.exerciseID == exerciseID)
+        )
+    }
+
     func countByDay(type: Workout.Type) throws -> [(NSDate, Int)] {
         let cal = NSCalendar.currentCalendar()
         let date = Workout.Schema.startTime
@@ -293,20 +321,21 @@ extension DB {
         return try db.prepare(Exercise.Schema.match(name: name))
     }
 
-    func match2(name name: String) throws -> [ExerciseReference] {
+    func match2(name name: String, sort: Exercise.SortType) throws -> [ExerciseReference] {
         typealias E = Exercise.Schema
         typealias W = Workset.Schema
         let rows = try db.prepare(E.search
-            .select(E.search[E.exerciseID], E.search[E.name], W.worksetID.count)
+            .select(E.search[E.exerciseID], E.search[E.name], W.workoutID.distinct.count)
             .join(.LeftOuter, W.table, on: W.table[W.exerciseID] == E.search[E.exerciseID])
             .group(E.search[E.exerciseID])
             .match("*"+name+"*")
+            .order(sort.column(scope: E.search))
         )
         return rows.map {
             return ExerciseReference(
                 exerciseID: $0[E.search[E.exerciseID]],
                 name: $0[E.name],
-                count: $0[W.worksetID.count]
+                count: $0[W.workoutID.distinct.count]
             )
         }
     }
@@ -737,7 +766,7 @@ extension DB {
         }
     }
 
-    func recalculate(workoutID workoutID: Int64) throws -> SuccessOrFail {
+    func recalculate(workoutID workoutID: Int64) throws {
         typealias WS = Workset.Schema
         typealias WO = Workout.Schema
         guard let row = db.pluck(WS.table
@@ -755,19 +784,19 @@ extension DB {
                 WS.activation.max
             )
             .filter(WS.workoutID == workoutID)
-        ) else { return .Fail }
+        ) else { throw Error.RecalculateWorkoutFailed }
         let sets = row[WS.worksetID.count]
+        let reps = row[WS.reps.sum]
+        let volume = row[WS.volume.sum]
+        let avePcVolume = row[WS.percentMaxVolume.average]
+        let aveIntensity = row[WS.intensity.average]
         guard let
             startTime = row[WS.startTime.min],
             endTime = row[WS.startTime.max],
-            reps = row[WS.reps.sum],
             activeDuration = row[WS.duration.sum],
-            volume = row[WS.volume.sum],
-            avePcVolume = row[WS.percentMaxVolume.average],
             avePercentMaxDuration = row[WS.percentMaxDuration.average],
-            aveIntensity = row[WS.intensity.average],
             maxDuration = row[WS.duration.max]
-            else { return .Fail }
+            else { throw Error.RecalculateWorkoutFailed }
         let lastDuration = db.scalar(WS.table
             .select(WS.duration)
             .filter(WS.workoutID == workoutID)
@@ -776,13 +805,22 @@ extension DB {
         )
         let duration = endTime.timeIntervalSinceDate(startTime) + lastDuration
         let restDuration = duration - activeDuration
-        let activation = Activation(percent: max(aveIntensity, avePcVolume))
+        let activation: Activation
+        if let avePcVolume = avePcVolume, aveIntensity = aveIntensity {
+            activation = Activation(percent: max(aveIntensity, avePcVolume))
+        } else if let avePcVolume = avePcVolume {
+            activation = Activation(percent: avePcVolume)
+        } else if let aveIntensity = aveIntensity {
+            activation = Activation(percent: aveIntensity)
+        } else {
+            activation = .Light
+        }
         try db.run(WO.table
             .filter(WS.workoutID == workoutID)
             .update(
                 WO.startTime <- startTime,
                 WO.sets <- sets,
-                WO.reps <- reps,
+                WO.reps <- (reps ?? 0),
                 WO.duration <- duration,
                 WO.restDuration <- restDuration,
                 WO.activeDuration <- activeDuration,
@@ -794,7 +832,6 @@ extension DB {
                 WO.maxActivation <- activation
             )
         )
-        return .Success
     }
 
     func get(type: Records.Type, input: Workset.Input) -> Records? {
