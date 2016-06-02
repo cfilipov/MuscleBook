@@ -78,6 +78,7 @@ class RootViewController: FormViewController {
         })
 
         tableView?.contentInset = UIEdgeInsetsMake(-36, 0, 0, 0)
+        tableView?.backgroundColor = UIColor(rgba: "#f7f7f7")
 
         title = "Days"
         navigationItem.title = "Muscle Book"

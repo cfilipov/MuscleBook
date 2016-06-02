@@ -28,8 +28,6 @@ class CreditsViewController : FormViewController {
 
         title = "Credits"
 
-        let info = NSBundle.mainBundle().infoDictionary!
-
         form
 
         +++ Section()
@@ -138,7 +136,36 @@ class CreditsViewController : FormViewController {
             $0.title = "JSQNotificationObserverKit"
             $0.controller = { SFSafariViewController(URL: NSURL(string: "https://github.com/jessesquires/JSQNotificationObserverKit")!) }
         }
-        
+
+        +++ Section()
+
+        <<< LabelRow() {
+            $0.title = "Color Scheme"
+            $0.value = "ColorBrewer"
+            $0.cellUpdate { cell, _ in
+                cell.accessoryType = .DisclosureIndicator
+            }
+            $0.onCellSelection { _, _ in
+                let vc = SFSafariViewController(
+                    URL: NSURL(string: "http://www.graphviz.org/doc/info/colors.html#brewer_license")!
+                )
+                self.showViewController(vc, sender: nil)
+            }
+        }
+
+        <<< LabelRow() {
+            $0.title = "Anatomy Artwork"
+            $0.value = "Daniel Gomez"
+            $0.cellUpdate { cell, _ in
+                cell.accessoryType = .DisclosureIndicator
+            }
+            $0.onCellSelection { _, _ in
+                let vc = SFSafariViewController(
+                    URL: NSURL(string: "http://predator5791.deviantart.com/art/Interactive-Muscular-Anatomy-145463634")!
+                )
+                self.showViewController(vc, sender: nil)
+            }
+        }
     }
     
 }

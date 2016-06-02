@@ -388,9 +388,12 @@ extension UIImage {
         let ctx = UIGraphicsGetCurrentContext()
         CGContextSaveGState(ctx)
 
-        let rect = CGRectMake(0, 0, radius, radius)
+        let rect = CGRectMake(0, 0, radius, radius).insetBy(dx: 0.5, dy: 0.5)
+        CGContextSetLineWidth(ctx, 0.5)
         CGContextSetFillColorWithColor(ctx, color.CGColor)
         CGContextFillEllipseInRect(ctx, rect)
+        UIColor.grayColor().set()
+        CGContextStrokeEllipseInRect(ctx, rect);
 
         CGContextRestoreGState(ctx)
         let img = UIGraphicsGetImageFromCurrentImageContext()
@@ -430,4 +433,50 @@ func ?=<T>(inout left: T, right: T?) {
         left = right
     }
 }
+
+let colorPalette = [
+    // Brewer Color Schemes http://www.graphviz.org/doc/info/colors.html
+    UIColor(rgba: "#fbb4ae"),
+    UIColor(rgba: "#b3cde3"),
+    UIColor(rgba: "#ccebc5"),
+    UIColor(rgba: "#decbe4"),
+    UIColor(rgba: "#fed9a6"),
+    UIColor(rgba: "#e5d8bd"),
+    UIColor(rgba: "#fddaec"),
+
+    UIColor(rgba: "#8dd3c7"),
+    UIColor(rgba: "#bebada"),
+    UIColor(rgba: "#fb8072"),
+    UIColor(rgba: "#80b1d3"),
+    UIColor(rgba: "#fdb462"),
+    UIColor(rgba: "#b3de69"),
+    UIColor(rgba: "#fccde5"),
+    UIColor(rgba: "#ccebc5"),
+    UIColor(rgba: "#ffed6f"),
+    UIColor(rgba: "#bc80bd"),
+
+    UIColor(rgba: "#a6cee3"),
+    UIColor(rgba: "#1f78b4"),
+    UIColor(rgba: "#b2df8a"),
+    UIColor(rgba: "#33a02c"),
+    UIColor(rgba: "#fb9a99"),
+
+    UIColor(rgba: "#fdbf6f"),
+    UIColor(rgba: "#ff7f00"),
+    UIColor(rgba: "#cab2d6"),
+
+    UIColor(rgba: "#e31a1c"),
+    UIColor(rgba: "#9e0142"),
+    UIColor(rgba: "#d53e4f"),
+    UIColor(rgba: "#f46d43"),
+    UIColor(rgba: "#fdae61"),
+    UIColor(rgba: "#fee08b"),
+    UIColor(rgba: "#ffffbf"),
+    UIColor(rgba: "#e6f598"),
+    UIColor(rgba: "#abdda4"),
+    UIColor(rgba: "#66c2a5"),
+    UIColor(rgba: "#3288bd"),
+    UIColor(rgba: "#5e4fa2"),
+    UIColor(rgba: "#ffffb3"),
+]
 

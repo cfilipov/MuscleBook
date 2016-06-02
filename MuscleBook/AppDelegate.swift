@@ -29,11 +29,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        window?.tintColor = UIColor(rgba: "#ff0000")
+        UITableView.appearance().backgroundColor = UIColor(rgba: "#f7f7f7")
         Profiler.trace("Uptime").start()
         Profiler.trace("App Launch").start()
         Dropbox.setupWithAppKey("apsa8g46ubfs32k")
         Fabric.with([Crashlytics.self])
-        window?.tintColor = UIColor(rgba: "#ff0000")
         DB.sharedInstance
         Profiler.trace("App Launch").end()
         return true

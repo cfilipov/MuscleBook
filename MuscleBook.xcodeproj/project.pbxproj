@@ -35,6 +35,7 @@
 		B23F0D031CF8CE70006BF745 /* SQLValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23F0D021CF8CE70006BF745 /* SQLValues.swift */; };
 		B23F0D061CF9506D006BF745 /* AnatomyDebugViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23F0D051CF9506D006BF745 /* AnatomyDebugViewController2.swift */; };
 		B247AEEA1C9CD74C00A501B0 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = B247AEE91C9CD74C00A501B0 /* Model.swift */; };
+		B24AE3BD1CFF9002000285FB /* ColorPaletteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AE3BC1CFF9002000285FB /* ColorPaletteViewController.swift */; };
 		B25E85831C7D6C3700253A62 /* Workset.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E85821C7D6C3700253A62 /* Workset.swift */; };
 		B25E861E1C7EBD8700253A62 /* AnatomySplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E861D1C7EBD8700253A62 /* AnatomySplitView.swift */; };
 		B25E86481C7F874500253A62 /* JAMSVGImage+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = B25E86471C7F874500253A62 /* JAMSVGImage+Extensions.m */; };
@@ -446,6 +447,7 @@
 		B23F0D021CF8CE70006BF745 /* SQLValues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLValues.swift; sourceTree = "<group>"; };
 		B23F0D051CF9506D006BF745 /* AnatomyDebugViewController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnatomyDebugViewController2.swift; sourceTree = "<group>"; };
 		B247AEE91C9CD74C00A501B0 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Model.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B24AE3BC1CFF9002000285FB /* ColorPaletteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPaletteViewController.swift; sourceTree = "<group>"; };
 		B25E85821C7D6C3700253A62 /* Workset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Workset.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B25E861D1C7EBD8700253A62 /* AnatomySplitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AnatomySplitView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B25E86461C7F874500253A62 /* JAMSVGImage+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "JAMSVGImage+Extensions.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -905,46 +907,6 @@
 			path = Submodules/CHCSVParser/CHCSVParser/CHCSVParser;
 			sourceTree = "<group>";
 		};
-		B2C367B01CB1C8680045824F /* Debug */ = {
-			isa = PBXGroup;
-			children = (
-				B2B326881C852162005F88E4 /* DebugMenuViewController.swift */,
-				B2C367AE1CB1C8640045824F /* DebugTimersViewController.swift */,
-				B2C367C21CB235000045824F /* AnatomyDebugViewController.swift */,
-				B23F0D051CF9506D006BF745 /* AnatomyDebugViewController2.swift */,
-			);
-			name = Debug;
-			sourceTree = "<group>";
-		};
-		B2C367B11CB1D2C30045824F /* Workout */ = {
-			isa = PBXGroup;
-			children = (
-				A22DE6771CA64B91001759CF /* WorksetViewController.swift */,
-				B2A52BBA1CA0D1B100268B6C /* AllWorkoutsViewController.swift */,
-				B2A52BBC1CA0E03F00268B6C /* WorkoutSummaryViewController.swift */,
-			);
-			name = Workout;
-			sourceTree = "<group>";
-		};
-		B2C367B21CB1D2E40045824F /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				B28440091CBB80A8008D0953 /* AboutViewController.swift */,
-				B29B45AD1CFCF39800E03478 /* CreditsViewController.swift */,
-				B23387581CB74F0C0027981A /* VerifyWorksetsViewController.swift */,
-			);
-			name = Settings;
-			sourceTree = "<group>";
-		};
-		B2C367B31CB1D30A0045824F /* Exercise */ = {
-			isa = PBXGroup;
-			children = (
-				B2BCB5351C76F2970046F5A1 /* ExerciseDetailViewController.swift */,
-				B29B45CA1CFD29D600E03478 /* ExerciseStatisticsViewController.swift */,
-			);
-			name = Exercise;
-			sourceTree = "<group>";
-		};
 		B2D61BA71C657D3800D30F79 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -981,16 +943,25 @@
 		B2E7C5751C6900AE00E60C07 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				B2A80D201C73B8AC0072928B /* RootViewController.swift */,
-				B2BCB5331C76EFCF0046F5A1 /* ExercisesListViewController.swift */,
+				B28440091CBB80A8008D0953 /* AboutViewController.swift */,
+				B2A52BBA1CA0D1B100268B6C /* AllWorkoutsViewController.swift */,
+				B2C367C21CB235000045824F /* AnatomyDebugViewController.swift */,
+				B23F0D051CF9506D006BF745 /* AnatomyDebugViewController2.swift */,
 				B2A52BAE1CA0AC5800268B6C /* AnatomyDiagramViewController.swift */,
+				B24AE3BC1CFF9002000285FB /* ColorPaletteViewController.swift */,
+				B29B45AD1CFCF39800E03478 /* CreditsViewController.swift */,
+				B2B326881C852162005F88E4 /* DebugMenuViewController.swift */,
+				B2C367AE1CB1C8640045824F /* DebugTimersViewController.swift */,
+				B2BCB5351C76F2970046F5A1 /* ExerciseDetailViewController.swift */,
+				B2BCB5331C76EFCF0046F5A1 /* ExercisesListViewController.swift */,
+				B29B45CA1CFD29D600E03478 /* ExerciseStatisticsViewController.swift */,
 				B2A52BAC1CA0AAB700268B6C /* MuscleListViewController.swift */,
-				B205857C1C7C1F5500491328 /* StatisticsViewController.swift */,
+				B2A80D201C73B8AC0072928B /* RootViewController.swift */,
 				B2BE3BC71C8021FC009198EA /* SettingsViewController.swift */,
-				B2C367B01CB1C8680045824F /* Debug */,
-				B2C367B31CB1D30A0045824F /* Exercise */,
-				B2C367B21CB1D2E40045824F /* Settings */,
-				B2C367B11CB1D2C30045824F /* Workout */,
+				B205857C1C7C1F5500491328 /* StatisticsViewController.swift */,
+				B23387581CB74F0C0027981A /* VerifyWorksetsViewController.swift */,
+				B2A52BBC1CA0E03F00268B6C /* WorkoutSummaryViewController.swift */,
+				A22DE6771CA64B91001759CF /* WorksetViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -1406,6 +1377,7 @@
 				B2E293DC1CA9FBD4009BC21A /* Workset+YAML.swift in Sources */,
 				B2E293DA1CA9FB50009BC21A /* WorksetAdapter+Dropbox.swift in Sources */,
 				B25E86891C800BA300253A62 /* BabelSerializers.swift in Sources */,
+				B24AE3BD1CFF9002000285FB /* ColorPaletteViewController.swift in Sources */,
 				B2843FF11CBB3412008D0953 /* AnatomyViewConfig.swift in Sources */,
 				B27D2FA51CB4845800C219E8 /* Schema20160410215418161.swift in Sources */,
 				B25E86861C800BA300253A62 /* README.md in Sources */,

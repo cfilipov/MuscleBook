@@ -20,49 +20,25 @@ import UIKit
 
 class AnatomyDebugViewController2: UIViewController {
 
-    let muscles = [
-        (muscle: Muscle(rawValue: 13335)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 13357)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 13379)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 13397)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 22314)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 22315)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 22356)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 22357)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 22430)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 22431)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 22432)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 22538)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 22542)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 32546)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 32549)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 32555)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 32556)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 32557)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 34687)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 34696)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 37670)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 37692)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 37694)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 37704)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 38459)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 38465)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 38469)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 38485)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 38500)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 38506)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 38518)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 38521)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 45956)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 45959)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 51048)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 71302)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 74998)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 83003)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 83006)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 83007)!, color: generateRandomColor()),
-        (muscle: Muscle(rawValue: 9628)!, color: generateRandomColor()),
-    ]
+    let anteriorColorGenerator = colorPalette.repeatGenerator
+    let posteriorColorGenerator = colorPalette.repeatGenerator
+
+    typealias Section = (title: String, muscles: [Muscle], colors: [UIColor])
+
+    lazy var sections: [Section] = {
+        [
+            (
+                title: "Anterior",
+                muscles: Muscle.displayableMuscles.filter { (m: Muscle) -> Bool in m.orientation == .Anterior },
+                colors: Muscle.displayableMuscles.indices.map { _ in self.anteriorColorGenerator.next()! }
+            ),
+            (
+                title: "Posterior",
+                muscles: Muscle.displayableMuscles.filter { (m: Muscle) -> Bool in m.orientation == .Posterior },
+                colors: Muscle.displayableMuscles.indices.map { _ in self.posteriorColorGenerator.next()! }
+            )
+        ]
+    }()
 
     lazy var anatomyView: SideBySideAnatomyView = {
         let anatomyView = SideBySideAnatomyView()
@@ -80,18 +56,27 @@ class AnatomyDebugViewController2: UIViewController {
         return tableView
     }()
 
-    let whiteCircle = UIImage.circle(12, color: UIColor.whiteColor())
+    let whiteCircle = UIImage.circle(14, color: UIColor.whiteColor())
 
-    var selections = Set<Int>()
+    var selections = Set<NSIndexPath>()
+
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        hidesBottomBarWhenPushed = true
+        automaticallyAdjustsScrollViewInsets = false
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        automaticallyAdjustsScrollViewInsets = false
-
         view.addSubview(tableView)
         view.addSubview(anatomyView)
 
+        tableView.backgroundColor = UIColor.whiteColor()
         view.backgroundColor = UIColor.whiteColor()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -142,37 +127,51 @@ class AnatomyDebugViewController2: UIViewController {
             .active = true
 
         tableView.reloadData()
+        self.selectAll()
     }
 
     func functionButtonPressed() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         alert.addAction(UIAlertAction(title: "Select All", style: .Destructive) { _ in
-            self.muscles.indices.forEach { self.selectMuscle(atRow: $0) }
-            self.tableView.reloadData()
+            self.selectAll()
             })
         alert.addAction(UIAlertAction(title: "Reset", style: .Destructive) { _ in
-            self.selections.removeAll()
-            self.anatomyView.reset()
-            self.tableView.reloadData()
-        })
+            self.reset()
+            })
         alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
         presentViewController(alert, animated: true, completion: nil)
     }
 
-    func selectMuscle(atRow row: Int) {
-        selections.insert(row)
+    func selectAll() {
+        sections[0].muscles.indices.forEach {
+            selectMuscle(atindexPath: NSIndexPath(forRow: $0, inSection: 0))
+        }
+        sections[1].muscles.indices.forEach {
+            selectMuscle(atindexPath: NSIndexPath(forRow: $0, inSection: 1))
+        }
+        tableView.reloadData()
+    }
+
+    func reset() {
+        selections.removeAll()
+        anatomyView.reset()
+        tableView.reloadData()
+    }
+
+    func selectMuscle(atindexPath path: NSIndexPath) {
+        selections.insert(path)
         anatomyView.setFillColor(
-            muscles[row].color,
-            muscle: muscles[row].muscle
+            sections[path.section].colors[path.row],
+            muscle: sections[path.section].muscles[path.row]
         )
         anatomyView.setNeedsDisplay()
     }
 
-    func deselectMuscle(atRow row: Int) {
-        selections.remove(row)
+    func deselectMuscle(atindexPath path: NSIndexPath) {
+        selections.remove(path)
         anatomyView.setFillColor(
             UIColor.whiteColor(),
-            muscle: muscles[row].muscle
+            muscle: sections[path.section].muscles[path.row]
         )
         anatomyView.setNeedsDisplay()
     }
@@ -180,26 +179,40 @@ class AnatomyDebugViewController2: UIViewController {
 
 extension AnatomyDebugViewController2: UITableViewDataSource, UITableViewDelegate {
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return muscles.count
+    func numberOfSectionsInTableView(_: UITableView) -> Int {
+        return sections.count
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return sections[section].muscles.count
+    }
+
+    func tableView(_: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell")!
-        cell.textLabel?.text = muscles[indexPath.row].muscle.name
-        cell.imageView?.image = selections.contains(indexPath.row) ? UIImage.circle(12, color: muscles[indexPath.row].color) : whiteCircle
+        let muscle = sections[indexPath.section].muscles[indexPath.row]
+        let color = sections[indexPath.section].colors[indexPath.row]
+        cell.textLabel?.text = muscle.name
+        cell.imageView?.image = selections.contains(indexPath) ? UIImage.circle(12, color: color) : whiteCircle
         cell.selectionStyle = .None
         return cell
     }
 
-    func tableView(table: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if selections.contains(indexPath.row) {
-            deselectMuscle(atRow: indexPath.row)
+    func tableView(_: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if selections.contains(indexPath) {
+            deselectMuscle(atindexPath: indexPath)
         } else {
-            selectMuscle(atRow: indexPath.row)
+            selectMuscle(atindexPath: indexPath)
         }
-        _ = tableView(table, cellForRowAtIndexPath: indexPath)
-        table.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+        _ = tableView(tableView, cellForRowAtIndexPath: indexPath)
+        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+    }
+
+    func tableView(_: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sections[section].title
+    }
+
+    func tableView(_: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        view.tintColor = UIColor.whiteColor()
     }
 
 }

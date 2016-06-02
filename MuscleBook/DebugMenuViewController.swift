@@ -38,6 +38,11 @@ class DebugMenuViewController : FormViewController {
 
         form
 
+        +++ Section() {
+            $0.header = HeaderFooterView(title: "Warning")
+            $0.footer = HeaderFooterView(title: "Don't mess with the debug settings unless you know what you are doing.\n\nSome of the options here may cause data loss or other craziness.")
+        }
+
         +++ Section()
 
         <<< LabelRow() {
@@ -50,6 +55,15 @@ class DebugMenuViewController : FormViewController {
         }
 
         <<< LabelRow() {
+            $0.title = "Color Palette"
+        }.cellSetup { cell, row in
+            cell.accessoryType = .DisclosureIndicator
+        }.onCellSelection { cell, row in
+            let vc = ColorPaletteViewController()
+            self.showViewController(vc, sender: nil)
+        }
+
+        <<< LabelRow() {
             $0.title = "Anatomy"
         }.cellSetup { cell, row in
             cell.accessoryType = .DisclosureIndicator
@@ -58,18 +72,6 @@ class DebugMenuViewController : FormViewController {
             self.showViewController(vc, sender: nil)
         }
 
-        <<< ModelViewControllerRow() {
-            $0.title = "Verify Workout Data"
-            $0.controller = { VerifyWorksetsViewController() }
-        }
-
-//        <<< LabelRow() {
-//            $0.title = "Link Dropbox Account"
-//            $0.hidden = Dropbox.authorizedClient == nil ? false : true
-//        }.onCellSelection { _, _ in
-//            Dropbox.authorizeFromController(self)
-//        }
-//
 //        <<< LabelRow("import_csv") {
 //            $0.title = "Import CSV"
 //            $0.disabled = "$import_csv != nil"

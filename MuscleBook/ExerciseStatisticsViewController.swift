@@ -82,7 +82,7 @@ class ExerciseStatisticsViewController : FormViewController {
         +++ Section("Records") {
             $0.tag = "records"
             $0.hidden = Condition.Function([]) { form -> Bool in
-                return (form.sectionByTag("prs")?.count ?? 0) > 0 ? false : true
+                return (form.sectionByTag("records")?.count ?? 0) > 0 ? false : true
             }
         }
 

@@ -438,7 +438,7 @@ extension Muscle {
         case .Pectorals: return ["Pecs", "Pectoralis", "Chest"]
         }
     }
-    
+
 }
 
 enum AnatomicalOrientation {

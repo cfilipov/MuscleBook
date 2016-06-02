@@ -19,6 +19,7 @@
 
 import UIKit
 import Eureka
+import SafariServices
 
 class AboutViewController : FormViewController {
 
@@ -53,6 +54,15 @@ class AboutViewController : FormViewController {
             $0.controller = { CreditsViewController() }
         }
 
+        +++ Section() {
+            $0.footer = HeaderFooterView(title: "Copyright (C) 2016  Cristian Filipov")
+        }
+
+        <<< PushViewControllerRow() {
+            // TODO: Load this w/o network access
+            $0.title = "License"
+            $0.controller = { SFSafariViewController(URL: NSURL(string: "http://www.gnu.org/licenses/gpl-3.0-standalone.html")!) }
+        }
     }
     
 }

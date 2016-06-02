@@ -23,25 +23,7 @@ class ExerciseDetailViewController : FormViewController {
 
     private let db = DB.sharedInstance
 
-    lazy var colorGenerator: AnyGenerator<UIColor> = {
-        let palette = [
-            // http://www.graphviz.org/doc/info/colors.html
-            UIColor(rgba: "#8dd3c7"),
-            UIColor(rgba: "#ffffb3"),
-            UIColor(rgba: "#bebada"),
-            UIColor(rgba: "#fb8072"),
-            UIColor(rgba: "#80b1d3"),
-            UIColor(rgba: "#fdb462"),
-            UIColor(rgba: "#b3de69"),
-            UIColor(rgba: "#fccde5"),
-            UIColor(rgba: "#d9d9d9"),
-            UIColor(rgba: "#bc80bd"),
-            UIColor(rgba: "#ccebc5"),
-            UIColor(rgba: "#ffed6f"),
-            ]
-        return palette.repeatGenerator
-    }()
-
+    let colorGenerator = colorPalette.repeatGenerator
     let formatter = NSDateFormatter()
     var muscleColorImages: [Muscle: UIImage] = [:]
     var musclesDictionary: [MuscleMovement.Classification: [Muscle]] = [:]
@@ -56,6 +38,7 @@ class ExerciseDetailViewController : FormViewController {
     init(exercise: Exercise) {
         self.exercise = exercise
         super.init(style: .Grouped)
+        hidesBottomBarWhenPushed = true
         let muscles = exercise.exerciseID.flatMap {
             try! db.find(exerciseID: $0)
         }
