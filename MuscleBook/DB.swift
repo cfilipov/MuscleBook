@@ -22,7 +22,7 @@ import SQLiteMigrationManager
 
 // MARK:
 
-typealias CurrentSchema = Schema20160524095754146
+typealias CurrentSchema = Schema20160601181210067
 
 class DB {
 
@@ -59,7 +59,8 @@ class DB {
             db: db,
             migrations: [
                 Schema20160410215418161.migration,
-                Schema20160524095754146.migration
+                Schema20160524095754146.migration,
+                Schema20160601181210067.migration
             ]
         )
 
@@ -238,7 +239,7 @@ extension DB {
                 WO.activeDuration <- 0,
                 WO.avePercentMaxDuration <- 0,
                 WO.maxDuration <- 0,
-                WO.maxActivation <- MuscleBook.Activation.None
+                WO.activation <- MuscleBook.Activation.Light
             )
         )
     }
@@ -317,11 +318,7 @@ extension DB {
         return db.pluck(Workout.Schema.table.filter(Workout.Schema.workoutID == workoutID))
     }
 
-    func match(name name: String) throws -> AnySequence<ExerciseReference> {
-        return try db.prepare(Exercise.Schema.match(name: name))
-    }
-
-    func match2(name name: String, sort: Exercise.SortType) throws -> [ExerciseReference] {
+    func match(name name: String, sort: Exercise.SortType) throws -> [ExerciseReference] {
         typealias E = Exercise.Schema
         typealias W = Workset.Schema
         let rows = try db.prepare(E.search
@@ -341,7 +338,11 @@ extension DB {
     }
 
     func find(exactName name: String) -> ExerciseReference? {
-        return db.pluck(Exercise.Schema.find(exactName: name))
+        typealias E = Exercise.Schema
+        return db.pluck(E.search
+            .select(E.exerciseID, E.name)
+            .filter(E.name == name)
+        )
     }
 
     func find(exerciseID exerciseID: Int64) throws -> AnySequence<MuscleMovement> {
@@ -453,7 +454,7 @@ extension DB {
         let cal = NSCalendar.currentCalendar()
         typealias W = Workout.Schema
         let res = try db.prepare(W.table
-            .select(W.startTime, W.maxActivation.max)
+            .select(W.startTime, W.activation.max)
             .group(W.startTime.localDay)
             .order(W.startTime.localDay)
         )
@@ -461,7 +462,7 @@ extension DB {
             res.lazy.map {
                 (
                     cal.startOfDayForDate($0[W.startTime]),
-                    $0.get(W.maxActivation.max)!
+                    $0.get(W.activation.max)!
                 )
             }
         )
@@ -671,6 +672,7 @@ extension DB {
         return try importer.importCSV()
     }
 
+    // TODO: CSV import/export needs lots of attention
     func exportCSV(type: Workset.Type, toURL url: NSURL) throws {
         let writer = CHCSVWriter(forWritingToCSVFile: url.path)
         writer.writeField("Date")
@@ -688,7 +690,7 @@ extension DB {
             writer.writeField(workset.input.exerciseName)
             writer.writeField(workset.input.reps?.description ?? "")
             writer.writeField(workset.input.weight?.description ?? "")
-            writer.writeField(workset.input.duration.description)
+            writer.writeField(workset.input.duration?.description ?? "")
             writer.finishLine()
         }
     }
@@ -785,17 +787,12 @@ extension DB {
             )
             .filter(WS.workoutID == workoutID)
         ) else { throw Error.RecalculateWorkoutFailed }
-        let sets = row[WS.worksetID.count]
-        let reps = row[WS.reps.sum]
-        let volume = row[WS.volume.sum]
         let avePcVolume = row[WS.percentMaxVolume.average]
         let aveIntensity = row[WS.intensity.average]
+        let activeDuration = row[WS.duration.sum]
         guard let
             startTime = row[WS.startTime.min],
-            endTime = row[WS.startTime.max],
-            activeDuration = row[WS.duration.sum],
-            avePercentMaxDuration = row[WS.percentMaxDuration.average],
-            maxDuration = row[WS.duration.max]
+            endTime = row[WS.startTime.max]
             else { throw Error.RecalculateWorkoutFailed }
         let lastDuration = db.scalar(WS.table
             .select(WS.duration)
@@ -803,8 +800,18 @@ extension DB {
             .order(WS.startTime.desc)
             .limit(1)
         )
-        let duration = endTime.timeIntervalSinceDate(startTime) + lastDuration
-        let restDuration = duration - activeDuration
+        let duration: Double?
+        if let lastDuration = lastDuration {
+            duration = endTime.timeIntervalSinceDate(startTime) + lastDuration
+        } else {
+            duration = nil
+        }
+        let restDuration: Double?
+        if let duration = duration, activeDuration = activeDuration {
+            restDuration = duration - activeDuration
+        } else {
+            restDuration = nil
+        }
         let activation: Activation
         if let avePcVolume = avePcVolume, aveIntensity = aveIntensity {
             activation = Activation(percent: max(aveIntensity, avePcVolume))
@@ -819,17 +826,17 @@ extension DB {
             .filter(WS.workoutID == workoutID)
             .update(
                 WO.startTime <- startTime,
-                WO.sets <- sets,
-                WO.reps <- (reps ?? 0),
+                WO.sets <- row[WS.worksetID.count],
+                WO.reps <- (row[WS.reps.sum] ?? 0),
                 WO.duration <- duration,
                 WO.restDuration <- restDuration,
                 WO.activeDuration <- activeDuration,
-                WO.volume <- volume,
+                WO.volume <- row[WS.volume.sum],
                 WO.avePercentMaxVolume <- avePcVolume,
-                WO.avePercentMaxDuration <- avePercentMaxDuration,
+                WO.avePercentMaxDuration <- row[WS.percentMaxDuration.average],
                 WO.aveIntensity <- aveIntensity,
-                WO.maxDuration <- maxDuration,
-                WO.maxActivation <- activation
+                WO.maxDuration <- row[WS.duration.max],
+                WO.activation <- activation
             )
         )
     }

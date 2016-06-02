@@ -114,6 +114,7 @@ struct RelativeRecords {
             volume: volume,
             e1RM: e1RM,
             percentMaxVolume: percentMaxVolume,
+            percentMaxDuration: nil,
             intensity: intensity,
             activation: activation
         )

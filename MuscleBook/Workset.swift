@@ -23,16 +23,19 @@ struct Workset {
         var exerciseID: Int64?
         var exerciseName: String
         var startTime: NSDate
-        var duration: Double
+        var duration: Double?
         var failure: Bool
         var warmup: Bool
         var reps: Int?
         var weight: Double?
+        var bodyweight: Double?
+        var assistanceWeight: Double?
     }
     struct Calculations {
         var volume: Double?
         var e1RM: Double?
         var percentMaxVolume: Double?
+        var percentMaxDuration: Double?
         var intensity: Double?
         var activation: Activation
     }
@@ -102,6 +105,23 @@ extension Workset {
         }
         else {
             return "\(input.duration)s"
+        }
+    }
+}
+
+extension Workset.Input {
+    var exercise: ExerciseReference? {
+        get {
+            guard let exerciseID = exerciseID where !exerciseName.isEmpty else { return nil }
+            return ExerciseReference(
+                exerciseID: exerciseID,
+                name: exerciseName
+            )
+        }
+
+        set(newVal) {
+            self.exerciseID = newVal?.exerciseID
+            self.exerciseName = newVal?.name ?? ""
         }
     }
 }

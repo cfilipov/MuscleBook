@@ -54,3 +54,27 @@ extension Activation: SQLite.Value {
         return self.rawValue
     }
 }
+
+extension InputOptions: SQLite.Value {
+    static var declaredDatatype: String {
+        return Int64.declaredDatatype
+    }
+    static func fromDatatypeValue(intValue: Int64) -> InputOptions {
+        return InputOptions(rawValue: intValue)
+    }
+    var datatypeValue: Int64 {
+        return self.rawValue
+    }
+}
+
+extension Exercise.Equipment: SQLite.Value {
+    static var declaredDatatype: String {
+        return Int64.declaredDatatype
+    }
+    static func fromDatatypeValue(intValue: Int64) -> Exercise.Equipment {
+        return Exercise.Equipment(rawValue: intValue)!
+    }
+    var datatypeValue: Int64 {
+        return self.rawValue
+    }
+}

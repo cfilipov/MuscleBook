@@ -95,66 +95,21 @@ class WorksetViewController: FormViewController {
         }
     }
 
-    private var exercise: ExerciseReference? {
+    private var input = Workset.Input(
+        exerciseID: nil,
+        exerciseName: "",
+        startTime: NSDate(),
+        duration: nil,
+        failure: false,
+        warmup: false,
+        reps: nil,
+        weight: nil,
+        bodyweight: nil,
+        assistanceWeight: nil
+    ) {
         didSet {
-            guard let input = input else { return }
             records = db.get(Records.self, input: input)
         }
-    }
-
-    private var startTime: NSDate = NSDate() {
-        didSet {
-            guard let input = input else { return }
-            records = db.get(Records.self, input: input)
-        }
-    }
-
-    private var failure: Bool = false {
-        didSet {
-            updateRelativeRecords()
-        }
-    }
-
-    private var warmup: Bool = false {
-        didSet {
-            updateRelativeRecords()
-        }
-    }
-
-    private var reps: Int? {
-        didSet {
-            guard let input = input else { return }
-            records = db.get(Records.self, input: input)
-        }
-    }
-
-    private var weight: Double? {
-        didSet {
-            guard let input = input else { return }
-            records = db.get(Records.self, input: input)
-        }
-    }
-
-    private var duration: Double? {
-        didSet {
-            updateRelativeRecords()
-        }
-    }
-
-    private var input: Workset.Input? {
-        guard let
-            exercise = exercise
-            else { return nil }
-        return Workset.Input(
-            exerciseID: exercise.exerciseID,
-            exerciseName: exercise.name,
-            startTime: startTime,
-            duration: duration ?? 0,
-            failure: failure,
-            warmup: warmup,
-            reps: reps,
-            weight: weight
-        )
     }
 
     private var calculations: Workset.Calculations? {
@@ -188,13 +143,7 @@ class WorksetViewController: FormViewController {
 
     init(workset: Workset? = nil, callback: Result -> Void = { _ in }) {
         if let workset = workset {
-            self.startTime = workset.input.startTime
-            self.duration = workset.input.duration
-            self.exercise = workset.exerciseReference
-            self.reps = workset.input.reps
-            self.weight = workset.input.weight
-            self.warmup = workset.input.warmup
-            self.failure = workset.input.failure
+            self.input = workset.input
             self.mode = .Editable(workset)
         } else {
             self.mode = .Creating
@@ -214,8 +163,8 @@ class WorksetViewController: FormViewController {
 
         tableView?.contentInset = UIEdgeInsetsMake(-36, 0, 0, 0)
         
-        if exercise == nil {
-            self.exercise = db.newest(Workset)?.exerciseReference
+        if input.exerciseID == nil {
+            input.exercise = db.newest(Workset)?.exerciseReference
         }
         
         form
@@ -229,7 +178,7 @@ class WorksetViewController: FormViewController {
             $0.tag = "exercise"
             $0.cellSetup { cell, row in
                 cell.accessoryType = .DisclosureIndicator
-                cell.showErrorAccessoryView(self.exercise?.exerciseID == nil)
+                cell.showErrorAccessoryView(self.input.exercise?.exerciseID == nil)
             }
             $0.onCellSelection { cell, row in
                 switch self.mode {
@@ -237,12 +186,12 @@ class WorksetViewController: FormViewController {
                 case .Editing(_):
                     let vc = ExercisesListViewController { ref in
                         self.navigationController?.popViewControllerAnimated(true)
-                        self.exercise = ref
+                        self.input.exercise = ref
                     }
                     self.showViewController(vc, sender: nil)
                 case .ReadOnly: fallthrough
                 case .Editable(_):
-                    if let ref = self.exercise, ex = self.db.dereference(ref) {
+                    if let ref = self.input.exercise, ex = self.db.dereference(ref) {
                         let vc = ExerciseDetailViewController(exercise: ex)
                         self.showViewController(vc, sender: nil)
                     }
@@ -263,44 +212,66 @@ class WorksetViewController: FormViewController {
         <<< TimerRow() {
             $0.title = "Duration"
             $0.tag = "duration"
-            $0.value = self.duration
+            $0.value = self.input.duration
             $0.onChange { row in
                 print("Timer: \(row.value)")
-                self.startTime ?= row.startTime
-                self.duration = row.value
+                self.input.startTime ?= row.startTime
+                self.input.duration = row.value
             }
         }
 
-        <<< IntRow("reps") {
+        <<< IntRow() {
             $0.title = "Reps"
-            $0.value = self.reps
+            $0.value = self.input.reps
+            $0.tag = "reps"
             $0.onChange { row in
-                self.reps = row.value
+                self.input.reps = row.value
             }
         }
 
-        <<< DecimalRow("weight") {
+        <<< DecimalRow() {
             $0.title = "Weight"
-            $0.value = self.weight
+            $0.value = self.input.weight
+            $0.tag = "weight"
             $0.formatter = self.numberFormatter
             $0.onChange { row in
-                self.weight = row.value
+                self.input.weight = row.value
+            }
+        }
+
+        <<< DecimalRow() {
+            $0.title = "Body Weight"
+            $0.value = self.input.bodyweight
+            $0.tag = "bodyweight"
+            $0.formatter = self.numberFormatter
+            $0.onChange { row in
+                self.input.bodyweight = row.value
+            }
+        }
+
+        <<< DecimalRow() {
+            $0.title = "Assistance Weight"
+            $0.value = self.input.assistanceWeight
+            $0.tag = "assweight"
+            $0.formatter = self.numberFormatter
+            $0.onChange { row in
+                self.input.assistanceWeight = row.value
             }
         }
 
         <<< SwitchRow("Failure") {
             $0.title = $0.tag
-            $0.value = self.failure
+            $0.value = self.input.failure
             $0.onChange { row in
-                self.failure = row.value!
+                self.input.failure = row.value!
             }
         }
 
         <<< SwitchRow("Warmup"){
             $0.title = $0.tag
-            $0.value = self.warmup
+            $0.value = self.input.warmup
             $0.onChange { row in
-                self.warmup = row.value!
+                self.input.warmup = row.value!
             }
         }
 
@@ -455,25 +426,38 @@ class WorksetViewController: FormViewController {
         }
 
         refreshMode()
-
-        if let input = input {
-            records = db.get(Records.self, input: input)
-            updateRelativeRecords()
-        }
-
+        records = db.get(Records.self, input: input)
+        updateRelativeRecords()
         updateCalculatedRows()
     }
 
     private func updateRelativeRecords() {
-        guard let input = input, records = records else { return }
+        guard let records = records, _ = input.exercise else { return }
         relativeRecords = RelativeRecords(input: input, records: records)
     }
 
     private func updateCalculatedRows() {
-        form.rowByTag("exercise")?.value = exercise?.name
-        form.rowByTag("date")?.value = dateFormatter.stringFromDate(startTime)
+        if let ref = input.exercise, ex = db.dereference(ref) {
+            form.rowByTag("reps")?.hidden = !ex.inputOptions.contains(.Reps) ? true : false
+            form.rowByTag("reps")?.evaluateHidden()
+            form.rowByTag("weight")?.hidden = !ex.inputOptions.contains(.Weight) ? true : false
+            form.rowByTag("weight")?.evaluateHidden()
+            // Duration is always shown, but is optional
+            form.rowByTag("bodyweight")?.hidden = !ex.inputOptions.contains(.BodyWeight) ? true : false
+            form.rowByTag("bodyweight")?.evaluateHidden()
+            form.rowByTag("assweight")?.hidden = !ex.inputOptions.contains(.AssistanceWeight) ? true : false
+            form.rowByTag("assweight")?.evaluateHidden()
+        } else {
+            form.rowByTag("reps")?.hidden = true
+            form.rowByTag("weight")?.hidden = true
+            // Duration is always shown, but is optional
+            form.rowByTag("bodyweight")?.hidden = true
+            form.rowByTag("assweight")?.hidden = true
+        }
+        form.rowByTag("exercise")?.value = input.exercise?.name
+        form.rowByTag("date")?.value = dateFormatter.stringFromDate(input.startTime)
         form.rowByTag("date")?.updateCell() // wtf? why?
-        form.rowByTag("time")?.value = timeFormatter.stringFromDate(startTime)
+        form.rowByTag("time")?.value = timeFormatter.stringFromDate(input.startTime)
         form.rowByTag("time")?.updateCell()
         form.rowByTag("e1rm")?.value = recordsFormatter.format(
             value: relativeRecords?.calculations.e1RM
@@ -494,7 +478,7 @@ class WorksetViewController: FormViewController {
             percent: relativeRecords?.percentE1RM
         )
         if let xrmRow = form.rowByTag("XRM") as? LabelRow {
-            if let reps = reps {
+            if let reps = input.reps {
                 xrmRow.title = "\(reps)RM"
                 xrmRow.value = recordsFormatter.format(
                     value: records?.maxXRM?.input.weight,
@@ -514,6 +498,7 @@ class WorksetViewController: FormViewController {
         form.sectionByTag("calculations")?.evaluateHidden()
         form.sectionByTag("prs")?.evaluateHidden()
         form.rowByTag("delete")?.evaluateHidden()
+        form.sectionByTag("input")?.evaluateHidden()
         form.sectionByTag("section_delete")?.evaluateHidden()
         form.sectionByTag("calculations")?.reload()
         form.sectionByTag("prs")?.reload()
@@ -575,22 +560,46 @@ class WorksetViewController: FormViewController {
     }
     
     func saveButtonPressed() {
-        guard let input = input where input.duration > 0 else {
-            Alert(message: "Could not save data point, mising required fields.")
+        guard let ref = input.exercise, exercise = db.dereference(ref) else {
+            Alert(message: "Could not save data point, mising required field: Exercise")
             return
+        }
+        if exercise.inputOptions.contains(.Reps) {
+            guard let _ = input.reps else {
+                Alert(message: "Could not save data point, mising required field: Reps")
+                return
+            }
+        }
+        if exercise.inputOptions.contains(.Weight) {
+            guard let _ = input.weight else {
+                Alert(message: "Could not save data point, mising required field: Weight")
+                return
+            }
+        }
+        if exercise.inputOptions.contains(.Duration) {
+            guard let _ = input.duration else {
+                Alert(message: "Could not save data point, mising required field: Duration")
+                return
+            }
+        }
+        if exercise.inputOptions.contains(.AssistanceWeight) {
+            guard let _ = input.assistanceWeight else {
+                Alert(message: "Could not save data point, mising required field: Assistance Weight")
+                return
+            }
         }
         switch mode {
         case let .Editing(workset):
             let effectedWorkouts = db.count(Workout.self, after: workset.input.startTime)
             WarnAlert(when: effectedWorkouts > 0, message: "Are you sure you want to save this change? Changes to this set will effect \(effectedWorkouts) other workouts.") {
                 AlertOnError {
-                    let newWorkset = try self.db.update(workset: workset, input: input)
+                    let newWorkset = try self.db.update(workset: workset, input: self.input)
                     self.mode = .Editable(newWorkset)
                 }
             }
         case .Creating:
             AlertOnError {
-                let workset = try self.db.save(input)
+                let workset = try self.db.save(self.input)
                 self.callback(Result.Created(workset))
             }
         default:

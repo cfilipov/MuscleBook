@@ -32,7 +32,7 @@ extension Exercise: ValueCoding {
 
     required init?(coder aDecoder: NSCoder) {
         let name = aDecoder.decodeObjectForKey("Name") as! String
-        let equipment = aDecoder.decodeObjectForKey("Equipment") as! [String]
+        let equipment = aDecoder.decodeObjectForKey("Equipment") as! String
         let gif = aDecoder.decodeObjectForKey("Gif") as? String
         let force = aDecoder.decodeObjectForKey("Force") as? String
         let level = aDecoder.decodeObjectForKey("Level") as? String
@@ -45,7 +45,8 @@ extension Exercise: ValueCoding {
         value = Exercise(
             exerciseID: nil,
             name: name,
-            equipment: equipment,
+            inputOptions: InputOptions.DefaultOptions, // TODO: Fixme
+            equipment: Exercise.Equipment(name: equipment)!,
             gif: gif,
             force: force,
             level: level,
@@ -60,7 +61,7 @@ extension Exercise: ValueCoding {
 
     func encodeWithCoder(aCoder: NSCoder) {
         aCoder.encodeObject(value.name, forKey: "Name")
-        aCoder.encodeObject(value.equipment, forKey: "Equipment")
+        aCoder.encodeObject(value.equipment.name, forKey: "Equipment")
         aCoder.encodeObject(value.force, forKey: "Gif")
         aCoder.encodeObject(value.force, forKey: "Force")
         aCoder.encodeObject(value.level, forKey: "Level")

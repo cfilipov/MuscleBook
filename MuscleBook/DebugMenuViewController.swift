@@ -88,19 +88,16 @@ class DebugMenuViewController : FormViewController {
 
         <<< ButtonRow() {
             $0.title = "Recalculate All Workouts"
-        }.onCellSelection { _, _ in
-            try! self.db.recalculateAllWorksets()
+            $0.cellUpdate { cell, _ in
+                cell.textLabel?.textColor = UIColor.redColor()
+            }
+            $0.onCellSelection { _, _ in
+                WarnAlert(message: "Are you sure?") {
+                    try! self.db.recalculateAllWorksets()
+                }
+            }
         }
 
-        <<< ButtonRow() {
-            $0.title = "Export Database"
-        }.onCellSelection { _, _ in
-            let vc = UIActivityViewController(
-                activityItems: [NSURL(fileURLWithPath: DB.path)],
-                applicationActivities: nil
-            )
-            self.presentViewController(vc, animated: true, completion: nil)
-        }
     }
 
 //    private func onSyncWithDropbox(cell: LabelCell, row: LabelRow) {

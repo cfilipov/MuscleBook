@@ -18,18 +18,16 @@
 
 import Foundation
 
-struct Workout {
-    let workoutID: Int64
-    let startTime: NSDate
-    let sets: Int
-    let reps: Int
-    let duration: Double?
-    let restDuration: Double?
-    let activeDuration: Double?
-    let volume: Double?
-    let avePercentMaxVolume: Double?
-    let avePercentMaxDuration: Double?
-    let aveIntensity: Double?
-    let maxDuration: Double?
-    let activation: MuscleBook.Activation
+struct InputOptions: OptionSetType {
+    let rawValue: Int64
+
+//    static let None = InputOptions(rawValue: 0)
+    static let Reps = InputOptions(rawValue: 1 << 0)
+    static let Weight  = InputOptions(rawValue: 1 << 1)
+    static let BodyWeight  = InputOptions(rawValue: 1 << 2)
+    static let Duration  = InputOptions(rawValue: 1 << 3)
+    static let AssistanceWeight  = InputOptions(rawValue: 1 << 4)
+
+    static let AllOptions: InputOptions = [.Reps, .Weight, .BodyWeight, .Duration, .AssistanceWeight]
+    static let DefaultOptions: InputOptions = [.Reps, .Weight, .Duration]
 }

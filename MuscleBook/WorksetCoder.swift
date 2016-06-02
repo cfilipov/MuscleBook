@@ -44,7 +44,9 @@ extension Workset.Input: ValueCoding {
             failure: false,
             warmup: false,
             reps: reps,
-            weight: weight
+            weight: weight,
+            bodyweight: nil,
+            assistanceWeight: nil
         )
     }
 

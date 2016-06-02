@@ -30,7 +30,7 @@ Don't shy away from contributing just because you can't program. In fact, I beli
 
 ## Technical Overview
 
-Muscle Book is written in [Swift](https://developer.apple.com/swift/) and uses [SQLite](https://www.sqlite.org/) as its data store. The most heavily used Swift frameworks in this project are [SQLite.swift](https://github.com/stephencelis/SQLite.swift), a Swift framework for SQLite and [Eureka](https://github.com/xmartlabs/Eureka), a framework for building table view forms. The central structure is the `Workset` which represents a single set of a particular exercise. A set may contain multiple reps, and often a weight and/or duration.
+Muscle Book is written in [Swift](https://developer.apple.com/swift/) and uses [SQLite](https://www.sqlite.org/) as its data store. The most heavily used Swift frameworks in this project are [SQLite.swift](https://github.com/stephencelis/SQLite.swift), a Swift framework for SQLite and [Eureka](https://github.com/xmartlabs/Eureka), a framework for building table view forms. The central structure is the `Workset` which represents a single set of a particular exercise. A set may contain multiple reps, and often a weight or duration.
 
 ### Dependencies
 

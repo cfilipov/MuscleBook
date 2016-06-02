@@ -74,7 +74,7 @@ class ExerciseDetailViewController : FormViewController {
 
         <<< LabelRow() {
             $0.title = "Equipment"
-            $0.value = exercise.equipment.joinWithSeparator(", ")
+            $0.value = exercise.equipment.name
         }
 
         <<< LabelRow() {

@@ -45,15 +45,33 @@ class SettingsViewController : FormViewController {
         +++ Section()
 
         <<< ButtonRow() {
+            $0.title = "Export Database"
+            $0.cellUpdate { cell, _ in
+                cell.textLabel?.textColor = UIColor.redColor()
+            }
+            $0.onCellSelection { _, _ in
+                let vc = UIActivityViewController(
+                    activityItems: [NSURL(fileURLWithPath: DB.path)],
+                    applicationActivities: nil
+                )
+                self.presentViewController(vc, animated: true, completion: nil)
+            }
+        }
+
+        <<< ButtonRow() {
             $0.title = "Export to CSV"
-        }.onCellSelection { _, _ in
-            let url = NSURL.cacheUUID()
-            try! self.db.exportCSV(Workset.self, toURL: url)
-            let vc = UIActivityViewController(
-                activityItems: [url],
-                applicationActivities: nil
-            )
-            self.presentViewController(vc, animated: true, completion: nil)
+            $0.cellUpdate { cell, _ in
+                cell.textLabel?.textColor = UIColor.redColor()
+            }
+            $0.onCellSelection { _, _ in
+                let url = NSURL.cacheUUID()
+                try! self.db.exportCSV(Workset.self, toURL: url)
+                let vc = UIActivityViewController(
+                    activityItems: [url],
+                    applicationActivities: nil
+                )
+                self.presentViewController(vc, animated: true, completion: nil)
+            }
         }
     }
 

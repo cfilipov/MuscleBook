@@ -185,10 +185,10 @@ final class WorkoutSummaryViewController: FormViewController {
         form.rowByTag("total_volume")?.value = workout.volume
         form.rowByTag("ave_rel_volume")?.value = workout.avePercentMaxVolume
         form.rowByTag("ave_intensity")?.value = workout.aveIntensity
-        form.rowByTag("active_duration")?.value = workout.activeDuration / 60
-        form.rowByTag("rest_duration")?.value = workout.restDuration / 60
-        form.rowByTag("total_duration")?.value = workout.duration / 60
-        form.rowByTag("activation")?.value = workout.maxActivation.name
+        form.rowByTag("active_duration")?.value = minutesOrNil(workout.activeDuration)
+        form.rowByTag("rest_duration")?.value = minutesOrNil(workout.restDuration)
+        form.rowByTag("total_duration")?.value = minutesOrNil(workout.duration)
+        form.rowByTag("activation")?.value = workout.activation.name
         form.rowByTag("anatomy")?.value = try! AnatomyViewConfig(
             db.get(MuscleWorkSummary.self, workoutID: workout.workoutID, movementClass: .Target)
         )
@@ -196,6 +196,11 @@ final class WorkoutSummaryViewController: FormViewController {
         form.sectionByTag("summary")?.reload()
         form.sectionByTag("worksets")?.removeAll()
         form.sectionByTag("worksets")?.appendContentsOf(buildWorksetRows())
+    }
+
+    private func minutesOrNil(seconds: Double?) -> Double? {
+        guard let seconds = seconds else { return nil }
+        return seconds / 60
     }
 
     private func updateWorkout() {

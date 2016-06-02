@@ -75,11 +75,11 @@ extension Schema20160524095754146 {
     enum Exercise {
         static var table = _table
         static let _table = Table("exercise")
-        static let _tableTMP = Table("exercise_20160524095754146")
+        static let _tableTMP = Table("exercise_tmp")
 
         static var search = _search
         static let _search = VirtualTable("exercise_search")
-        static let _searchTMP = VirtualTable("exercise_search_20160524095754146")
+        static let _searchTMP = VirtualTable("exercise_search_tmp")
 
         static let exerciseID = Expression<Int64>("exercise_id")
         static let name = Expression<String>("exercise_name")
@@ -99,7 +99,7 @@ extension Schema20160524095754146 {
     enum Workset {
         static var table = _table
         static let _table = Table("workset")
-        static let _tableTMP = Table("workset_20160524095754146")
+        static let _tableTMP = Table("workset_tmp")
 
         static let worksetID = Expression<Int64>("workset_id")
         static let workoutID = Expression<Int64>("workout_id")
@@ -130,7 +130,7 @@ extension Schema20160524095754146 {
     enum Workout {
         static var table = _table
         static let _table = Table("workout")
-        static let _tableTMP = Table("workout_20160524095754146")
+        static let _tableTMP = Table("workout_tmp")
         static let workoutID = Expression<Int64>("workout_id")
         static let startTime = Expression<NSDate>("start_time")
         static let sets = Expression<Int>("sets")
@@ -158,7 +158,7 @@ extension Schema20160524095754146 {
 
 // MARK:
 
-extension This.Activation {
+private extension This.Activation {
     static func create(db: Connection) throws {
         try db.run(
             table.create(ifNotExists: true) { t in
@@ -181,7 +181,7 @@ extension This.Activation {
     }
 }
 
-extension This.Workset {
+private extension This.Workset {
     static func create(db: Connection) throws {
         try db.run(
             table.create(ifNotExists: true) { t in
@@ -244,7 +244,7 @@ extension This.Workset {
 
 }
 
-extension This.Workout {
+private extension This.Workout {
     static func create(db: Connection) throws {
         try db.run(
             table.create(ifNotExists: true) { t in
@@ -293,7 +293,7 @@ extension This.Workout {
 
 }
 
-extension This.Exercise {
+private extension This.Exercise {
     static func create(db: Connection) throws {
         try db.run(
             table.create(ifNotExists: true) { t in

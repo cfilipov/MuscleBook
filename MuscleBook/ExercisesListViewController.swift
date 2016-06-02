@@ -147,7 +147,7 @@ class ExercisesListViewController: UITableViewController {
             filteredExercises = unfilteredExercises
             return
         }
-        filteredExercises = try! db.match2(name: searchText, sort: sort)
+        filteredExercises = try! db.match(name: searchText, sort: sort)
     }
 
     private func updateUnfilteredExercises() {

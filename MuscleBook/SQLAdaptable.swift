@@ -50,7 +50,8 @@ extension Exercise: SQLAdaptable {
     init(row: Row) {
         exerciseID = row[Schema.exerciseID]
         name = row[Schema.name]
-        equipment = row.get(Schema.equipment).array
+        equipment = row.get(Schema.equipmentID)
+        inputOptions = row.get(Schema.inputOptions)
         gif = row[Schema.gif]
         force = row[Schema.force]
         level = row[Schema.level]
@@ -65,7 +66,8 @@ extension Exercise: SQLAdaptable {
     var setters: [Setter] {
         return [
             Schema.name <- self.name,
-            Schema.equipment <- ArrayBox(array: self.equipment),
+            Schema.equipmentID <- self.equipment,
+            Schema.inputOptions <- self.inputOptions,
             Schema.gif <- self.gif,
             Schema.force <- self.force,
             Schema.level <- self.level,
@@ -112,6 +114,30 @@ extension Activation: SQLAdaptable {
 
     init(row: Row) {
         self = Activation(rawValue: row[Schema.activationID])!
+    }
+
+    var setters: [Setter] {
+        fatalError("This table cannot be modified")
+    }
+}
+
+extension InputOptions: SQLAdaptable {
+    typealias Schema = CurrentSchema.InputOptions
+
+    init(row: Row) {
+        self = InputOptions(rawValue: row[Schema.inputOptionsID])
+    }
+
+    var setters: [Setter] {
+        fatalError("This table cannot be modified")
+    }
+}
+
+extension Exercise.Equipment {
+    typealias Schema = CurrentSchema.Equipment
+
+    init(row: Row) {
+        self = Exercise.Equipment(rawValue: row[Schema.equipmentID])!
     }
 
     var setters: [Setter] {
@@ -168,7 +194,7 @@ extension Workout: SQLAdaptable {
         avePercentMaxDuration = row[Schema.avePercentMaxDuration]
         aveIntensity = row[Schema.aveIntensity]
         maxDuration = row[Schema.maxDuration]
-        maxActivation = row.get(Schema.maxActivation)
+        activation = row.get(Schema.activation)
     }
 
     var setters: [Setter] {
@@ -184,7 +210,7 @@ extension Workout: SQLAdaptable {
             Schema.avePercentMaxDuration <- avePercentMaxDuration,
             Schema.aveIntensity <- aveIntensity,
             Schema.maxDuration <- maxDuration,
-            Schema.maxActivation <- maxActivation,
+            Schema.activation <- activation,
         ]
     }
 }
@@ -203,12 +229,15 @@ extension Workset: SQLAdaptable {
             failure: row[Schema.failure],
             warmup: row[Schema.warmup],
             reps: row[Schema.reps],
-            weight: row[Schema.weight]
+            weight: row[Schema.weight],
+            bodyweight: row[Schema.bodyweight],
+            assistanceWeight: row[Schema.assistanceWeight]
         )
         calculations = Workset.Calculations(
             volume: row[Schema.volume],
             e1RM: row[Schema.e1RM],
             percentMaxVolume: row[Schema.percentMaxVolume],
+            percentMaxDuration: row[Schema.percentMaxDuration],
             intensity: row[Schema.intensity],
             activation: row.get(Schema.activation)
         )
@@ -228,7 +257,7 @@ extension Workset: SQLAdaptable {
             Schema.volume <- calculations.volume,
             Schema.e1RM <- calculations.e1RM,
             Schema.percentMaxVolume <- calculations.percentMaxVolume,
-            Schema.percentMaxDuration <- 0,
+            Schema.percentMaxDuration <- calculations.percentMaxDuration,
             Schema.intensity <- calculations.intensity,
             Schema.activation <- calculations.activation
         ]
