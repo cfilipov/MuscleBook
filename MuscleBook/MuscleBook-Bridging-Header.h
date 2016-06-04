@@ -21,7 +21,6 @@
 #import "JAMSVGImageView.h"
 #import "JAMSVGImage+Extensions.h"
 #import "NSDate+YACYAMLPrivate.h"
-#import "SecurityUtil.h"
 #import <CommonCrypto/CommonCrypto.h>
 #import <YACYAML/CBLParseDate.h>
 #import "CHCSVParser.h"

@@ -17,16 +17,12 @@
  */
 
 import UIKit
-import Fabric
-import Crashlytics
 import HEXColor
-import JSQNotificationObserverKit
 import Kingfisher
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    static let dropboxAuthNotification = Notification<DropboxAuthResult, AnyObject>(name: "Dropbox.handleRedirectURL")
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -34,27 +30,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITableView.appearance().backgroundColor = UIColor(rgba: "#f7f7f7")
         Profiler.trace("Uptime").start()
         Profiler.trace("App Launch").start()
-        Dropbox.setupWithAppKey("apsa8g46ubfs32k")
-        Fabric.with([Crashlytics.self])
         DB.sharedInstance
         KingfisherManager.sharedManager.cache.maxCachePeriodInSecond = 31536000000
         Profiler.trace("App Launch").end()
         return true
-    }
-
-    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
-        if let authResult = Dropbox.handleRedirectURL(url) {
-            switch authResult {
-            case .Success(let token):
-                print("Success! User is logged into Dropbox with token: \(token)")
-            case .Error(let error, let description):
-                print("Error \(error): \(description)")
-            }
-
-            AppDelegate.dropboxAuthNotification.post(authResult)
-        }
-
-        return false
     }
 
     func applicationDidBecomeActive(application: UIApplication) {

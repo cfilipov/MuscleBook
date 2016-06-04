@@ -1,6 +1,3 @@
-[submodule "Submodules/Alamofire"]
-	path = Submodules/Alamofire
-	url = https://github.com/Alamofire/Alamofire.git
 [submodule "Submodules/UIColor-Hex-Swift"]
 	path = Submodules/UIColor-Hex-Swift
 	url = https://github.com/yeahdongcn/UIColor-Hex-Swift.git
@@ -19,9 +16,6 @@
 [submodule "Submodules/SQLiteMigrationManager.swift"]
 	path = Submodules/SQLiteMigrationManager.swift
 	url = https://github.com/garriguv/SQLiteMigrationManager.swift.git
-[submodule "Submodules/Gifu"]
-	path = Submodules/Gifu
-	url = https://github.com/kaishin/Gifu.git
 [submodule "Submodules/Kingfisher"]
 	path = Submodules/Kingfisher
 	url = https://github.com/onevcat/Kingfisher.git
