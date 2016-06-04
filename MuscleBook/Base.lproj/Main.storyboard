@@ -133,10 +133,10 @@
             </objects>
             <point key="canvasLocation" x="-1054" y="-1448"/>
         </scene>
-        <!--Exercises List View Controller-->
+        <!--Exercise List View Controller-->
         <scene sceneID="XvK-5f-Pwx">
             <objects>
-                <tableViewController id="OTG-gt-mX4" customClass="ExercisesListViewController" customModule="MuscleBook" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="OTG-gt-mX4" customClass="ExerciseListViewController" customModule="MuscleBook" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="mTD-T5-5zX">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

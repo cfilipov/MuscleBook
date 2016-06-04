@@ -19,7 +19,7 @@
 import UIKit
 import Eureka
 
-class ExercisesListViewController: UITableViewController {
+class ExerciseListViewController: UITableViewController {
 
     enum Mode {
         case Browse
@@ -116,7 +116,8 @@ class ExercisesListViewController: UITableViewController {
         return cell!
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let ref = exercises[indexPath.row]
         switch mode {
         case .Browse:
@@ -156,7 +157,7 @@ class ExercisesListViewController: UITableViewController {
     }
 }
 
-extension ExercisesListViewController: UISearchResultsUpdating {
+extension ExerciseListViewController: UISearchResultsUpdating {
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         updateFilteredExercises()
     }

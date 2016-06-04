@@ -11,10 +11,9 @@ This app is not targeted at beginner lifters, but there is no reason a beginner 
 
 **This software is a work in progress, expect bugs. Seriously, look at the version number, it's not even close to 1.0.**
 
-<img src="Screenshots/Main.png" width="200px" />
-<img src="Screenshots/ExerciseDetails.png" width="200px" />
-<br />
-<img src="Screenshots/AddDataPoint.png" width="200px" />
+<img src="Screenshots/Main.png" width="200px" valign="top" />
+<img src="Screenshots/AddDataPoint.png" width="200px" valign="top" />
+<img src="Screenshots/ExerciseDetails.png" width="200px" valign="top" />
 <img src="Screenshots/ExerciseStatistics.png" width="200px" valign="top" />
 
 ## Features

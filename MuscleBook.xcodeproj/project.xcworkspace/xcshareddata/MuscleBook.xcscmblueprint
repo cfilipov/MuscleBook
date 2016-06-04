@@ -10,6 +10,7 @@
     "9EDF01A7804EB52CCFC540C61D3368942DB9FDFD" : 0,
     "67620B5EFA902936DF04070AF595B76AB0333747" : 0,
     "83BADBC5501CE21C43EFAD0B4239602133296C18" : 0,
+    "4F201322DFCBE25D8D43B7E20BE17D99A7146515" : 0,
     "2C7119AA1BDD3FCFAE0DCEE36758B3A9D8119405" : 0,
     "3AE8ED2E684071AF4FB151FA51BF266B82FF45BD" : 0,
     "89AB8B7AC69D45E8D6D9FF946DB3C994C65BB513" : 0
@@ -22,6 +23,7 @@
     "9EDF01A7804EB52CCFC540C61D3368942DB9FDFD" : "MuscleBook\/Submodules\/UIColor-Hex-Swift\/",
     "67620B5EFA902936DF04070AF595B76AB0333747" : "MuscleBook\/Submodules\/Alamofire\/",
     "83BADBC5501CE21C43EFAD0B4239602133296C18" : "MuscleBook\/Submodules\/Eureka\/",
+    "4F201322DFCBE25D8D43B7E20BE17D99A7146515" : "MuscleBook\/Submodules\/Gifu\/",
     "2C7119AA1BDD3FCFAE0DCEE36758B3A9D8119405" : "MuscleBook\/Submodules\/EFCalendarGraph\/",
     "3AE8ED2E684071AF4FB151FA51BF266B82FF45BD" : "MuscleBook\/Submodules\/SQLite.swift\/",
     "89AB8B7AC69D45E8D6D9FF946DB3C994C65BB513" : "MuscleBook\/Submodules\/CHCSVParser\/"
@@ -39,6 +41,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/stephencelis\/SQLite.swift.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "3AE8ED2E684071AF4FB151FA51BF266B82FF45BD"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/kaishin\/Gifu.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4F201322DFCBE25D8D43B7E20BE17D99A7146515"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/cfilipov\/MuscleBook.git",

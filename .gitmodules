@@ -19,3 +19,6 @@
 [submodule "Submodules/SQLiteMigrationManager.swift"]
 	path = Submodules/SQLiteMigrationManager.swift
 	url = https://github.com/garriguv/SQLiteMigrationManager.swift.git
+[submodule "Submodules/Gifu"]
+	path = Submodules/Gifu
+	url = https://github.com/kaishin/Gifu.git

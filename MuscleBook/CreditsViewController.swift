@@ -137,6 +137,11 @@ class CreditsViewController : FormViewController {
             $0.controller = { SFSafariViewController(URL: NSURL(string: "https://github.com/jessesquires/JSQNotificationObserverKit")!) }
         }
 
+        <<< PushViewControllerRow() {
+            $0.title = "Gifu"
+            $0.controller = { SFSafariViewController(URL: NSURL(string: "https://github.com/kaishin/Gifu")!) }
+        }
+        
         +++ Section()
 
         <<< LabelRow() {

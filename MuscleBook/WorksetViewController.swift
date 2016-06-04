@@ -184,7 +184,7 @@ class WorksetViewController: FormViewController {
                 switch self.mode {
                 case .Creating: fallthrough
                 case .Editing(_):
-                    let vc = ExercisesListViewController { ref in
+                    let vc = ExerciseListViewController { ref in
                         self.navigationController?.popViewControllerAnimated(true)
                         self.input.exercise = ref
                     }

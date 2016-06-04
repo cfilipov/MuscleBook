@@ -95,6 +95,11 @@ class ExerciseDetailViewController : FormViewController {
         <<< anatomyRow
 
         <<< PushViewControllerRow() {
+            $0.title = "Instructions"
+            $0.controller = { ExerciseInstructionsViewController(exercise: self.exercise) }
+        }
+
+        <<< PushViewControllerRow() {
             $0.title = "Statistics"
             $0.controller = { ExerciseStatisticsViewController(exercise: self.exercise.exerciseReference) }
             $0.hidden = self.performanceCount == 0 ? true : false
