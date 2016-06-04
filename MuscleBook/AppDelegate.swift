@@ -21,6 +21,7 @@ import Fabric
 import Crashlytics
 import HEXColor
 import JSQNotificationObserverKit
+import Kingfisher
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -36,6 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Dropbox.setupWithAppKey("apsa8g46ubfs32k")
         Fabric.with([Crashlytics.self])
         DB.sharedInstance
+        KingfisherManager.sharedManager.cache.maxCachePeriodInSecond = 31536000000
         Profiler.trace("App Launch").end()
         return true
     }

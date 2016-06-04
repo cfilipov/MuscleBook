@@ -18,6 +18,7 @@
 
 import UIKit
 import Eureka
+import Kingfisher
 
 class ExerciseDetailViewController : FormViewController {
 
@@ -120,7 +121,16 @@ class ExerciseDetailViewController : FormViewController {
         if let s = musclesDictionary[.DynamicStabilizer] where !s.isEmpty {
             form +++ Section("Dynamic Stabilizers") <<< s.map(rowForMuscle)
         }
-
+        
+        if let gif = exercise.gif, url = NSURL(string: gif) {
+            let prefetcher = ImagePrefetcher(
+                urls: [url],
+                optionsInfo: nil,
+                progressBlock: nil,
+                completionHandler: nil
+            )
+            prefetcher.start()
+        }
     }
 
     private func rowForString(name: String) -> LabelRow {

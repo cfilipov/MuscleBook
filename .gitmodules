@@ -22,3 +22,6 @@
 [submodule "Submodules/Gifu"]
 	path = Submodules/Gifu
 	url = https://github.com/kaishin/Gifu.git
+[submodule "Submodules/Kingfisher"]
+	path = Submodules/Kingfisher
+	url = https://github.com/onevcat/Kingfisher.git

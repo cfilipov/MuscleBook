@@ -19,14 +19,14 @@
 
 import UIKit
 import Eureka
-import Gifu
+import Kingfisher
 
 class ExerciseInstructionsViewController : FormViewController {
 
     let exercise: Exercise
 
-    lazy var imageView: AnimatableImageView = {
-        let view = AnimatableImageView()
+    lazy var imageView: AnimatedImageView = {
+        let view = AnimatedImageView()
         view.frame = CGRect(x: 0, y: 15, width: 120, height: 120)
         view.contentMode = .ScaleAspectFit
         view.autoresizingMask = .FlexibleWidth
@@ -83,9 +83,7 @@ class ExerciseInstructionsViewController : FormViewController {
         }
 
         if let gif = exercise.gif, url = NSURL(string: gif) {
-            load(url) {
-                self.imageView.animateWithImageData($0)
-            }
+            imageView.kf_setImageWithURL(url)
         }
     }
 
