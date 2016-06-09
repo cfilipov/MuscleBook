@@ -64,7 +64,7 @@ struct Exercise {
     let gif: String?
     let force: String?
     let level: String?
-    let muscles: [MuscleMovement]?
+    var muscles: [MuscleMovement]?
     let mechanics: String?
     let type: String
     let instructions: [String]?

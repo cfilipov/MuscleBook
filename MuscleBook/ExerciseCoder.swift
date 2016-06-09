@@ -62,7 +62,7 @@ extension Exercise: ValueCoding {
     func encodeWithCoder(aCoder: NSCoder) {
         aCoder.encodeObject(value.name, forKey: "Name")
         aCoder.encodeObject(value.equipment.name, forKey: "Equipment")
-        aCoder.encodeObject(value.force, forKey: "Gif")
+        aCoder.encodeObject(value.gif, forKey: "Gif")
         aCoder.encodeObject(value.force, forKey: "Force")
         aCoder.encodeObject(value.level, forKey: "Level")
         let musclesCoder = MuscleMovementCoder(movements: value.muscles!)

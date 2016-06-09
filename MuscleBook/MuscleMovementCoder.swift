@@ -18,26 +18,44 @@
 
 import Foundation
 
+private func objectToMovement(obj: AnyObject, _ classification: MuscleMovement.Classification) -> MuscleMovement {
+    var muscle: Muscle? = nil
+    if let muscleID = obj as? NSInteger {
+        muscle = Muscle(rawValue: Int64(muscleID))
+    }
+    var muscleName: String? = nil
+    if let name = obj as? NSString {
+        muscleName = String(name)
+    }
+    return MuscleMovement(
+        muscleMovementID: nil,
+        exerciseID: nil,
+        classification: classification,
+        muscleName: muscle?.name ?? muscleName!,
+        muscle: muscle
+    )
+}
+
 @objc class MuscleMovementCoder: NSObject, NSCoding {
 
-    let target: [String]
-    let agonists: [String]?
-    let antagonists: [String]?
-    let synergists: [String]?
-    let stabilizers: [String]?
-    let dynamicStabilizers: [String]?
-    let antagonistStabilizers: [String]?
-    let other: [String]?
+    let target: NSArray
+    let agonists: NSArray?
+    let antagonists: NSArray?
+    let synergists: NSArray?
+    let stabilizers: NSArray?
+    let dynamicStabilizers: NSArray?
+    let antagonistStabilizers: NSArray?
+    let other: NSArray?
 
     required init?(coder aDecoder: NSCoder) {
-        self.target = (aDecoder.decodeObjectForKey("Target") as? [String]) ?? []
-        self.agonists = aDecoder.decodeObjectForKey("Agonists") as? [String]
-        self.antagonists = aDecoder.decodeObjectForKey("Antagonists") as? [String]
-        self.synergists = aDecoder.decodeObjectForKey("Synergists") as? [String]
-        self.stabilizers = aDecoder.decodeObjectForKey("Stabilizers") as? [String]
-        self.dynamicStabilizers = aDecoder.decodeObjectForKey("Dynamic Stabilizers") as? [String]
-        self.antagonistStabilizers = aDecoder.decodeObjectForKey("Antagonist Stabilizer") as? [String]
-        self.other = aDecoder.decodeObjectForKey("Other") as? [String]
+        self.target = (aDecoder.decodeObjectForKey("Target") as? NSArray) ?? []
+        self.agonists = aDecoder.decodeObjectForKey("Agonists") as? NSArray
+        self.antagonists = aDecoder.decodeObjectForKey("Antagonists") as? NSArray
+        self.synergists = aDecoder.decodeObjectForKey("Synergists") as? NSArray
+        self.stabilizers = aDecoder.decodeObjectForKey("Stabilizers") as? NSArray
+        self.dynamicStabilizers = aDecoder.decodeObjectForKey("Dynamic Stabilizers") as? NSArray
+        self.antagonistStabilizers = aDecoder.decodeObjectForKey("Antagonist Stabilizer") as? NSArray
+        self.other = aDecoder.decodeObjectForKey("Other") as? NSArray
     }
 
     func encodeWithCoder(aCoder: NSCoder) {
@@ -66,10 +84,14 @@ import Foundation
     }
 
     init(movements: [MuscleMovement]) {
-        var dict: [MuscleMovement.Classification: [String]] = [:]
+        var dict: [MuscleMovement.Classification: NSMutableArray] = [:]
         for movement in movements {
-            var items = (dict[movement.classification] ?? [])
-            items.append(movement.muscleName)
+            let items = (dict[movement.classification] ?? NSMutableArray())
+            if let muscle = movement.muscle {
+                items.addObject(Int(muscle.rawValue))
+            } else {
+                items.addObject(movement.muscleName)
+            }
             dict[movement.classification] = items
         }
         self.target = dict[MuscleMovement.Classification.Target] ?? []
@@ -84,94 +106,15 @@ import Foundation
 
     func muscleMovements() -> [MuscleMovement] {
         var movement: [MuscleMovement] = []
-        movement.appendContentsOf(
-            target.map { name in
-                MuscleMovement(
-                    muscleMovementID: nil,
-                    exerciseID: nil,
-                    classification: MuscleMovement.Classification.Target,
-                    muscleName: name,
-                    muscle: nil
-                )
-            }
-        )
-        movement.appendContentsOf(
-            agonists?.map { name in
-                MuscleMovement(
-                    muscleMovementID: nil,
-                    exerciseID: nil,
-                    classification: MuscleMovement.Classification.Agonist,
-                    muscleName: name,
-                    muscle: nil
-                )
-                } ?? []
-        )
-        movement.appendContentsOf(
-            antagonists?.map { name in
-                MuscleMovement(
-                    muscleMovementID: nil,
-                    exerciseID: nil,
-                    classification: MuscleMovement.Classification.Antagonist,
-                    muscleName: name,
-                    muscle: nil
-                )
-                } ?? []
-        )
-        movement.appendContentsOf(
-            synergists?.map { name in
-                MuscleMovement(
-                    muscleMovementID: nil,
-                    exerciseID: nil,
-                    classification: MuscleMovement.Classification.Synergist,
-                    muscleName: name,
-                    muscle: nil
-                )
-                } ?? []
-        )
-        movement.appendContentsOf(
-            stabilizers?.map { name in
-                MuscleMovement(
-                    muscleMovementID: nil,
-                    exerciseID: nil,
-                    classification: MuscleMovement.Classification.Stabilizer,
-                    muscleName: name,
-                    muscle: nil
-                )
-                } ?? []
-        )
-        movement.appendContentsOf(
-            dynamicStabilizers?.map { name in
-                MuscleMovement(
-                    muscleMovementID: nil,
-                    exerciseID: nil,
-                    classification: MuscleMovement.Classification.DynamicStabilizer,
-                    muscleName: name,
-                    muscle: nil
-                )
-                } ?? []
-        )
-        movement.appendContentsOf(
-            antagonistStabilizers?.map { name in
-                MuscleMovement(
-                    muscleMovementID: nil,
-                    exerciseID: nil,
-                    classification: MuscleMovement.Classification.AntagonistStabilizer,
-                    muscleName: name,
-                    muscle: nil
-                )
-                } ?? []
-        )
-        movement.appendContentsOf(
-            other?.map { name in
-                MuscleMovement(
-                    muscleMovementID: nil,
-                    exerciseID: nil,
-                    classification: MuscleMovement.Classification.Other,
-                    muscleName: name,
-                    muscle: nil
-                )
-                } ?? []
-        )
+        target.forEach { movement.append(objectToMovement($0, .Target)) }
+        target.forEach { movement.append(objectToMovement($0, .Agonist)) }
+        target.forEach { movement.append(objectToMovement($0, .Antagonist)) }
+        target.forEach { movement.append(objectToMovement($0, .Synergist)) }
+        target.forEach { movement.append(objectToMovement($0, .Stabilizer)) }
+        target.forEach { movement.append(objectToMovement($0, .DynamicStabilizer)) }
+        target.forEach { movement.append(objectToMovement($0, .AntagonistStabilizer)) }
+        target.forEach { movement.append(objectToMovement($0, .Other)) }
         return movement
     }
+
 }

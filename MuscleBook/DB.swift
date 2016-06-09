@@ -102,6 +102,10 @@ extension DB {
         )
     }
 
+    func all(type: Exercise.Type) throws -> AnySequence<Exercise> {
+        return try db.prepare(Exercise.Schema.table)
+    }
+    
     func all(type: Exercise.Type, sort: Exercise.SortType) throws -> [ExerciseReference] {
         typealias R = ExerciseReference.Schema
         typealias E = Exercise.Schema
@@ -705,6 +709,18 @@ extension DB {
         guard let min = row?[date.min] else { return nil }
         guard let max = row?[date.max] else { return nil }
         return (min, max)
+    }
+    
+    func exportYAML(type: Exercise.Type, toURL url: NSURL) throws {
+        var yaml = ""
+        for exercise in try all(Exercise) {
+            yaml += "---\n"
+            var ex = exercise
+            ex.muscles = Array(try! find(exerciseID: ex.exerciseID!))
+            yaml += YACYAMLKeyedArchiver.archivedStringWithRootObject(ex.encoded)!
+        }
+        yaml += "..."
+        try yaml.writeToURL(url, atomically: true, encoding: NSUTF8StringEncoding)
     }
 
     func findUnknownExercises() throws -> AnySequence<ExerciseReference> {

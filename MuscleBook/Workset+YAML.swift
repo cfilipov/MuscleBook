@@ -24,8 +24,3 @@ extension Workset.Input {
     }
 }
 
-extension SequenceType where Generator.Element == Workset.Input {
-    func toYAML() -> NSData {
-        return YACYAMLKeyedArchiver.archivedDataWithRootObject(self.encoded)
-    }
-}

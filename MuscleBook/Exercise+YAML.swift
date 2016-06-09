@@ -26,6 +26,6 @@ extension Exercise {
 
 extension SequenceType where Generator.Element == Exercise {
     func toYAML() -> NSData {
-        return YACYAMLKeyedArchiver.archivedDataWithRootObject(self.encoded)
+        return YACYAMLKeyedArchiver.archivedDataWithRootObject(self.encoded, options: YACYAMLKeyedArchiverOptionDontUseObjectEquality)
     }
 }
