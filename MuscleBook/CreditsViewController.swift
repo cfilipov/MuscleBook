@@ -142,6 +142,11 @@ class CreditsViewController : FormViewController {
             $0.controller = { SFSafariViewController(URL: NSURL(string: "https://github.com/kaishin/Gifu")!) }
         }
         
+        <<< PushViewControllerRow() {
+            $0.title = "Kingfisher"
+            $0.controller = { SFSafariViewController(URL: NSURL(string: "https://github.com/onevcat/Kingfisher")!) }
+        }
+        
         +++ Section()
 
         <<< LabelRow() {
@@ -153,6 +158,20 @@ class CreditsViewController : FormViewController {
             $0.onCellSelection { _, _ in
                 let vc = SFSafariViewController(
                     URL: NSURL(string: "http://www.graphviz.org/doc/info/colors.html#brewer_license")!
+                )
+                self.showViewController(vc, sender: nil)
+            }
+        }
+            
+        <<< LabelRow() {
+            $0.title = "Anatomy Data"
+            $0.value = "FMA"
+            $0.cellUpdate { cell, _ in
+                cell.accessoryType = .DisclosureIndicator
+            }
+            $0.onCellSelection { _, _ in
+                let vc = SFSafariViewController(
+                    URL: NSURL(string: "http://sig.biostr.washington.edu/projects/fm/AboutFM.html")!
                 )
                 self.showViewController(vc, sender: nil)
             }

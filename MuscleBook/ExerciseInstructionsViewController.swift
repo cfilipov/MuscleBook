@@ -20,6 +20,7 @@
 import UIKit
 import Eureka
 import Kingfisher
+import SafariServices
 
 class ExerciseInstructionsViewController : FormViewController {
 
@@ -80,6 +81,11 @@ class ExerciseInstructionsViewController : FormViewController {
                     $0.disabled = true
                 }
             }
+        }
+        
+        form +++ Section() <<< PushViewControllerRow() {
+            $0.title = "More Details"
+            $0.controller = { SFSafariViewController(URL: NSURL(string: self.exercise.link)!) }
         }
 
         if let gif = exercise.gif, url = NSURL(string: gif) {

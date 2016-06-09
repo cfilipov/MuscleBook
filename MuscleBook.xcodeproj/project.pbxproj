@@ -35,7 +35,6 @@
 		B23F0D011CF8CDDB006BF745 /* SQLAdaptable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23F0D001CF8CDDB006BF745 /* SQLAdaptable.swift */; };
 		B23F0D031CF8CE70006BF745 /* SQLValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23F0D021CF8CE70006BF745 /* SQLValues.swift */; };
 		B23F0D061CF9506D006BF745 /* AnatomyDebugViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23F0D051CF9506D006BF745 /* AnatomyDebugViewController2.swift */; };
-		B247AEEA1C9CD74C00A501B0 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = B247AEE91C9CD74C00A501B0 /* Model.swift */; };
 		B24AE3BD1CFF9002000285FB /* ColorPaletteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AE3BC1CFF9002000285FB /* ColorPaletteViewController.swift */; };
 		B24AE3DC1CFFBF29000285FB /* InputOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AE3DB1CFFBF29000285FB /* InputOptions.swift */; };
 		B24AE3DE1CFFBF7F000285FB /* Schema20160601181210067.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AE3DD1CFFBF7F000285FB /* Schema20160601181210067.swift */; };
@@ -466,7 +465,6 @@
 		B23F0D001CF8CDDB006BF745 /* SQLAdaptable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLAdaptable.swift; sourceTree = "<group>"; };
 		B23F0D021CF8CE70006BF745 /* SQLValues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLValues.swift; sourceTree = "<group>"; };
 		B23F0D051CF9506D006BF745 /* AnatomyDebugViewController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnatomyDebugViewController2.swift; sourceTree = "<group>"; };
-		B247AEE91C9CD74C00A501B0 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Model.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B24AE3BC1CFF9002000285FB /* ColorPaletteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPaletteViewController.swift; sourceTree = "<group>"; };
 		B24AE3DB1CFFBF29000285FB /* InputOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputOptions.swift; sourceTree = "<group>"; };
 		B24AE3DD1CFFBF7F000285FB /* Schema20160601181210067.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schema20160601181210067.swift; sourceTree = "<group>"; };
@@ -673,7 +671,6 @@
 				B23180D91C76DDCF0043BFE4 /* Exercise.swift */,
 				B24AE3DB1CFFBF29000285FB /* InputOptions.swift */,
 				B2E294561CAC649E009BC21A /* ExerciseReference.swift */,
-				B247AEE91C9CD74C00A501B0 /* Model.swift */,
 				B2843FF41CBB3480008D0953 /* Activation.swift */,
 				B2843FF01CBB3412008D0953 /* AnatomyViewConfig.swift */,
 				B23180D31C76D6730043BFE4 /* Muscle.swift */,
@@ -1399,7 +1396,6 @@
 				B2843FF51CBB3480008D0953 /* Activation.swift in Sources */,
 				B24AE40E1D000053000285FB /* ExerciseInstructionsViewController.swift in Sources */,
 				B2E294141CAA5630009BC21A /* ExerciseCoder.swift in Sources */,
-				B247AEEA1C9CD74C00A501B0 /* Model.swift in Sources */,
 				B2E2946E1CACA1D2009BC21A /* CalendarWeekCell.swift in Sources */,
 				A22DE6781CA64B91001759CF /* WorksetViewController.swift in Sources */,
 				B23180DA1C76DDCF0043BFE4 /* Exercise.swift in Sources */,

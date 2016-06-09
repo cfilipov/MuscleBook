@@ -38,6 +38,25 @@ struct Exercise {
         case BodyWeight
     }
     
+    enum Force {
+        case Push
+        case Pull
+        case PushAndPull
+    }
+    
+    enum Mechanics {
+        case Isolation
+        case Compound
+        
+    }
+    
+    enum Type {
+        case BasicOrAuxiliary
+        case Auxiliary
+        case Basic
+        case Specialized
+    }
+    
     let exerciseID: Int64?
     let name: String
     let inputOptions: InputOptions
