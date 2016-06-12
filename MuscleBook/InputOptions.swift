@@ -21,7 +21,6 @@ import Foundation
 struct InputOptions: OptionSetType {
     let rawValue: Int64
 
-//    static let None = InputOptions(rawValue: 0)
     static let Reps = InputOptions(rawValue: 1 << 0)
     static let Weight  = InputOptions(rawValue: 1 << 1)
     static let BodyWeight  = InputOptions(rawValue: 1 << 2)

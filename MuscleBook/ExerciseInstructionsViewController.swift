@@ -83,9 +83,11 @@ class ExerciseInstructionsViewController : FormViewController {
             }
         }
         
-        form +++ Section() <<< PushViewControllerRow() {
-            $0.title = "More Details"
-            $0.controller = { SFSafariViewController(URL: NSURL(string: self.exercise.link)!) }
+        if let link = exercise.link {
+            form +++ Section() <<< PushViewControllerRow() {
+                $0.title = "More Details"
+                $0.controller = { SFSafariViewController(URL: NSURL(string: link)!) }
+            }
         }
 
         if let gif = exercise.gif, url = NSURL(string: gif) {

@@ -38,37 +38,42 @@ struct Exercise {
         case BodyWeight
     }
     
-    enum Force {
-        case Push
+    enum Force: Int64 {
+        case Push = 1
         case Pull
         case PushAndPull
     }
     
-    enum Mechanics {
-        case Isolation
+    enum Mechanics: Int64 {
+        case Isolation = 1
         case Compound
-        
     }
     
-    enum Type {
-        case BasicOrAuxiliary
+    enum ExerciseType: Int64 {
+        case BasicOrAuxiliary = 1
         case Auxiliary
         case Basic
         case Specialized
     }
     
-    let exerciseID: Int64?
+    enum SkillLevel: Int64 {
+        case Beginer = 1
+        case Intermediate
+        case Advanced
+    }
+    
+    let exerciseID: Int64
     let name: String
     let inputOptions: InputOptions
     let equipment: Equipment
     let gif: String?
-    let force: String?
-    let level: String?
+    let force: Force?
+    let skillLevel: SkillLevel?
     var muscles: [MuscleMovement]?
-    let mechanics: String?
-    let type: String
+    let mechanics: Mechanics?
+    let exerciseType: ExerciseType
     let instructions: [String]?
-    let link: String
+    let link: String?
     let source: String?
 }
 
@@ -114,6 +119,83 @@ extension Exercise.Equipment {
         case .AssistedPartner: return "Assisted (partner)"
         case .Suspension: return "Suspension"
         case .Lever: return "Lever"
+        }
+    }
+}
+
+extension Exercise.Force {
+    init?(name: String) {
+        switch name {
+        case "Push": self = .Push
+        case "Pull": self = .Pull
+        case "PushAndPull": self = .PushAndPull
+        default: return nil
+        }
+    }
+    
+    var name: String {
+        switch self {
+        case Push: return "Push"
+        case Pull: return "Pull"
+        case PushAndPull: return "PushAndPull"
+        }
+    }
+}
+
+extension Exercise.Mechanics {
+    init?(name: String) {
+        switch name {
+        case "Isolation": self = .Isolation
+        case "Compound": self = .Compound
+        default: return nil
+        }
+    }
+    
+    var name: String {
+        switch self {
+        case Isolation: return "Isolation"
+        case Compound: return "Compound"
+        }
+    }
+}
+
+extension Exercise.ExerciseType {
+    init?(name: String) {
+        switch name {
+        case "Basic or Auxiliary": self = .BasicOrAuxiliary
+        case "Auxiliary or Basic": self = .BasicOrAuxiliary
+        case "Auxiliary": self = .Auxiliary
+        case "Basic": self = .Basic
+        case "Specialized": self = .Specialized
+        default: return nil
+        }
+    }
+    
+    var name: String {
+        switch self {
+        case BasicOrAuxiliary: return "Basic or Auxiliary"
+        case Auxiliary: return "Auxiliary"
+        case Basic: return "Basic"
+        case Specialized: return "Specialized"
+        }
+    }
+}
+
+extension Exercise.SkillLevel {
+    init?(name: String) {
+        switch name {
+        case "Beginer": self = .Beginer
+        case "Intermediate": self = .Intermediate
+        case "Advanced": self = .Advanced
+        default: return nil
+        }
+    }
+    
+    var name: String {
+        switch self {
+        case Beginer: return "Beginer"
+        case Intermediate: return "Intermediate"
+        case Advanced: return "Advanced"
         }
     }
 }

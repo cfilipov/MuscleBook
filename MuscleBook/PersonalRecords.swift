@@ -93,6 +93,14 @@ struct RelativeRecords {
         return volume / maxVolume
     }
 
+//    var percentMaxReps: Double? {
+//        guard let
+//            r = records?.maxReps?.input.reps,
+//            reps = input.reps
+//            else { return nil }
+//        return reps / maxReps
+//    }
+
     var intensity: Double? {
         if records == nil { return 1.0 }
         return [percentMaxWeight, percent1RM].flatMap{$0}.maxElement()

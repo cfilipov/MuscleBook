@@ -20,7 +20,7 @@ import Foundation
 
 struct MuscleMovement {
     let muscleMovementID: Int64?
-    let exerciseID: Int64?
+    let exerciseID: Int64
     let classification: Classification
     let muscleName: String
     let muscle: Muscle?

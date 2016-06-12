@@ -18,7 +18,7 @@
 
 import Foundation
 
-private func objectToMovement(obj: AnyObject, _ classification: MuscleMovement.Classification) -> MuscleMovement {
+private func objectToMovement(obj: AnyObject, _ classification: MuscleMovement.Classification, _ exerciseID: Int64) -> MuscleMovement {
     var muscle: Muscle? = nil
     if let muscleID = obj as? NSInteger {
         muscle = Muscle(rawValue: Int64(muscleID))
@@ -29,7 +29,7 @@ private func objectToMovement(obj: AnyObject, _ classification: MuscleMovement.C
     }
     return MuscleMovement(
         muscleMovementID: nil,
-        exerciseID: nil,
+        exerciseID: exerciseID,
         classification: classification,
         muscleName: muscle?.name ?? muscleName!,
         muscle: muscle
@@ -104,16 +104,16 @@ private func objectToMovement(obj: AnyObject, _ classification: MuscleMovement.C
         self.other = dict[MuscleMovement.Classification.Other]
     }
 
-    func muscleMovements() -> [MuscleMovement] {
+    func muscleMovements(exerciseID: Int64) -> [MuscleMovement] {
         var movement: [MuscleMovement] = []
-        target.forEach { movement.append(objectToMovement($0, .Target)) }
-        target.forEach { movement.append(objectToMovement($0, .Agonist)) }
-        target.forEach { movement.append(objectToMovement($0, .Antagonist)) }
-        target.forEach { movement.append(objectToMovement($0, .Synergist)) }
-        target.forEach { movement.append(objectToMovement($0, .Stabilizer)) }
-        target.forEach { movement.append(objectToMovement($0, .DynamicStabilizer)) }
-        target.forEach { movement.append(objectToMovement($0, .AntagonistStabilizer)) }
-        target.forEach { movement.append(objectToMovement($0, .Other)) }
+        target.forEach { movement.append(objectToMovement($0, .Target, exerciseID)) }
+        agonists?.forEach { movement.append(objectToMovement($0, .Agonist, exerciseID)) }
+        antagonists?.forEach { movement.append(objectToMovement($0, .Antagonist, exerciseID)) }
+        synergists?.forEach { movement.append(objectToMovement($0, .Synergist, exerciseID)) }
+        stabilizers?.forEach { movement.append(objectToMovement($0, .Stabilizer, exerciseID)) }
+        dynamicStabilizers?.forEach { movement.append(objectToMovement($0, .DynamicStabilizer, exerciseID)) }
+        antagonistStabilizers?.forEach { movement.append(objectToMovement($0, .AntagonistStabilizer, exerciseID)) }
+        other?.forEach { movement.append(objectToMovement($0, .Other, exerciseID)) }
         return movement
     }
 

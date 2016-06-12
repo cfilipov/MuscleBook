@@ -18,6 +18,7 @@
 		A280C3D01D036A1200709E3E /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A280C3B91D036A0A00709E3E /* Kingfisher.framework */; };
 		A280C3D11D036A1200709E3E /* Kingfisher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A280C3B91D036A0A00709E3E /* Kingfisher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A280C3D51D03744800709E3E /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A280C3D41D03744800709E3E /* libz.tbd */; };
+		A2C745031D092EED00B33FE5 /* Schema20160608215756485.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C745021D092EED00B33FE5 /* Schema20160608215756485.swift */; };
 		A2E7948F1CA85197004FF320 /* noun_179916_cc.svg in Resources */ = {isa = PBXBuildFile; fileRef = A2E7948E1CA85197004FF320 /* noun_179916_cc.svg */; };
 		B205857D1C7C1F5500491328 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205857C1C7C1F5500491328 /* StatisticsViewController.swift */; };
 		B207A7A81C63072300BD4DC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B207A7A71C63072300BD4DC9 /* AppDelegate.swift */; };
@@ -39,6 +40,15 @@
 		B24AE3DC1CFFBF29000285FB /* InputOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AE3DB1CFFBF29000285FB /* InputOptions.swift */; };
 		B24AE3DE1CFFBF7F000285FB /* Schema20160601181210067.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AE3DD1CFFBF7F000285FB /* Schema20160601181210067.swift */; };
 		B24AE40E1D000053000285FB /* ExerciseInstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AE40D1D000053000285FB /* ExerciseInstructionsViewController.swift */; };
+		B24BA3651D0CC1E90032260A /* DB+YAML.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24BA3641D0CC1E90032260A /* DB+YAML.swift */; };
+		B24BA3841D0CC2270032260A /* DB+CSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24BA3831D0CC2270032260A /* DB+CSV.swift */; };
+		B24BA3861D0CC2510032260A /* DB+Workouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24BA3851D0CC2510032260A /* DB+Workouts.swift */; };
+		B24BA3881D0CC26E0032260A /* DB+Exercises.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24BA3871D0CC26E0032260A /* DB+Exercises.swift */; };
+		B24BA38A1D0CC2840032260A /* DB+Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24BA3891D0CC2840032260A /* DB+Calculations.swift */; };
+		B24BA38C1D0CC5670032260A /* DB+Workset.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24BA38B1D0CC5670032260A /* DB+Workset.swift */; };
+		B24BA38E1D0CC5D40032260A /* DB+Dates.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24BA38D1D0CC5D40032260A /* DB+Dates.swift */; };
+		B24BA3901D0CC69D0032260A /* DB+Muscles.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24BA38F1D0CC69D0032260A /* DB+Muscles.swift */; };
+		B24BA3931D0CD3190032260A /* exercises.yaml in Resources */ = {isa = PBXBuildFile; fileRef = B24BA3921D0CD3190032260A /* exercises.yaml */; };
 		B25E85831C7D6C3700253A62 /* Workset.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E85821C7D6C3700253A62 /* Workset.swift */; };
 		B25E861E1C7EBD8700253A62 /* AnatomySplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E861D1C7EBD8700253A62 /* AnatomySplitView.swift */; };
 		B25E86481C7F874500253A62 /* JAMSVGImage+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = B25E86471C7F874500253A62 /* JAMSVGImage+Extensions.m */; };
@@ -446,6 +456,7 @@
 		A23B0A361CF0E62F00AD924F /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utilities.m"; sourceTree = "<group>"; };
 		A280C3A91D036A0900709E3E /* Kingfisher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Kingfisher.xcodeproj; path = Submodules/Kingfisher/Kingfisher.xcodeproj; sourceTree = "<group>"; };
 		A280C3D41D03744800709E3E /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		A2C745021D092EED00B33FE5 /* Schema20160608215756485.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schema20160608215756485.swift; sourceTree = "<group>"; };
 		A2E7948E1CA85197004FF320 /* noun_179916_cc.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = noun_179916_cc.svg; sourceTree = "<group>"; };
 		B205857C1C7C1F5500491328 /* StatisticsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = StatisticsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B207A7A41C63072300BD4DC9 /* MuscleBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MuscleBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -469,6 +480,15 @@
 		B24AE3DB1CFFBF29000285FB /* InputOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputOptions.swift; sourceTree = "<group>"; };
 		B24AE3DD1CFFBF7F000285FB /* Schema20160601181210067.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schema20160601181210067.swift; sourceTree = "<group>"; };
 		B24AE40D1D000053000285FB /* ExerciseInstructionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseInstructionsViewController.swift; sourceTree = "<group>"; };
+		B24BA3641D0CC1E90032260A /* DB+YAML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DB+YAML.swift"; sourceTree = "<group>"; };
+		B24BA3831D0CC2270032260A /* DB+CSV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DB+CSV.swift"; sourceTree = "<group>"; };
+		B24BA3851D0CC2510032260A /* DB+Workouts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DB+Workouts.swift"; sourceTree = "<group>"; };
+		B24BA3871D0CC26E0032260A /* DB+Exercises.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DB+Exercises.swift"; sourceTree = "<group>"; };
+		B24BA3891D0CC2840032260A /* DB+Calculations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DB+Calculations.swift"; sourceTree = "<group>"; };
+		B24BA38B1D0CC5670032260A /* DB+Workset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DB+Workset.swift"; sourceTree = "<group>"; };
+		B24BA38D1D0CC5D40032260A /* DB+Dates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DB+Dates.swift"; sourceTree = "<group>"; };
+		B24BA38F1D0CC69D0032260A /* DB+Muscles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DB+Muscles.swift"; sourceTree = "<group>"; };
+		B24BA3921D0CD3190032260A /* exercises.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = exercises.yaml; sourceTree = SOURCE_ROOT; };
 		B25E85821C7D6C3700253A62 /* Workset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Workset.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B25E861D1C7EBD8700253A62 /* AnatomySplitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AnatomySplitView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B25E86461C7F874500253A62 /* JAMSVGImage+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "JAMSVGImage+Extensions.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -693,6 +713,7 @@
 				B23F0CDB1CF693A2006BF745 /* Schema.swift */,
 				B23F0D001CF8CDDB006BF745 /* SQLAdaptable.swift */,
 				B23F0D021CF8CE70006BF745 /* SQLValues.swift */,
+				B24BA3911D0CC6BD0032260A /* DB+Queries */,
 				B23387191CB4F8710027981A /* Schemas */,
 			);
 			name = Database;
@@ -704,8 +725,24 @@
 				B27D2FA41CB4845800C219E8 /* Schema20160410215418161.swift */,
 				B23F0CD71CF4BFDB006BF745 /* Schema20160524095754146.swift */,
 				B24AE3DD1CFFBF7F000285FB /* Schema20160601181210067.swift */,
+				A2C745021D092EED00B33FE5 /* Schema20160608215756485.swift */,
 			);
 			name = Schemas;
+			sourceTree = "<group>";
+		};
+		B24BA3911D0CC6BD0032260A /* DB+Queries */ = {
+			isa = PBXGroup;
+			children = (
+				B24BA3891D0CC2840032260A /* DB+Calculations.swift */,
+				B24BA3831D0CC2270032260A /* DB+CSV.swift */,
+				B24BA38D1D0CC5D40032260A /* DB+Dates.swift */,
+				B24BA3871D0CC26E0032260A /* DB+Exercises.swift */,
+				B24BA38F1D0CC69D0032260A /* DB+Muscles.swift */,
+				B24BA3851D0CC2510032260A /* DB+Workouts.swift */,
+				B24BA38B1D0CC5670032260A /* DB+Workset.swift */,
+				B24BA3641D0CC1E90032260A /* DB+YAML.swift */,
+			);
+			name = "DB+Queries";
 			sourceTree = "<group>";
 		};
 		B2843FED1CB8C4E1008D0953 /* Coder */ = {
@@ -820,6 +857,7 @@
 				A2E7948E1CA85197004FF320 /* noun_179916_cc.svg */,
 				B2A52BB81CA0C0E100268B6C /* Anterior.svg */,
 				B2EEB07F1CA0988C00442482 /* Posterior.svg */,
+				B24BA3921D0CD3190032260A /* exercises.yaml */,
 				B207A7B31C63072300BD4DC9 /* Info.plist */,
 				B207A7AE1C63072300BD4DC9 /* Assets.xcassets */,
 				B207A7B01C63072300BD4DC9 /* LaunchScreen.storyboard */,
@@ -1322,6 +1360,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B24BA3931D0CD3190032260A /* exercises.yaml in Resources */,
 				B207A7B21C63072300BD4DC9 /* LaunchScreen.storyboard in Resources */,
 				B207A7AF1C63072300BD4DC9 /* Assets.xcassets in Resources */,
 				B2843FFB1CBB4D8D008D0953 /* DateValueCell.xib in Resources */,
@@ -1342,6 +1381,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2C367AF1CB1C8640045824F /* DebugTimersViewController.swift in Sources */,
+				B24BA3651D0CC1E90032260A /* DB+YAML.swift in Sources */,
 				B23387591CB74F0C0027981A /* VerifyWorksetsViewController.swift in Sources */,
 				B2A52BA31CA0A74500268B6C /* JAMStyledBezierPath.m in Sources */,
 				B23668E91CB341EF00C0CEFB /* FormItems.swift in Sources */,
@@ -1356,6 +1396,7 @@
 				B2E293DC1CA9FBD4009BC21A /* Workset+YAML.swift in Sources */,
 				B2E293DA1CA9FB50009BC21A /* WorksetAdapter+Dropbox.swift in Sources */,
 				B24AE3BD1CFF9002000285FB /* ColorPaletteViewController.swift in Sources */,
+				B24BA3901D0CC69D0032260A /* DB+Muscles.swift in Sources */,
 				B24AE3DC1CFFBF29000285FB /* InputOptions.swift in Sources */,
 				B2843FF11CBB3412008D0953 /* AnatomyViewConfig.swift in Sources */,
 				B27D2FA51CB4845800C219E8 /* Schema20160410215418161.swift in Sources */,
@@ -1365,6 +1406,7 @@
 				B2DD36BA1C6C50A2002F8576 /* Util.swift in Sources */,
 				B2A52BAD1CA0AAB700268B6C /* MuscleListViewController.swift in Sources */,
 				B2C367AA1CB1B12F0045824F /* Workout.swift in Sources */,
+				B24BA3861D0CC2510032260A /* DB+Workouts.swift in Sources */,
 				B2A52BA51CA0A74500268B6C /* JAMSVGGradientParts.m in Sources */,
 				B25E86481C7F874500253A62 /* JAMSVGImage+Extensions.m in Sources */,
 				B2E293D81CA9F166009BC21A /* WorksetCoder.swift in Sources */,
@@ -1376,7 +1418,9 @@
 				B2A52BA61CA0A74500268B6C /* JAMSVGParser.m in Sources */,
 				B2C367C31CB235000045824F /* AnatomyDebugViewController.swift in Sources */,
 				B205857D1C7C1F5500491328 /* StatisticsViewController.swift in Sources */,
+				B24BA3841D0CC2270032260A /* DB+CSV.swift in Sources */,
 				B2843FE91CB8C42F008D0953 /* MuscleWorkSummary.swift in Sources */,
+				B24BA38A1D0CC2840032260A /* DB+Calculations.swift in Sources */,
 				B23386C11CB48C680027981A /* MuscleWorkout.swift in Sources */,
 				B2843FE71CB8A33B008D0953 /* SideBySideAnatomyViewCell.swift in Sources */,
 				B2843FF91CBB41F1008D0953 /* SQLite+Extensions.swift in Sources */,
@@ -1392,10 +1436,13 @@
 				B2A52BAF1CA0AC5800268B6C /* AnatomyDiagramViewController.swift in Sources */,
 				A23B0A381CF0E62F00AD924F /* NSDate+Utilities.m in Sources */,
 				B2A52BA71CA0A74500268B6C /* JAMSVGImage.m in Sources */,
+				A2C745031D092EED00B33FE5 /* Schema20160608215756485.swift in Sources */,
+				B24BA3881D0CC26E0032260A /* DB+Exercises.swift in Sources */,
 				B2BCB5361C76F2970046F5A1 /* ExerciseDetailViewController.swift in Sources */,
 				B2843FF51CBB3480008D0953 /* Activation.swift in Sources */,
 				B24AE40E1D000053000285FB /* ExerciseInstructionsViewController.swift in Sources */,
 				B2E294141CAA5630009BC21A /* ExerciseCoder.swift in Sources */,
+				B24BA38E1D0CC5D40032260A /* DB+Dates.swift in Sources */,
 				B2E2946E1CACA1D2009BC21A /* CalendarWeekCell.swift in Sources */,
 				A22DE6781CA64B91001759CF /* WorksetViewController.swift in Sources */,
 				B23180DA1C76DDCF0043BFE4 /* Exercise.swift in Sources */,
@@ -1418,6 +1465,7 @@
 				B23180D41C76D6730043BFE4 /* Muscle.swift in Sources */,
 				B2A80D211C73B8AC0072928B /* RootViewController.swift in Sources */,
 				B2C3679C1CAEF6500045824F /* Muscle+SVG.swift in Sources */,
+				B24BA38C1D0CC5670032260A /* DB+Workset.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

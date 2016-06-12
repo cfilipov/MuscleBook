@@ -78,3 +78,51 @@ extension Exercise.Equipment: SQLite.Value {
         return self.rawValue
     }
 }
+
+extension Exercise.Force: SQLite.Value {
+    static var declaredDatatype: String {
+        return Int64.declaredDatatype
+    }
+    static func fromDatatypeValue(intValue: Int64) -> Exercise.Force {
+        return Exercise.Force(rawValue: intValue)!
+    }
+    var datatypeValue: Int64 {
+        return self.rawValue
+    }
+}
+
+extension Exercise.Mechanics: SQLite.Value {
+    static var declaredDatatype: String {
+        return Int64.declaredDatatype
+    }
+    static func fromDatatypeValue(intValue: Int64) -> Exercise.Mechanics {
+        return Exercise.Mechanics(rawValue: intValue)!
+    }
+    var datatypeValue: Int64 {
+        return self.rawValue
+    }
+}
+
+extension Exercise.ExerciseType: SQLite.Value {
+    static var declaredDatatype: String {
+        return Int64.declaredDatatype
+    }
+    static func fromDatatypeValue(intValue: Int64) -> Exercise.ExerciseType {
+        return Exercise.ExerciseType(rawValue: intValue)!
+    }
+    var datatypeValue: Int64 {
+        return self.rawValue
+    }
+}
+
+extension Exercise.SkillLevel: SQLite.Value {
+    static var declaredDatatype: String {
+        return Int64.declaredDatatype
+    }
+    static func fromDatatypeValue(intValue: Int64) -> Exercise.SkillLevel {
+        return Exercise.SkillLevel(rawValue: intValue)!
+    }
+    var datatypeValue: Int64 {
+        return self.rawValue
+    }
+}

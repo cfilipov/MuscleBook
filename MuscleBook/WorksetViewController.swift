@@ -19,6 +19,30 @@
 import UIKit
 import Eureka
 
+extension NSDate {
+
+    func setTime(time: NSDate) -> NSDate {
+        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+        let timeComponents = calendar.components(([.Day, .Month, .Year]), fromDate: time)
+        let components = calendar.components(([.Day, .Month, .Year]), fromDate: self)
+        components.hour = timeComponents.hour
+        components.minute = timeComponents.minute
+        components.second = timeComponents.second
+        return calendar.dateFromComponents(components)!
+    }
+
+    func setDateWithouTime(date: NSDate) -> NSDate {
+        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+        let timeComponents = calendar.components(([.Day, .Month, .Year]), fromDate: self)
+        let components = calendar.components(([.Day, .Month, .Year]), fromDate: date)
+        components.hour = timeComponents.hour
+        components.minute = timeComponents.minute
+        components.second = timeComponents.second
+        return calendar.dateFromComponents(components)!
+    }
+    
+}
+
 class WorksetViewController: FormViewController {
 
     enum Result {
@@ -178,6 +202,8 @@ class WorksetViewController: FormViewController {
             $0.tag = "exercise"
             $0.cellSetup { cell, row in
                 cell.accessoryType = .DisclosureIndicator
+            }
+            $0.cellUpdate { cell, _ in
                 cell.showErrorAccessoryView(self.input.exercise?.exerciseID == nil)
             }
             $0.onCellSelection { cell, row in
@@ -199,14 +225,28 @@ class WorksetViewController: FormViewController {
             }
         }
 
-        <<< LabelRow() {
+        <<< DateInlineRow() {
             $0.title = "Date"
             $0.tag = "date"
+            $0.maximumDate = NSDate()
+            $0.onChange { row in
+                print("Date: \(row.value)")
+                if let value = row.value {
+                    self.input.startTime.setDateWithouTime(value)
+                }
+            }
         }
 
-        <<< LabelRow() {
+        <<< TimeInlineRow() {
             $0.title = "Time"
             $0.tag = "time"
+            $0.maximumDate = NSDate()
+            $0.onChange { row in
+                print("Time: \(row.value)")
+                if let value = row.value {
+                    self.input.startTime.setTime(value)
+                }
+            }
         }
 
         <<< TimerRow() {
@@ -217,6 +257,24 @@ class WorksetViewController: FormViewController {
                 print("Timer: \(row.value)")
                 self.input.startTime ?= row.startTime
                 self.input.duration = row.value
+            }
+            $0.onCellSelection { cell, row in
+                let alert = UIAlertController(title: "Set Duration", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(
+                    UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+                )
+                alert.addAction(
+                    UIAlertAction(title: "Set", style: .Default) { _ in
+                        row.value = Double(alert.textFields![0].text!)!
+                        self.input.duration = row.value
+                        row.updateCell()
+                    }
+                )
+                alert.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
+                    textField.placeholder = "Seconds"
+                    textField.keyboardType = .DecimalPad
+                })
+                self.presentViewController(alert, animated: true, completion: nil)
             }
         }
 
@@ -455,9 +513,9 @@ class WorksetViewController: FormViewController {
             form.rowByTag("assweight")?.hidden = true
         }
         form.rowByTag("exercise")?.value = input.exercise?.name
-        form.rowByTag("date")?.value = dateFormatter.stringFromDate(input.startTime)
+        form.rowByTag("date")?.value = input.startTime
         form.rowByTag("date")?.updateCell() // wtf? why?
-        form.rowByTag("time")?.value = timeFormatter.stringFromDate(input.startTime)
+        form.rowByTag("time")?.value = input.startTime
         form.rowByTag("time")?.updateCell()
         form.rowByTag("e1rm")?.value = recordsFormatter.format(
             value: relativeRecords?.calculations.e1RM
@@ -579,6 +637,12 @@ class WorksetViewController: FormViewController {
         if exercise.inputOptions.contains(.Duration) {
             guard let _ = input.duration else {
                 Alert(message: "Could not save data point, mising required field: Duration")
+                return
+            }
+        }
+        if exercise.inputOptions.contains(.BodyWeight) {
+            guard let _ = input.bodyweight else {
+                Alert(message: "Could not save data point, mising required field: Body Weight")
                 return
             }
         }

@@ -74,27 +74,6 @@ class SettingsViewController : FormViewController {
             }
         }
         
-        <<< ButtonRow() {
-            $0.title = "Export Exercises"
-            $0.cellUpdate { cell, _ in
-                cell.textLabel?.textColor = UIColor.redColor()
-            }
-            $0.onCellSelection { _, _ in
-                let url = NSFileManager
-                    .defaultManager()
-                    .URLsForDirectory(
-                        .CachesDirectory,
-                        inDomains: .UserDomainMask
-                    )[0]
-                    .URLByAppendingPathComponent("exercises.yaml")
-                try! self.db.exportYAML(Exercise.self, toURL: url)
-                let vc = UIActivityViewController(
-                    activityItems: [url],
-                    applicationActivities: nil
-                )
-                self.presentViewController(vc, animated: true, completion: nil)
-            }
-        }
     }
 
 }

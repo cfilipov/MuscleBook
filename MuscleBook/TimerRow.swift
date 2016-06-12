@@ -94,7 +94,7 @@ public class TimerCell : Cell<Double>, CellType {
 
     public lazy var pauseButton: UIButton = {
         let button = UIButton(type: .System)
-        button.setTitle("PAUSE", forState: .Normal)
+        button.setTitle("STOP", forState: .Normal)
         button.addTarget(self, action: #selector(TimerCell.pause), forControlEvents: .TouchUpInside)
         button.frame = CGRect(x: 0, y: 0, width: 65, height: 30)
         button.contentHorizontalAlignment = .Right;

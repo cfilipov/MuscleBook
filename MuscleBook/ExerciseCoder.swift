@@ -31,7 +31,9 @@ extension Exercise: ValueCoding {
     }
 
     required init?(coder aDecoder: NSCoder) {
+        let identifier = aDecoder.decodeObjectForKey("Identifier") as! NSNumber
         let name = aDecoder.decodeObjectForKey("Name") as! String
+        let input = aDecoder.decodeObjectForKey("Input") as! NSNumber
         let equipment = aDecoder.decodeObjectForKey("Equipment") as! String
         let gif = aDecoder.decodeObjectForKey("Gif") as? String
         let force = aDecoder.decodeObjectForKey("Force") as? String
@@ -40,19 +42,19 @@ extension Exercise: ValueCoding {
         let mechanics = aDecoder.decodeObjectForKey("Mechanics") as? String
         let type = aDecoder.decodeObjectForKey("Type") as! String
         let instructions = aDecoder.decodeObjectForKey("Instructions") as? [String]
-        let link = aDecoder.decodeObjectForKey("Link") as! String
+        let link = aDecoder.decodeObjectForKey("Link") as? String
         let source = aDecoder.decodeObjectForKey("Source") as? String
         value = Exercise(
-            exerciseID: nil,
+            exerciseID: identifier.longLongValue,
             name: name,
-            inputOptions: InputOptions.DefaultOptions, // TODO: Fixme
+            inputOptions: InputOptions(rawValue: input.longLongValue),
             equipment: Exercise.Equipment(name: equipment)!,
             gif: gif,
-            force: force,
-            level: level,
-            muscles: musclesCoder.muscleMovements(),
-            mechanics: mechanics,
-            type: type,
+            force: force.flatMap { Exercise.Force(name: $0) },
+            skillLevel: level.flatMap { Exercise.SkillLevel(name: $0) },
+            muscles: musclesCoder.muscleMovements(identifier.longLongValue),
+            mechanics: mechanics.flatMap { Exercise.Mechanics(name: $0) },
+            exerciseType: Exercise.ExerciseType(name: type)!,
             instructions: instructions,
             link: link,
             source: source
@@ -60,18 +62,34 @@ extension Exercise: ValueCoding {
     }
 
     func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(NSNumber(longLong: value.exerciseID), forKey: "Identifier")
         aCoder.encodeObject(value.name, forKey: "Name")
+        aCoder.encodeObject(NSNumber(longLong: value.inputOptions.rawValue), forKey: "Input")
         aCoder.encodeObject(value.equipment.name, forKey: "Equipment")
-        aCoder.encodeObject(value.gif, forKey: "Gif")
-        aCoder.encodeObject(value.force, forKey: "Force")
-        aCoder.encodeObject(value.level, forKey: "Level")
+        if let gif = value.gif {
+            aCoder.encodeObject(gif, forKey: "Gif")
+        }
+        if let force = value.force {
+            aCoder.encodeObject(force.name, forKey: "Force")
+        }
+        if let level = value.skillLevel {
+            aCoder.encodeObject(level.name, forKey: "Level")
+        }
         let musclesCoder = MuscleMovementCoder(movements: value.muscles!)
         aCoder.encodeObject(musclesCoder, forKey: "Muscles")
-        aCoder.encodeObject(value.mechanics, forKey: "Mechanics")
-        aCoder.encodeObject(value.type, forKey: "Type")
-        aCoder.encodeObject(value.instructions, forKey: "Instructions")
-        aCoder.encodeObject(value.link, forKey: "Link")
-        aCoder.encodeObject(value.source, forKey: "Source")
+        if let mechanics = value.mechanics {
+            aCoder.encodeObject(mechanics.name, forKey: "Mechanics")
+        }
+        aCoder.encodeObject(value.exerciseType.name, forKey: "Type")
+        if let instructions = value.instructions {
+            aCoder.encodeObject(instructions, forKey: "Instructions")
+        }
+        if let link = value.link {
+            aCoder.encodeObject(link, forKey: "Link")
+        }
+        if let source = value.source {
+            aCoder.encodeObject(source, forKey: "Source")
+        }
     }
     
 }

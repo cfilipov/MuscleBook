@@ -50,14 +50,14 @@ extension Exercise: SQLAdaptable {
     init(row: Row) {
         exerciseID = row[Schema.exerciseID]
         name = row[Schema.name]
-        equipment = row.get(Schema.equipmentID)
+        equipment = row.get(Schema.equipment)
         inputOptions = row.get(Schema.inputOptions)
         gif = row[Schema.gif]
-        force = row[Schema.force]
-        level = row[Schema.level]
+        force = row.get(Schema.force)
+        skillLevel = row.get(Schema.skillLevel)
         muscles = nil
-        mechanics = row[Schema.mechanics]
-        type = row[Schema.type]
+        mechanics = row.get(Schema.mechanics)
+        exerciseType = row.get(Schema.exerciseType)
         instructions = row.get(Schema.instructions)?.array
         link = row[Schema.link]
         source = row[Schema.source]
@@ -65,14 +65,15 @@ extension Exercise: SQLAdaptable {
 
     var setters: [Setter] {
         return [
+            Schema.exerciseID <- self.exerciseID,
             Schema.name <- self.name,
-            Schema.equipmentID <- self.equipment,
+            Schema.equipment <- self.equipment,
             Schema.inputOptions <- self.inputOptions,
             Schema.gif <- self.gif,
             Schema.force <- self.force,
-            Schema.level <- self.level,
+            Schema.skillLevel <- self.skillLevel,
             Schema.mechanics <- self.mechanics,
-            Schema.type <- self.type,
+            Schema.exerciseType <- self.exerciseType,
             Schema.instructions <- ArrayBox(array: self.instructions ?? []),
             Schema.link <- self.link,
             Schema.source <- self.source
@@ -145,6 +146,54 @@ extension Exercise.Equipment {
     }
 }
 
+extension Exercise.Force {
+    typealias Schema = CurrentSchema.Force
+    
+    init(row: Row) {
+        self = Exercise.Force(rawValue: row[Schema.forceID])!
+    }
+    
+    var setters: [Setter] {
+        fatalError("This table cannot be modified")
+    }
+}
+
+extension Exercise.Mechanics {
+    typealias Schema = CurrentSchema.Mechanics
+    
+    init(row: Row) {
+        self = Exercise.Mechanics(rawValue: row[Schema.mechanicsID])!
+    }
+    
+    var setters: [Setter] {
+        fatalError("This table cannot be modified")
+    }
+}
+
+extension Exercise.ExerciseType {
+    typealias Schema = CurrentSchema.ExerciseType
+    
+    init(row: Row) {
+        self = Exercise.ExerciseType(rawValue: row[Schema.exerciseTypeID])!
+    }
+    
+    var setters: [Setter] {
+        fatalError("This table cannot be modified")
+    }
+}
+
+extension Exercise.SkillLevel {
+    typealias Schema = CurrentSchema.SkillLevel
+    
+    init(row: Row) {
+        self = Exercise.SkillLevel(rawValue: row[Schema.skillLevelID])!
+    }
+    
+    var setters: [Setter] {
+        fatalError("This table cannot be modified")
+    }
+}
+
 extension MuscleMovement: SQLAdaptable {
     typealias Schema = CurrentSchema.MuscleMovement
 
@@ -158,7 +207,7 @@ extension MuscleMovement: SQLAdaptable {
 
     var setters: [Setter] {
         return [
-            Schema.exerciseID <- self.exerciseID!,
+            Schema.exerciseID <- self.exerciseID,
             Schema.muscleMovementClassID <- self.classification,
             Schema.muscleName <- self.muscleName,
             Schema.muscleID <- self.muscle
@@ -254,6 +303,8 @@ extension Workset: SQLAdaptable {
             Schema.warmup <- input.warmup,
             Schema.reps <- input.reps,
             Schema.weight <- input.weight,
+            Schema.bodyweight <- input.bodyweight,
+            Schema.assistanceWeight <- input.assistanceWeight,
             Schema.volume <- calculations.volume,
             Schema.e1RM <- calculations.e1RM,
             Schema.percentMaxVolume <- calculations.percentMaxVolume,

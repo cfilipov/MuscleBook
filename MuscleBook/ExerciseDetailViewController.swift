@@ -33,17 +33,15 @@ class ExerciseDetailViewController : FormViewController {
     let whiteCircle = UIImage.circle(12, color: UIColor.whiteColor())
 
     private var performanceCount: Int {
-        return db.count(Exercise.self, exerciseID: exercise.exerciseID!)
+        return db.count(Exercise.self, exerciseID: exercise.exerciseID)
     }
 
     init(exercise: Exercise) {
         self.exercise = exercise
         super.init(style: .Grouped)
         hidesBottomBarWhenPushed = true
-        let muscles = exercise.exerciseID.flatMap {
-            try! db.find(exerciseID: $0)
-        }
-        musclesDictionary ?= muscles?.dictionary()
+        let muscles = try! db.find(exerciseID: exercise.exerciseID)
+        musclesDictionary = muscles.dictionary()
         let muscleColorCoding = Dictionary(
             Set<Muscle>(musclesDictionary.values.flatMap{$0})
                 .map{($0,self.colorGenerator.next()!)}
@@ -80,17 +78,22 @@ class ExerciseDetailViewController : FormViewController {
 
         <<< LabelRow() {
             $0.title = "Force"
-            $0.value = exercise.force
+            $0.value = exercise.force?.name
         }
 
         <<< LabelRow() {
             $0.title = "Mechanics"
-            $0.value = exercise.mechanics
+            $0.value = exercise.mechanics?.name
         }
 
         <<< LabelRow() {
             $0.title = "Type"
-            $0.value = exercise.type
+            $0.value = exercise.exerciseType.name
+        }
+
+        <<< LabelRow() {
+            $0.title = "Exercise ID"
+            $0.value = String(exercise.exerciseID)
         }
 
         <<< anatomyRow
