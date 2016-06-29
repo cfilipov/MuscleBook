@@ -480,3 +480,25 @@ let colorPalette = [
     UIColor(rgba: "#ffffb3"),
 ]
 
+extension SequenceType {
+    func find(@noescape predicate: (Self.Generator.Element) throws -> Bool) rethrows -> Self.Generator.Element? {
+        for element in self {
+            if try predicate(element) {
+                return element
+            }
+        }
+        return nil
+    }
+}
+
+extension SequenceType {
+    func findmap<T>(@noescape predicate: (Self.Generator.Element) throws -> T?) rethrows -> T? {
+        for element in self {
+            if let res = try predicate(element) {
+                return res
+            }
+        }
+        return nil
+    }
+}
+

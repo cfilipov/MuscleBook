@@ -117,7 +117,7 @@ final class WorkoutSummaryViewController: FormViewController {
 
         <<< SideBySideAnatomyViewRow("anatomy")
 
-        <<< IntRow() {
+        <<< DecimalRow() {
             $0.title = "Total Volume"
             $0.tag = "total_volume"
             $0.hidden = "$total_volume == nil"
@@ -166,7 +166,7 @@ final class WorkoutSummaryViewController: FormViewController {
         }
 
         <<< LabelRow() {
-            $0.title = "Max Activation"
+            $0.title = "Activation"
             $0.tag = "activation"
             $0.hidden = "$activation == nil"
             $0.disabled = true
@@ -210,7 +210,7 @@ final class WorkoutSummaryViewController: FormViewController {
     private func workoutRecordToRow(workset: Workset) -> BaseRow {
         let row = LabelRow()
         row.title = workset.input.exerciseName
-        row.value = workset.shortString
+        row.value = workset.summary
         row.onCellSelection { cell, row in
             let vc = WorksetViewController(workset: workset) { result in
                 self.dismissViewControllerAnimated(true, completion: nil)

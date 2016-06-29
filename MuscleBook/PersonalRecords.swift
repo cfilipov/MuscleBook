@@ -18,6 +18,21 @@
 
 import Foundation
 
+protocol StringSummarizable {
+    var summary: String { get }
+}
+
+enum PersonalRecord {
+    case MaxWeight(worksetID: Int64, maxWeight: Double, curWeight: Double?)
+    case MaxReps(worksetID: Int64, maxReps: Int, curReps: Int?)
+    case Max1RM(worksetID: Int64, maxWeight: Double, curWeight: Double?)
+    case MaxE1RM(worksetID: Int64, maxWeight: Double, curWeight: Double?)
+    case MaxXRM(worksetID: Int64, maxWeight: Double, curWeight: Double?)
+    case MaxDuration(worksetID: Int64, maxDuration: Double, curDuration: Double?)
+    case MaxVolume(worksetID: Int64, maxVolume: Double, curVolume: Double?)
+    case MaxEReps(worksetID: Int64, maxReps: Int, curReps: Int?)
+}
+
 struct Records {
     var maxWeight: Workset?
     var maxReps: Workset?
@@ -106,7 +121,7 @@ struct RelativeRecords {
         return [percentMaxWeight, percent1RM].flatMap{$0}.maxElement()
     }
 
-    var activation: Activation {
+    var activation: ActivationLevel {
         guard input.warmup == false else { return .Light }
         if input.failure { return .Max }
         guard let
@@ -114,7 +129,7 @@ struct RelativeRecords {
             percentMaxVolume = percentMaxVolume
             else { return .Light }
         let maxActivation = max(intensity, percentMaxVolume)
-        return Activation(percent: maxActivation)
+        return ActivationLevel(percent: maxActivation)
     }
 
     var calculations: Workset.Calculations {
@@ -152,5 +167,73 @@ class RelativeRecordsFormatter {
         } else {
             return "\(valueStr)"
         }
+    }
+}
+
+extension PersonalRecord {
+    var recordTitle: String {
+        switch self {
+        case .MaxWeight(_, _, _): return "Weight"
+        case .MaxReps(_, _, _): return "Reps"
+        case .Max1RM(_, _, _): return "1RM"
+        case .MaxE1RM(_, _, _): return "e1RM"
+        case .MaxXRM(_, _, _): return "xRM"
+        case .MaxDuration(_, _, _): return "Duration"
+        case .MaxVolume(_, _, _): return "Volume"
+        case .MaxEReps(_, _, _): return "eReps"
+        }
+    }
+
+    var worksetID: Int64 {
+        switch self {
+        case let .MaxWeight(worksetID, _, _): return worksetID
+        case let .MaxReps(worksetID, _, _): return worksetID
+        case let .Max1RM(worksetID, _, _): return worksetID
+        case let .MaxE1RM(worksetID, _, _): return worksetID
+        case let .MaxXRM(worksetID, _, _): return worksetID
+        case let .MaxDuration(worksetID, _, _): return worksetID
+        case let .MaxVolume(worksetID, _, _): return worksetID
+        case let .MaxEReps(worksetID, _, _): return worksetID
+        }
+    }
+
+    var percent: Double? {
+        switch self {
+        case let .MaxWeight(_, maxVal, curVal?): return curVal / maxVal
+        case let .MaxReps(_, maxVal, curVal?): return Double(curVal) / Double(maxVal)
+        case let .Max1RM(_, maxVal, curVal?): return curVal / maxVal
+        case let .MaxE1RM(_, maxVal, curVal?): return curVal / maxVal
+        case let .MaxXRM(_, maxVal, curVal?): return curVal / maxVal
+        case let .MaxDuration(_, maxVal, curVal?): return curVal / maxVal
+        case let .MaxVolume(_, maxVal, curVal?): return curVal / maxVal
+        case let .MaxEReps(_, maxVal, curVal?): return Double(curVal) / Double(maxVal)
+        default: return nil
+        }
+    }
+
+    var recordString: String {
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = .DecimalStyle
+        formatter.maximumFractionDigits = 0
+        switch self {
+        case let .MaxWeight(_, val, _): return formatter.stringFromOptionalNumber(val)!
+        case let .MaxReps(_, val, _): return formatter.stringFromOptionalNumber(val)!
+        case let .Max1RM(_, val, _): return formatter.stringFromOptionalNumber(val)!
+        case let .MaxE1RM(_, val, _): return formatter.stringFromOptionalNumber(val)!
+        case let .MaxXRM(_, val, _): return formatter.stringFromOptionalNumber(val)!
+        case let .MaxDuration(_, val, _): return formatter.stringFromOptionalNumber(val)!
+        case let .MaxVolume(_, val, _): return formatter.stringFromOptionalNumber(val)!
+        case let .MaxEReps(_, val, _): return formatter.stringFromOptionalNumber(val)!
+        }
+    }
+}
+
+extension PersonalRecord: StringSummarizable {
+    var summary: String {
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = .DecimalStyle
+        formatter.maximumFractionDigits = 0
+        guard let percent = percent else { return recordString }
+        return "\(recordString) (\(formatter.stringFromNumber(percent * 100)!)%)"
     }
 }

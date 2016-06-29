@@ -21,7 +21,7 @@ import SQLite
 
 extension DB {
 
-    func activationByDay() throws -> [NSDate: Activation] {
+    func activationByDay() throws -> [NSDate: ActivationLevel] {
         let cal = NSCalendar.currentCalendar()
         typealias W = Workout.Schema
         let res = try db.prepare(W.table
@@ -39,7 +39,7 @@ extension DB {
         )
     }
 
-    func activationByDay(exerciseID exerciseID: Int64) throws -> [NSDate: Activation] {
+    func activationByDay(exerciseID exerciseID: Int64) throws -> [NSDate: ActivationLevel] {
         let cal = NSCalendar.currentCalendar()
         typealias W = Workset.Schema
         let res = try db.prepare(W.table

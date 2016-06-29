@@ -44,6 +44,10 @@ extension DB {
         }
     }
 
+    func get(type: Workset.Type, worksetID: Int64) -> Workset? {
+        return db.pluck(Workset.Schema.table.filter(Workset.Schema.worksetID == worksetID))
+    }
+
     func newest(type: Workset.Type) -> Workset? {
         typealias W = Workset.Schema
         return db.pluck(W.table.order(W.startTime.desc))

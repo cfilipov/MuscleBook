@@ -19,6 +19,24 @@
 import Foundation
 
 struct Exercise {
+
+    struct InputOptions: OptionSetType {
+        let rawValue: Int64
+
+        static let Reps = InputOptions(rawValue: 1 << 0)
+        static let Weight  = InputOptions(rawValue: 1 << 1)
+        static let BodyWeight  = InputOptions(rawValue: 1 << 2)
+        static let Duration  = InputOptions(rawValue: 1 << 3)
+        static let AssistanceWeight  = InputOptions(rawValue: 1 << 4)
+        static let Failure  = InputOptions(rawValue: 1 << 5)
+        static let Warmup  = InputOptions(rawValue: 1 << 6)
+        static let StartTime  = InputOptions(rawValue: 1 << 7)
+
+        static let AllOptions: InputOptions = [.Reps, .Weight, .BodyWeight, .Duration, .AssistanceWeight]
+        static let DefaultOptions: InputOptions = [.Reps, .Weight, .Duration]
+        static let UniversalOptions: InputOptions = [.StartTime, .Warmup, .Failure]
+    }
+
     enum Equipment: Int64 {
         case Lever = 1
         case LeverPlateLaded

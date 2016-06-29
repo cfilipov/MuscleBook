@@ -90,7 +90,7 @@ extension Schema20160608215756485 {
         static let _searchTMP = VirtualTable("exercise_search_tmp")
         
         static let exerciseID = Expression<Int64>("exercise_id")
-        static let inputOptions = Expression<MuscleBook.InputOptions>("input_options_id")
+        static let inputOptions = Expression<MuscleBook.Exercise.InputOptions>("input_options_id")
         static let name = Expression<String>("exercise_name")
         static let equipment = Expression<MuscleBook.Exercise.Equipment>("equipment_id")
         static let gif = Expression<String?>("gif")

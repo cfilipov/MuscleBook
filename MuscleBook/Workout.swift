@@ -31,5 +31,5 @@ struct Workout {
     let avePercentMaxDuration: Double?
     let aveIntensity: Double?
     let maxDuration: Double?
-    let activation: MuscleBook.Activation
+    let activation: MuscleBook.ActivationLevel
 }

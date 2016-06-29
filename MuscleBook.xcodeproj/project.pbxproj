@@ -37,7 +37,6 @@
 		B23F0D031CF8CE70006BF745 /* SQLValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23F0D021CF8CE70006BF745 /* SQLValues.swift */; };
 		B23F0D061CF9506D006BF745 /* AnatomyDebugViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23F0D051CF9506D006BF745 /* AnatomyDebugViewController2.swift */; };
 		B24AE3BD1CFF9002000285FB /* ColorPaletteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AE3BC1CFF9002000285FB /* ColorPaletteViewController.swift */; };
-		B24AE3DC1CFFBF29000285FB /* InputOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AE3DB1CFFBF29000285FB /* InputOptions.swift */; };
 		B24AE3DE1CFFBF7F000285FB /* Schema20160601181210067.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AE3DD1CFFBF7F000285FB /* Schema20160601181210067.swift */; };
 		B24AE40E1D000053000285FB /* ExerciseInstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AE40D1D000053000285FB /* ExerciseInstructionsViewController.swift */; };
 		B24BA3651D0CC1E90032260A /* DB+YAML.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24BA3641D0CC1E90032260A /* DB+YAML.swift */; };
@@ -477,7 +476,6 @@
 		B23F0D021CF8CE70006BF745 /* SQLValues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLValues.swift; sourceTree = "<group>"; };
 		B23F0D051CF9506D006BF745 /* AnatomyDebugViewController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnatomyDebugViewController2.swift; sourceTree = "<group>"; };
 		B24AE3BC1CFF9002000285FB /* ColorPaletteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPaletteViewController.swift; sourceTree = "<group>"; };
-		B24AE3DB1CFFBF29000285FB /* InputOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputOptions.swift; sourceTree = "<group>"; };
 		B24AE3DD1CFFBF7F000285FB /* Schema20160601181210067.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schema20160601181210067.swift; sourceTree = "<group>"; };
 		B24AE40D1D000053000285FB /* ExerciseInstructionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseInstructionsViewController.swift; sourceTree = "<group>"; };
 		B24BA3641D0CC1E90032260A /* DB+YAML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DB+YAML.swift"; sourceTree = "<group>"; };
@@ -689,7 +687,6 @@
 			isa = PBXGroup;
 			children = (
 				B23180D91C76DDCF0043BFE4 /* Exercise.swift */,
-				B24AE3DB1CFFBF29000285FB /* InputOptions.swift */,
 				B2E294561CAC649E009BC21A /* ExerciseReference.swift */,
 				B2843FF41CBB3480008D0953 /* Activation.swift */,
 				B2843FF01CBB3412008D0953 /* AnatomyViewConfig.swift */,
@@ -1397,7 +1394,6 @@
 				B2E293DA1CA9FB50009BC21A /* WorksetAdapter+Dropbox.swift in Sources */,
 				B24AE3BD1CFF9002000285FB /* ColorPaletteViewController.swift in Sources */,
 				B24BA3901D0CC69D0032260A /* DB+Muscles.swift in Sources */,
-				B24AE3DC1CFFBF29000285FB /* InputOptions.swift in Sources */,
 				B2843FF11CBB3412008D0953 /* AnatomyViewConfig.swift in Sources */,
 				B27D2FA51CB4845800C219E8 /* Schema20160410215418161.swift in Sources */,
 				A23B0A371CF0E62F00AD924F /* EFCalendarGraph.m in Sources */,

@@ -122,7 +122,7 @@ extension Schema20160524095754146 {
         static let percentMaxVolume = Expression<Double?>("percent_max_volume")
         static let percentMaxDuration = Expression<Double?>("percent_max_duration")
         static let intensity = Expression<Double?>("intensity")
-        static let activation = Expression<MuscleBook.Activation>("activation_id")
+        static let activation = Expression<MuscleBook.ActivationLevel>("activation_id")
     }
 
     /* `workout` table replaces `workout` view */
@@ -143,7 +143,7 @@ extension Schema20160524095754146 {
         static let avePercentMaxDuration = Expression<Double>("ave_percent_max_duration")
         static let aveIntensity = Expression<Double?>("ave_intensity")
         static let maxDuration = Expression<Double>("max_duration")
-        static let maxActivation = Expression<MuscleBook.Activation>("max_activation")
+        static let maxActivation = Expression<MuscleBook.ActivationLevel>("max_activation")
     }
 
     /* new table: `activation` */
@@ -169,7 +169,7 @@ private extension This.Activation {
     }
 
     static func populate(db: Connection) throws {
-        for c in Activation.all {
+        for c in ActivationLevel.all {
             try db.run(
                 table.insert(
                     or: .Replace,
@@ -236,7 +236,7 @@ private extension This.Workset {
                     duration <- d,
                     failure <- false,
                     warmup <- false,
-                    activation <- MuscleBook.Activation.None
+                    activation <- MuscleBook.ActivationLevel.None
                 )
             )
         }
@@ -285,7 +285,7 @@ private extension This.Workout {
                     activeDuration <- 0,
                     avePercentMaxDuration <- 0,
                     maxDuration <- 0,
-                    maxActivation <- MuscleBook.Activation.None
+                    maxActivation <- MuscleBook.ActivationLevel.None
                 )
             )
         }

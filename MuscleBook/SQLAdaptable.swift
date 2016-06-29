@@ -110,11 +110,11 @@ extension Muscle: SQLAdaptable {
     }
 }
 
-extension Activation: SQLAdaptable {
+extension ActivationLevel: SQLAdaptable {
     typealias Schema = CurrentSchema.Activation
 
     init(row: Row) {
-        self = Activation(rawValue: row[Schema.activationID])!
+        self = ActivationLevel(rawValue: row[Schema.activationID])!
     }
 
     var setters: [Setter] {
@@ -122,11 +122,11 @@ extension Activation: SQLAdaptable {
     }
 }
 
-extension InputOptions: SQLAdaptable {
+extension Exercise.InputOptions: SQLAdaptable {
     typealias Schema = CurrentSchema.InputOptions
 
     init(row: Row) {
-        self = InputOptions(rawValue: row[Schema.inputOptionsID])
+        self = Exercise.InputOptions(rawValue: row[Schema.inputOptionsID])
     }
 
     var setters: [Setter] {

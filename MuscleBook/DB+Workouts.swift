@@ -82,7 +82,7 @@ extension DB {
                 WO.activeDuration <- 0,
                 WO.avePercentMaxDuration <- 0,
                 WO.maxDuration <- 0,
-                WO.activation <- MuscleBook.Activation.Light
+                WO.activation <- MuscleBook.ActivationLevel.Light
             )
         )
     }
@@ -200,13 +200,13 @@ extension DB {
         } else {
             restDuration = nil
         }
-        let activation: Activation
+        let activation: ActivationLevel
         if let avePcVolume = avePcVolume, aveIntensity = aveIntensity {
-            activation = Activation(percent: max(aveIntensity, avePcVolume))
+            activation = ActivationLevel(percent: max(aveIntensity, avePcVolume))
         } else if let avePcVolume = avePcVolume {
-            activation = Activation(percent: avePcVolume)
+            activation = ActivationLevel(percent: avePcVolume)
         } else if let aveIntensity = aveIntensity {
-            activation = Activation(percent: aveIntensity)
+            activation = ActivationLevel(percent: aveIntensity)
         } else {
             activation = .Light
         }

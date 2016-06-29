@@ -47,7 +47,7 @@ extension Exercise: ValueCoding {
         value = Exercise(
             exerciseID: identifier.longLongValue,
             name: name,
-            inputOptions: InputOptions(rawValue: input.longLongValue),
+            inputOptions: Exercise.InputOptions(rawValue: input.longLongValue),
             equipment: Exercise.Equipment(name: equipment)!,
             gif: gif,
             force: force.flatMap { Exercise.Force(name: $0) },

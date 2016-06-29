@@ -1,6 +1,27 @@
 # Change Log
 
-### 0.0.1
+### [0.1.0](https://github.com/cfilipov/MuscleBook/releases/tag/v0.1.0)
+
+* Added exercise statistics to exercise detail screen. Stats include max weight, max e1rm, volume, total workouts, total sets and a punchcard graph.
+* Fixed bug with intensity calculation/display (default to light instead of none).
+* Fixed punchcard graph not displaying the latest days.
+* Better punchcard coloring. Previously punchcard colors were based on volume only, now it's volume or intensity, whichever is higher.
+* New: Sort exercises based on frequency
+* Fixed: workout calculations don't appear on first workout.
+* New: Data entry fields are now based on exercise. Example: Pull ups only have a field for bodyweight, weighted pull ups have added weight field, etc...
+* Gif animation in exercise instructions (network connection required)
+* Added exercise instructions
+* Fixed: Workout duration calculations were off
+
+##### Known Issues in 0.1.0
+
+* While it's possible to edit or delete a past workout set, doing so requires all workouts that follow to have to be recalculated. The input data should not be effected, but PRs and other stats will. This process might take a while and will lock up the UI.
+* It's not possible to add a set to a past workout.
+* Duration numbers seem off.
+* Github-style punchcard graph doesn't render the last couple days for some reason.
+* YAML and CSV import is non-functional (removed for now). You can still export the saw SQLite3 file **and should back it up periodically**.
+
+### [0.0.1](https://github.com/cfilipov/MuscleBook/releases/tag/v0.0.1)
 
 * Major database schema migration, allows for more useful data and faster lookups.
 * Added the ability to edit past workout sets.

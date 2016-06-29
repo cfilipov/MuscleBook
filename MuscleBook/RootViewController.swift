@@ -182,7 +182,7 @@ class RootViewController: FormViewController {
 private class WorkoutPunchcardDelegate: PunchcardDelegate {
     private let db = DB.sharedInstance
     private let cal = NSCalendar.currentCalendar()
-    private let activations: [NSDate: Activation]
+    private let activations: [NSDate: ActivationLevel]
 
     override init() {
         activations = try! db.activationByDay()

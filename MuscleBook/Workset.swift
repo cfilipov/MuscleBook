@@ -31,13 +31,19 @@ struct Workset {
         var bodyweight: Double?
         var assistanceWeight: Double?
     }
+    enum Calculation {
+        case E1RM(Double)
+        case Volume(Double)
+        case Wilks(Double)
+        case EReps(Int)
+    }
     struct Calculations {
         var volume: Double?
         var e1RM: Double?
         var percentMaxVolume: Double?
         var percentMaxDuration: Double?
         var intensity: Double?
-        var activation: Activation
+        var activation: ActivationLevel
     }
     let worksetID: Int64
     let workoutID: Int64
@@ -47,9 +53,9 @@ struct Workset {
 
 // http://www.exrx.net/Calculators/OneRepMax.html
 // http://www.exrx.net/Calculators/onerepmax.js
-func estimate1RM(reps reps: Int, weight: Double) -> Double? {
+func estimate1RM(reps reps: Int, weight: Double) -> Double {
     precondition(reps >= 0)
-    if reps == 0 { return nil }
+    if reps == 0 { return 0 }
     if reps == 1 { return weight }
     if reps < 10 { return round(weight / (1.0278 - 0.0278 * Double(reps))) }
     else { return round(weight / 0.75) }
@@ -96,7 +102,27 @@ extension Workset {
         )
     }
 
-    var shortString: String {
+}
+
+extension Workset.Input {
+    var calculations: [Workset.Calculation] {
+        var calculations: [Workset.Calculation] = []
+        if let reps = reps, weight = weight {
+            calculations.append(
+                .E1RM(estimate1RM(reps: reps, weight: weight))
+            )
+        }
+        if let reps = reps, weight = weight {
+            calculations.append(
+                .Volume(Double(reps) * weight)
+            )
+        }
+        return calculations
+    }
+}
+
+extension Workset: StringSummarizable {
+    var summary: String {
         if let reps = input.reps, weight = input.weight {
             return "\(reps)@\(weight)"
         }

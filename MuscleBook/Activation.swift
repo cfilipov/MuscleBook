@@ -18,7 +18,7 @@
 
 import Foundation
 
-enum Activation: Int64, Comparable {
+enum ActivationLevel: Int64, Comparable {
     case None = 1
     case Light // Below average intensity and volume
     case Medium // Above average intensity or volume
@@ -26,11 +26,11 @@ enum Activation: Int64, Comparable {
     case Max // New PR or failure set
 }
 
-func <(lhs: Activation, rhs: Activation) -> Bool {
+func <(lhs: ActivationLevel, rhs: ActivationLevel) -> Bool {
     return lhs.rawValue < rhs.rawValue
 }
 
-extension Activation {
+extension ActivationLevel {
     init(percent: Double) {
         if percent == 0 { self = .None }
         else if percent > 1.0 { self = .Max }
@@ -49,7 +49,7 @@ extension Activation {
         }
     }
 
-    static var all: [Activation] {
+    static var all: [ActivationLevel] {
         return [.None, .Light, .Medium, .High, .Max]
     }
 

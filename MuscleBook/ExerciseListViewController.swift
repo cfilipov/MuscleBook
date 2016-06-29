@@ -96,7 +96,10 @@ class ExerciseListViewController: UITableViewController {
         definesPresentationContext = true
         tableView?.setContentOffset(CGPoint(x: 0, y: 44), animated: false)
         tableView?.tableHeaderView = searchController.searchBar
-        updateUnfilteredExercises()
+        sort = db.totalExercisesPerformed(sinceDate: NSDate.distantPast()) > 3
+            ? .Count
+            : .Alphabetical
+        segmentedControl.selectedSegmentIndex = sort.rawValue
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

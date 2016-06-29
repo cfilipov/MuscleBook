@@ -21,6 +21,63 @@ import SQLite
 
 extension DB {
 
+    func get(type: PersonalRecord.Type, input: Workset.Input) -> [PersonalRecord] {
+        guard let exerciseID = input.exerciseID else { return [] }
+        var records: [PersonalRecord] = []
+        let calculations = input.calculations
+        if let weight = input.weight,
+            w = maxReps(exerciseID: exerciseID, weight: weight, todate: input.startTime) {
+            records.append(
+                .MaxReps(
+                    worksetID: w.worksetID,
+                    maxReps: w.input.reps!,
+                    curReps: input.reps))
+        }
+        if let w = maxRM(exerciseID: exerciseID, todate: input.startTime) {
+            records.append(
+                .MaxWeight(
+                    worksetID: w.worksetID,
+                    maxWeight: w.input.weight!,
+                    curWeight: input.weight))
+        }
+        if let w = max1RM(exerciseID: exerciseID, todate: input.startTime) {
+            records.append(
+                .Max1RM(
+                    worksetID: w.worksetID,
+                    maxWeight: w.input.weight!,
+                    curWeight: input.weight))
+        }
+        if let w = maxE1RM(exerciseID: exerciseID, todate: input.startTime) {
+            records.append(
+                .MaxE1RM(
+                    worksetID: w.worksetID,
+                    maxWeight: w.calculations.e1RM!,
+                    curWeight: calculations.findmap {
+                        if case let .E1RM(val) = $0 { return val }
+                        return nil
+                    }))
+        }
+        if let w = maxVolume(exerciseID: exerciseID, todate: input.startTime) {
+            records.append(
+                .MaxVolume(
+                    worksetID: w.worksetID,
+                    maxVolume: w.calculations.volume!,
+                    curVolume: calculations.findmap {
+                        if case let .Volume(val) = $0 { return val }
+                        return nil
+                    }))
+        }
+        if let reps = input.reps,
+            w = maxXRM(exerciseID: exerciseID, reps: reps, todate: input.startTime) {
+            records.append(
+                .MaxXRM(
+                    worksetID: w.worksetID,
+                    maxWeight: w.input.weight!,
+                    curWeight: input.weight))
+        }
+        return records
+    }
+
     func get(type: Records.Type, input: Workset.Input) -> Records? {
         guard let exerciseID = input.exerciseID else { return nil }
         var perf = Records()
@@ -41,7 +98,7 @@ extension DB {
                         Workset.Schema.exerciseID == exerciseID &&
                         Workset.Schema.exerciseID != nil
                 )
-                .order(Workset.Schema.reps.desc)
+                .order(Workset.Schema.weight.desc)
                 .limit(1)
         )
     }
@@ -51,11 +108,10 @@ extension DB {
             Workset.Schema.table
                 .filter(
                     Workset.Schema.startTime.localDay < date.localDay &&
-                        Workset.Schema.exerciseID == exerciseID &&
-                        Workset.Schema.exerciseID != nil &&
-                        Workset.Schema.weight >= weight
-                )
-                .order(Workset.Schema.weight.desc)
+                    Workset.Schema.exerciseID == exerciseID &&
+                    Workset.Schema.exerciseID != nil &&
+                    Workset.Schema.weight >= weight)
+                .order(Workset.Schema.reps.desc)
                 .limit(1)
         )
     }

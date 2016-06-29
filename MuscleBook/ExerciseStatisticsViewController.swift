@@ -168,7 +168,7 @@ class ExerciseStatisticsViewController : FormViewController {
 private class ExercisePunchcardDelegate: PunchcardDelegate {
     private let db = DB.sharedInstance
     private let cal = NSCalendar.currentCalendar()
-    private let activations: [NSDate: Activation]
+    private let activations: [NSDate: ActivationLevel]
     private let exerciseID: Int64
 
     init(exerciseID: Int64) {

@@ -82,7 +82,7 @@ extension Schema20160601181210067 {
         static let _searchTMP = VirtualTable("exercise_search_tmp")
 
         static let exerciseID = Expression<Int64>("exercise_id")
-        static let inputOptions = Expression<MuscleBook.InputOptions>("input_options_id") // New
+        static let inputOptions = Expression<MuscleBook.Exercise.InputOptions>("input_options_id") // New
         static let name = Expression<String>("exercise_name")
         static let equipmentID = Expression<MuscleBook.Exercise.Equipment>("equipment_id") // Changed type
         static let gif = Expression<String?>("gif")
@@ -142,7 +142,7 @@ extension Schema20160601181210067 {
         static let percentMaxVolume = Expression<Double?>("percent_max_volume")
         static let percentMaxDuration = Expression<Double?>("percent_max_duration")
         static let intensity = Expression<Double?>("intensity")
-        static let activation = Expression<MuscleBook.Activation>("activation_id")
+        static let activation = Expression<MuscleBook.ActivationLevel>("activation_id")
     }
 
     /* Rename column, change colume types */
@@ -163,7 +163,7 @@ extension Schema20160601181210067 {
         static let avePercentMaxDuration = Expression<Double?>("ave_percent_max_duration") // Now nullable
         static let aveIntensity = Expression<Double?>("ave_intensity")
         static let maxDuration = Expression<Double?>("max_duration") // Now nullable
-        static let activation = Expression<MuscleBook.Activation>("activation") // Renamed
+        static let activation = Expression<MuscleBook.ActivationLevel>("activation") // Renamed
     }
 }
 
@@ -197,7 +197,7 @@ extension This.Exercise {
         typealias PE = Prev.Exercise
         for ex in try db.prepare(PE.table) {
             let e = MuscleBook.Exercise.Equipment(name: ex.get(PE.equipment).array[0])!
-            var input: InputOptions = []
+            var input: Exercise.InputOptions = []
             switch e {
             case .Lever: input.insert(.DefaultOptions)
             case .LeverPlateLaded: input.insert(.DefaultOptions)
@@ -254,7 +254,7 @@ extension This.InputOptions {
     }
 
     static func populate(db: Connection) throws {
-        typealias I = MuscleBook.InputOptions
+        typealias I = MuscleBook.Exercise.InputOptions
         try db.run(table.insert(inputOptionsID <- I.Reps.rawValue, name <- "Reps"))
         try db.run(table.insert(inputOptionsID <- I.Weight.rawValue, name <- "Weight"))
         try db.run(table.insert(inputOptionsID <- I.BodyWeight.rawValue, name <- "Body Weight"))

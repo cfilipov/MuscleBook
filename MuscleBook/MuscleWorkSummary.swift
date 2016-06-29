@@ -22,7 +22,7 @@ struct MuscleWorkSummary {
     let muscle: Muscle
     let exercise: ExerciseReference
     let movementClass: MuscleMovement.Classification
-    let activation: Activation
+    let activation: ActivationLevel
     let volume: Double?
     let weight: Double?
 }

@@ -43,24 +43,24 @@ extension Muscle: SQLite.Value {
     }
 }
 
-extension Activation: SQLite.Value {
+extension ActivationLevel: SQLite.Value {
     static var declaredDatatype: String {
         return Int64.declaredDatatype
     }
-    static func fromDatatypeValue(intValue: Int64) -> Activation {
-        return Activation(rawValue: intValue)!
+    static func fromDatatypeValue(intValue: Int64) -> ActivationLevel {
+        return ActivationLevel(rawValue: intValue)!
     }
     var datatypeValue: Int64 {
         return self.rawValue
     }
 }
 
-extension InputOptions: SQLite.Value {
+extension Exercise.InputOptions: SQLite.Value {
     static var declaredDatatype: String {
         return Int64.declaredDatatype
     }
-    static func fromDatatypeValue(intValue: Int64) -> InputOptions {
-        return InputOptions(rawValue: intValue)
+    static func fromDatatypeValue(intValue: Int64) -> Exercise.InputOptions {
+        return Exercise.InputOptions(rawValue: intValue)
     }
     var datatypeValue: Int64 {
         return self.rawValue

@@ -259,10 +259,12 @@ class WorksetViewController: FormViewController {
                 self.input.duration = row.value
             }
             $0.onCellSelection { cell, row in
+                guard
+                    case .Editing(_) = self.mode,
+                    case .Creating = self.mode
+                    else { return }
                 let alert = UIAlertController(title: "Set Duration", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(
-                    UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-                )
+                alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
                 alert.addAction(
                     UIAlertAction(title: "Set", style: .Default) { _ in
                         row.value = Double(alert.textFields![0].text!)!
@@ -350,101 +352,17 @@ class WorksetViewController: FormViewController {
             $0.hidden = "$Volume == nil"
         }
 
+        <<< LabelRow() {
+            $0.title = "Intensity"
+            $0.tag = "intensity"
+            $0.hidden = "$intensity == nil"
+        }
+
         +++ Section("Personal Records") {
             $0.tag = "prs"
             $0.hidden = Condition.Function([]) { form -> Bool in
                 return (form.sectionByTag("prs")?.count ?? 0) > 0 ? false : true
             }
-        }
-
-        <<< LabelRow("RM") {
-            $0.title = $0.tag
-            $0.hidden = "$RM == nil"
-            $0.cellUpdate { cell, row in
-                if let maxWeight = self.records?.maxWeight {
-                    cell.accessoryType = .DisclosureIndicator
-                    row.onCellSelection { _, _ in
-                        let vc = WorksetViewController(workset: maxWeight)
-                        self.showViewController(vc, sender: nil)
-                    }
-                } else {
-                    cell.accessoryType = .None
-                    row.onCellSelection { _, _ in }
-                }
-            }
-        }
-
-        <<< LabelRow("OneRM") {
-            $0.title = "1RM"
-            $0.hidden = "$OneRM == nil"
-            $0.cellUpdate { cell, row in
-                if let max1RM = self.records?.max1RM {
-                    cell.accessoryType = .DisclosureIndicator
-                    row.onCellSelection { _, _ in
-                        let vc = WorksetViewController(workset: max1RM)
-                        self.showViewController(vc, sender: nil)
-                    }
-                } else {
-                    cell.accessoryType = .None
-                    row.onCellSelection { _, _ in }
-                }
-            }
-        }
-
-        <<< LabelRow("e1RM") {
-            $0.title = $0.tag
-            $0.hidden = "$e1RM == nil"
-            $0.cellUpdate { cell, row in
-                if let maxE1RM = self.records?.maxE1RM {
-                    cell.accessoryType = .DisclosureIndicator
-                    row.onCellSelection { _, _ in
-                        let vc = WorksetViewController(workset: maxE1RM)
-                        self.showViewController(vc, sender: nil)
-                    }
-                } else {
-                    cell.accessoryType = .None
-                    row.onCellSelection { _, _ in }
-                }
-            }
-        }
-
-        <<< LabelRow("XRM") {
-            $0.hidden = "$XRM == nil"
-            $0.cellUpdate { cell, row in
-                if let maxXRM = self.records?.maxXRM {
-                    cell.accessoryType = .DisclosureIndicator
-                    row.onCellSelection { _, _ in
-                        let vc = WorksetViewController(workset: maxXRM)
-                        self.showViewController(vc, sender: nil)
-                    }
-                } else {
-                    cell.accessoryType = .None
-                    row.onCellSelection { _, _ in }
-                }
-            }
-        }
-
-        <<< LabelRow("past_volume") {
-            $0.title = "Volume"
-            $0.hidden = "$past_volume == nil"
-            $0.cellUpdate { cell, row in
-                if let maxVolume = self.records?.maxVolume {
-                    cell.accessoryType = .DisclosureIndicator
-                    row.onCellSelection { _, _ in
-                        let vc = WorksetViewController(workset: maxVolume)
-                        self.showViewController(vc, sender: nil)
-                    }
-                } else {
-                    cell.accessoryType = .None
-                    row.onCellSelection { _, _ in }
-                }
-            }
-        }
-
-        <<< LabelRow() {
-            $0.title = "Intensity"
-            $0.tag = "intensity"
-            $0.hidden = "$intensity == nil"
         }
 
         +++ Section() {
@@ -559,7 +477,10 @@ class WorksetViewController: FormViewController {
         form.sectionByTag("input")?.evaluateHidden()
         form.sectionByTag("section_delete")?.evaluateHidden()
         form.sectionByTag("calculations")?.reload()
-        form.sectionByTag("prs")?.reload()
+        form.sectionByTag("prs")?.removeAll()
+        form.sectionByTag("prs")?.appendContentsOf(
+            db.get(PersonalRecord.self, input: input).map(personalRecordToRow)
+        )
         form.sectionByTag("section_delete")?.reload()
     }
 
@@ -680,6 +601,21 @@ class WorksetViewController: FormViewController {
             }
         default:
             fatalError("Unexpected mode: \(mode)")
+        }
+    }
+
+    private func personalRecordToRow(pr: PersonalRecord) -> BaseRow {
+        let workset = db.get(Workset.self, worksetID: pr.worksetID)!
+        return LabelRow() {
+            $0.title = pr.recordTitle
+            $0.value = pr.summary
+            $0.onCellSelection { _, _ in
+                let vc = WorksetViewController(workset: workset)
+                self.showViewController(vc, sender: nil)
+            }
+            $0.cellSetup { cell, row in
+                cell.accessoryType = .DisclosureIndicator
+            }
         }
     }
 

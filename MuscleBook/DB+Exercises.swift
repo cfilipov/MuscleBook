@@ -45,19 +45,19 @@ extension DB {
         typealias R = ExerciseReference.Schema
         typealias E = Exercise.Schema
         typealias W = Workset.Schema
-
         let rows = try db.prepare(E.table
             .select(E.table[E.exerciseID], E.table[E.name], W.workoutID.distinct.count)
             .join(.LeftOuter, W.table, on: W.table[W.exerciseID] == E.table[E.exerciseID])
             .group(E.table[E.exerciseID])
-            .order(sort.column(scope: E.table))
-        )
+            .order(sort.column(scope: E.table)))
         return rows.map {
             return ExerciseReference(
                 exerciseID: $0[R.exerciseID],
                 name: $0[R.name],
-                count: $0[W.workoutID.distinct.count]
-            )
+                count: $0[W.workoutID.distinct.count])
+        }.filter {
+            guard sort == .Count else { return true }
+            return $0.count > 0
         }
     }
 
@@ -81,16 +81,13 @@ extension DB {
         typealias E = Exercise.Schema
         return db.pluck(E.search
             .select(E.exerciseID, E.name)
-            .filter(E.name == name)
-        )
+            .filter(E.name == name))
     }
 
     func find(exerciseID exerciseID: Int64) throws -> AnySequence<MuscleMovement> {
         return try db.prepare(
             MuscleMovement.Schema.table.filter(
-                MuscleMovement.Schema.exerciseID == exerciseID
-            )
-        )
+                MuscleMovement.Schema.exerciseID == exerciseID))
     }
 
     func findUnknownExercises() throws -> AnySequence<ExerciseReference> {
@@ -106,8 +103,7 @@ extension DB {
         return try db.prepare(WS.table
             .select(WS.exerciseID, WS.exerciseName)
             .filter(WS.startTime.localDay == date.localDay)
-            .group(WS.exerciseID)
-        )
+            .group(WS.exerciseID))
     }
 
     func match(name name: String, sort: Exercise.SortType) throws -> [ExerciseReference] {
@@ -115,33 +111,29 @@ extension DB {
         typealias W = Workset.Schema
         let rows = try db.prepare(E.search
             .select(E.search[E.exerciseID], E.search[E.name], W.workoutID.distinct.count)
-            .join(.LeftOuter, W.table, on: W.table[W.exerciseID] == E.search[E.exerciseID])
+            .join(.LeftOuter, W.table, on:
+                W.table[W.exerciseID] == E.search[E.exerciseID])
             .group(E.search[E.exerciseID])
             .match("*"+name+"*")
-            .order(sort.column(scope: E.search))
-        )
+            .order(sort.column(scope: E.search)))
         return rows.map {
             return ExerciseReference(
                 exerciseID: $0[E.search[E.exerciseID]],
                 name: $0[E.name],
-                count: $0[W.workoutID.distinct.count]
-            )
+                count: $0[W.workoutID.distinct.count])
+        }.filter {
+            guard sort == .Count else { return true }
+            return $0.count > 0
         }
     }
 
     func save(exercise: Exercise) throws {
         try db.transaction { [unowned self] in
-            try self.db.run(
-                Exercise.Schema.table.insert(or: .Replace, exercise)
-            )
+            try self.db.run(Exercise.Schema.table.insert(or: .Replace, exercise))
             for movement in exercise.muscles! {
-                try self.db.run(
-                    MuscleMovement.Schema.table.insert(movement)
-                )
+                try self.db.run(MuscleMovement.Schema.table.insert(movement))
             }
-            try self.db.run(
-                Exercise.Schema.search.insert(or: .Replace, exercise.exerciseReference)
-            )
+            try self.db.run(Exercise.Schema.search.insert(or: .Replace, exercise.exerciseReference))
         }
     }
 
@@ -149,8 +141,7 @@ extension DB {
         typealias W = Workset.Schema
         return db.scalar(W.table
             .select(W.exerciseID.distinct.count)
-            .filter(W.startTime.localDay >= date)
-        )
+            .filter(W.startTime.localDay >= date))
     }
     
 }
