@@ -1,5 +1,12 @@
 # Change Log
 
+### [0.1.1](https://github.com/cfilipov/MuscleBook/releases/tag/v0.1.1)
+
+* Fixed: Crash when looking up max weight for bodyweight exercise ([#44](https://github.com/cfilipov/MuscleBook/issues/44)).
+* Fixed: Error recalculating workouts when entering warmup set ([#43](https://github.com/cfilipov/MuscleBook/issues/43)).
+* Fixed: Not dismissing view controllers properly when deleting sets.
+* Fixed: When editing a data point, the weight in the the workout summary doesn't update until refreshed ([#40](https://github.com/cfilipov/MuscleBook/issues/40)).
+
 ### [0.1.0](https://github.com/cfilipov/MuscleBook/releases/tag/v0.1.0)
 
 * New: Exercise statistics in exercise detail screen. Stats include max weight, max e1rm, volume, total workouts, total sets and a punchcard graph.
