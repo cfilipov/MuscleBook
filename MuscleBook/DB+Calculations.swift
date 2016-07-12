@@ -95,12 +95,11 @@ extension DB {
             Workset.Schema.table
                 .filter(
                     Workset.Schema.startTime.localDay < date.localDay &&
-                        Workset.Schema.exerciseID == exerciseID &&
-                        Workset.Schema.exerciseID != nil
-                )
+                    Workset.Schema.exerciseID == exerciseID &&
+                    Workset.Schema.exerciseID != nil &&
+                    Workset.Schema.weight != nil)
                 .order(Workset.Schema.weight.desc)
-                .limit(1)
-        )
+                .limit(1))
     }
 
     func maxReps(exerciseID exerciseID: Int64, weight: Double, todate date: NSDate = NSDate()) -> Workset? {
@@ -110,7 +109,8 @@ extension DB {
                     Workset.Schema.startTime.localDay < date.localDay &&
                     Workset.Schema.exerciseID == exerciseID &&
                     Workset.Schema.exerciseID != nil &&
-                    Workset.Schema.weight >= weight)
+                    Workset.Schema.weight >= weight &&
+                    Workset.Schema.reps != nil)
                 .order(Workset.Schema.reps.desc)
                 .limit(1)
         )
@@ -123,11 +123,10 @@ extension DB {
                 W.startTime.localDay < date.localDay &&
                     W.exerciseID == exerciseID &&
                     W.exerciseID != nil &&
-                    W.reps == 1
-            )
+                    W.reps == 1 &&
+                    W.weight != nil)
             .order(Workset.Schema.weight.desc)
-            .limit(1)
-        )
+            .limit(1))
     }
 
     func maxE1RM(exerciseID exerciseID: Int64, todate date: NSDate = NSDate()) -> Workset? {
@@ -136,11 +135,10 @@ extension DB {
             .filter(
                 W.startTime.localDay < date.localDay &&
                     W.exerciseID == exerciseID &&
-                    W.exerciseID != nil
-            )
+                    W.exerciseID != nil &&
+                    W.e1RM != nil)
             .order(W.e1RM.desc)
-            .limit(1)
-        )
+            .limit(1))
     }
 
     func maxXRM(exerciseID exerciseID: Int64, reps: Int, todate date: NSDate = NSDate()) -> Workset? {
@@ -150,8 +148,8 @@ extension DB {
                 W.startTime.localDay < date.localDay &&
                     W.exerciseID == exerciseID &&
                     W.exerciseID != nil &&
-                    W.reps == reps
-            )
+                    W.reps == reps &&
+                    W.weight != nil)
             .order(Workset.Schema.weight.desc)
             .limit(1)
         )
@@ -163,11 +161,11 @@ extension DB {
                 .filter(
                     Workset.Schema.startTime.localDay < date.localDay &&
                         Workset.Schema.exerciseID == exerciseID &&
-                        Workset.Schema.exerciseID != nil
-                )
+                        Workset.Schema.exerciseID != nil &&
+                        Workset.Schema.weight != nil &&
+                        Workset.Schema.volume != nil)
                 .order(Workset.Schema.volume.desc)
-                .limit(1)
-        )
+                .limit(1))
     }
 
     func maxSquat(sinceDate date: NSDate) -> Double? {
@@ -176,9 +174,7 @@ extension DB {
             .select(W.weight.max)
             .filter(
                 W.startTime.localDay >= date &&
-                    W.exerciseID == 973
-            )
-        )
+                    W.exerciseID == 973))
     }
 
     func maxDeadlift(sinceDate date: NSDate) -> Double? {
@@ -187,9 +183,7 @@ extension DB {
             .select(W.weight.max)
             .filter(
                 W.startTime.localDay >= date &&
-                    W.exerciseID == 723
-            )
-        )
+                    W.exerciseID == 723))
     }
 
     func maxBench(sinceDate date: NSDate) -> Double? {
@@ -198,9 +192,7 @@ extension DB {
             .select(W.weight.max)
             .filter(
                 W.startTime.localDay >= date &&
-                    W.exerciseID == 482
-            )
-        )
+                    W.exerciseID == 482))
     }
 
     func recalculateAll(after startTime: NSDate = NSDate(timeIntervalSince1970: 0)) throws {
@@ -218,24 +210,21 @@ extension DB {
         typealias W = Workset.Schema
         return db.scalar(W.table
             .select(W.duration.sum)
-            .filter(W.startTime.localDay >= date)
-        )
+            .filter(W.startTime.localDay >= date))
     }
 
     func totalSets(sinceDate date: NSDate) -> Int {
         typealias W = Workset.Schema
         return db.scalar(W.table
             .select(W.worksetID.count)
-            .filter(W.startTime.localDay >= date)
-        )
+            .filter(W.startTime.localDay >= date))
     }
 
     func totalReps(sinceDate date: NSDate) -> Int? {
         typealias W = Workset.Schema
         return db.scalar(W.table
             .select(W.reps.sum)
-            .filter(W.startTime.localDay >= date)
-        )
+            .filter(W.startTime.localDay >= date))
     }
 
     func totalVolume(sinceDate date: NSDate) -> Double? {
@@ -249,9 +238,7 @@ extension DB {
         return db.scalar(W.table
             .select(W.worksetID.count)
             .filter(W.startTime.localDay >= date &&
-                (W.intensity > 1.0 || W.intensity > 1.0)
-            )
-        )
+                (W.intensity > 1.0 || W.intensity > 1.0)))
     }
 
     func volumeByDay() throws -> [(NSDate, Double)] {

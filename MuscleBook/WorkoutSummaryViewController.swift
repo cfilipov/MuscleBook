@@ -204,7 +204,12 @@ final class WorkoutSummaryViewController: FormViewController {
     }
 
     private func updateWorkout() {
-        workout = db.get(Workout.self, workoutID: workout.workoutID)!
+        guard let workout = db.get(Workout.self, workoutID: workout.workoutID) else {
+            navigationController?.popToRootViewControllerAnimated(true)
+            return
+        }
+        self.workout = workout
+        self.updateRows()
     }
 
     private func workoutRecordToRow(workset: Workset) -> BaseRow {
@@ -213,12 +218,8 @@ final class WorkoutSummaryViewController: FormViewController {
         row.value = workset.summary
         row.onCellSelection { cell, row in
             let vc = WorksetViewController(workset: workset) { result in
-                self.dismissViewControllerAnimated(true, completion: nil)
-                if case .Deleted(_) = result where self.workout.sets == 1 {
-                    self.navigationController?.popViewControllerAnimated(true)
-                } else {
-                    self.updateRows()
-                }
+                self.updateWorkout()
+                self.navigationController?.popViewControllerAnimated(true)
             }
             self.showViewController(vc, sender: nil)
         }

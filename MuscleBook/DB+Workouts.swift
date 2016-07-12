@@ -60,13 +60,9 @@ extension DB {
         let date = Workout.Schema.startTime
         let count = Workout.Schema.workoutID.count
         let rows = try db.prepare(
-            Workout.Schema.table.select(date, count).group(date.localDay)
-        )
+            Workout.Schema.table.select(date, count).group(date.localDay))
         return rows.map { row in
-            return (
-                cal.startOfDayForDate(row[date]),
-                row[count]
-            )
+            return (cal.startOfDayForDate(row[date]), row[count])
         }
     }
 
@@ -82,17 +78,14 @@ extension DB {
                 WO.activeDuration <- 0,
                 WO.avePercentMaxDuration <- 0,
                 WO.maxDuration <- 0,
-                WO.activation <- MuscleBook.ActivationLevel.Light
-            )
-        )
+                WO.activation <- MuscleBook.ActivationLevel.Light))
     }
 
     func endDate(workout: Workout) -> NSDate? {
         let row = db.pluck(Workset.Schema.table
             .select(Workset.Schema.startTime.max)
             .filter(Workset.Schema.workoutID == workout.workoutID)
-            .limit(1)
-        )
+            .limit(1))
         return row?[Workset.Schema.startTime.max]
     }
 
@@ -139,8 +132,7 @@ extension DB {
         return db.pluck(Workset.Schema.table
             .order(date.asc)
             .filter(date > workout.startTime)
-            .limit(1)
-        )
+            .limit(1))
     }
 
     func prev(workout: Workout) -> Workout? {
@@ -149,13 +141,11 @@ extension DB {
         return db.pluck(W.table
             .order(date.desc)
             .filter(date < workout.startTime)
-            .limit(1)
-        )
+            .limit(1))
     }
 
     func recalculate(workoutID workoutID: Int64) throws {
         typealias WS = Workset.Schema
-        typealias WO = Workout.Schema
         guard let row = db.pluck(WS.table
             .select(
                 WS.startTime.min,
@@ -164,20 +154,18 @@ extension DB {
                 WS.reps.sum,
                 WS.volume.sum,
                 WS.duration.sum,
+                WS.duration.max,
+                WS.activation.max)
+            .filter(WS.workoutID == workoutID))
+            else { throw Error.RecalculateWorkoutFailed }
+        let averages = db.pluck(WS.table
+            .select(
                 WS.percentMaxVolume.average,
                 WS.percentMaxDuration.average,
-                WS.intensity.average,
-                WS.duration.max,
-                WS.activation.max
-            )
+                WS.intensity.average)
             .filter(
                 WS.workoutID == workoutID &&
-                    WS.warmup == false
-            )
-            ) else { throw Error.RecalculateWorkoutFailed }
-        let avePcVolume = row[WS.percentMaxVolume.average]
-        let aveIntensity = row[WS.intensity.average]
-        let activeDuration = row[WS.duration.sum]
+                WS.warmup == false))
         guard let
             startTime = row[WS.startTime.min],
             endTime = row[WS.startTime.max]
@@ -186,11 +174,14 @@ extension DB {
             .select(WS.duration)
             .filter(WS.workoutID == workoutID)
             .order(WS.startTime.desc)
-            .limit(1)
-        )
+            .limit(1))
+        let avePcVolume = averages?[WS.percentMaxVolume.average]
+        let aveIntensity = averages?[WS.intensity.average]
+        let activeDuration = row[WS.duration.sum]
         let duration: Double?
         if let lastDuration = lastDuration {
             duration = endTime.timeIntervalSinceDate(startTime) + lastDuration
+            assert(duration > 0)
         } else {
             duration = nil
         }
@@ -210,6 +201,7 @@ extension DB {
         } else {
             activation = .Light
         }
+        typealias WO = Workout.Schema
         try db.run(WO.table
             .filter(WS.workoutID == workoutID)
             .update(
@@ -221,7 +213,7 @@ extension DB {
                 WO.activeDuration <- activeDuration,
                 WO.volume <- row[WS.volume.sum],
                 WO.avePercentMaxVolume <- avePcVolume,
-                WO.avePercentMaxDuration <- row[WS.percentMaxDuration.average],
+                WO.avePercentMaxDuration <- averages?[WS.percentMaxDuration.average],
                 WO.aveIntensity <- aveIntensity,
                 WO.maxDuration <- row[WS.duration.max],
                 WO.activation <- activation

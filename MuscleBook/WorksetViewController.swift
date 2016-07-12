@@ -67,6 +67,14 @@ class WorksetViewController: FormViewController {
             default: return false
             }
         }
+
+        var editing: Bool {
+            switch self {
+            case .Editing(_): return true
+            case .Creating: return true
+            default: return false
+            }
+        }
     }
 
     private let db = DB.sharedInstance
@@ -259,10 +267,7 @@ class WorksetViewController: FormViewController {
                 self.input.duration = row.value
             }
             $0.onCellSelection { cell, row in
-                guard
-                    case .Editing(_) = self.mode,
-                    case .Creating = self.mode
-                    else { return }
+                guard self.mode.editing else { return }
                 let alert = UIAlertController(title: "Set Duration", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
                 alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
                 alert.addAction(

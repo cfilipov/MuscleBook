@@ -39,8 +39,11 @@ extension DB {
         try db.transaction { [unowned self] in
             try self.db.run(WS.table.filter(WS.worksetID == workset.worksetID).delete())
             let count = self.db.scalar(WS.table.select(WS.worksetID.count).filter(WS.workoutID == workset.workoutID))
-            guard count == 0 else { return }
-            try self.db.run(WO.table.filter(WO.workoutID == workset.workoutID).delete())
+            if count == 0 {
+                try self.db.run(WO.table.filter(WO.workoutID == workset.workoutID).delete())
+            } else {
+                try self.recalculate(workoutID: workset.workoutID)
+            }
         }
     }
 
