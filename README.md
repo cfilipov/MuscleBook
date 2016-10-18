@@ -1,15 +1,16 @@
-# <img src="Icon512.png" width="40px" /> Muscle Book
+# MuscleBook.app
 
-Muscle Book is an iOS workout tracker for strength training and body building.
+[![Status: ABANDONED](https://img.shields.io/badge/Status-ABANDONED-red.svg?style=flat)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+[![Swift 2.2](https://img.shields.io/badge/Swift-2.2-orange.svg?style=flat)](https://swift.org)
+[![License MIT](https://img.shields.io/badge/License-GPL%20v3-blue.svg?style=flat)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
-The purpose of this app can be summarized as follows:
+#### *This project has been abandoned, it is no longer maintained, and likely won't build anymore. Muscle book now lives on as a web app: [MuscleBook.net](https://github.com/cfilipov/MuscleBook.net)*
 
-1. Provide a means of archiving detailed exercise activity for the long-term.
-2. Visualize and summarize data to enable the knowledgeable lifter to make decisions based on the data presented.
+* * *
 
-This app is not targeted at beginner lifters, but there is no reason a beginner should avoid using this application.
+<a href="https://d3js.org"><img src="Icon512.png" align="left" hspace="10" vspace="6" width="55px"></a>
 
-**This software is a work in progress, expect bugs. Seriously, look at the version number, it's not even close to 1.0.**
+Muscle Book is an iOS workout tracker for strength training and body building. This app is not targeted at beginner lifters, but there is no reason a beginner should avoid using this application.
 
 <img src="Screenshots/Main.png" width="200px" valign="top" />
 <img src="Screenshots/AddDataPoint.png" width="200px" valign="top" />
